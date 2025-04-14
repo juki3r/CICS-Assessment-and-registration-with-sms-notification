@@ -19,19 +19,19 @@
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('bsit' ,  ['student_course' => 'bsit'])" :active="request()->routeIs('bsit')">
+                    <x-nav-link :href="route('main' ,  ['student_course' => 'bsit'])" :active="request()->student_course === 'bsit'">
                         {{ __('BSIT') }}
                     </x-nav-link>
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('bscs', ['student_course' => 'bscs'])" :active="request()->routeIs('bscs')">
+                    <x-nav-link :href="route('main', ['student_course' => 'bscs'])" :active="request()->student_course === 'bscs'">
                         {{ __('BSCS') }}
                     </x-nav-link>
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('blis', ['student_course' => 'blis'])" :active="request()->routeIs('blis')">
+                    <x-nav-link :href="route('main', ['student_course' => 'blis'])" :active="request()->student_course === 'blis'">
                         {{ __('BLIS') }}
                     </x-nav-link>
                 </div>
@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('smslogs')" :active="request()->routeIs('smslogs')">
+                    <x-nav-link :href="route('reports')" :active="request()->routeIs('reports')">
                         {{ __('REPORTS') }}
                     </x-nav-link>
                 </div>
@@ -104,13 +104,13 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('bsit')" :active="request()->routeIs('bsit')">
+            <x-responsive-nav-link :href="route('main')" :active="request()->student_course === 'bsit'">
                 {{ __('BSIT') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('bscs')" :active="request()->routeIs('bscs')">
+            <x-responsive-nav-link :href="route('main')" :active="request()->student_course === 'bscs'">
                 {{ __('BSCS') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('blis')" :active="request()->routeIs('blis')">
+            <x-responsive-nav-link :href="route('main')" :active="request()->student_course === 'blis'">
                 {{ __('BLIS') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('smslogs')" :active="request()->routeIs('smslogs')">

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Add BSIT Student - SKILL TEST') }}
+            Add {{$student_course}} student - {{$task}}
         </h2>
     </x-slot>
 
@@ -13,7 +13,7 @@
                 <div class="border col-12 col-md-6 p-2 mx-lg-1">
                         <h3 class="text-lg font-semibold mb-4">Add New Student</h3>
 
-                        <form action="{{ route('students.store', ['student_course' => $student_course]) }}" method="POST">
+                        <form action="{{ route('students.store', ['student_course' => $student_course, 'task' => $task]) }}" method="POST">
                         @csrf
 
                         <div class="row mb-4">
@@ -91,7 +91,7 @@
 
                         <div class="mt-4">
                             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Add Student</button>
-                            <a href="{{ route('bsit',  ['course' => 'bsit']) }}" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</a>
+                            <a href="{{ route('dashboard') }}" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</a>
                         </div>
                     
 

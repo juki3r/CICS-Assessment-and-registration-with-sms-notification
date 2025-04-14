@@ -8,11 +8,11 @@ use Illuminate\Http\Request;
 class BSITStudentsController extends Controller
 {
     // BSIT DASHBOARD
-    public function bsit(Request $request)
+    public function show(Request $request)
     {
-        $student_course = $request->student_course;;
-        $students = Students::where('student_course', 'BSIT')->get();
-        return view('bsit', compact('students', 'student_course'));
+        $student_course = $request->student_course;
+        $students = Students::where('student_course', $student_course)->get();
+        return view('show', compact('students', 'student_course'));
     }
 
     // Show the create form

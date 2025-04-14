@@ -19,6 +19,12 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
+    <style>
+        .select_task:hover{
+            background-color: skyblue;
+            color: white;
+        }
+    </style>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
             @include('layouts.navigation')

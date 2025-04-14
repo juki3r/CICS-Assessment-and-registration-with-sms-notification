@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('BSIT Students') }}
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight text-uppercase">
+            {{$student_course}} Students
         </h2>
     </x-slot>
 
@@ -55,7 +55,14 @@
                                     <td class="border border-gray-300 px-4 py-2 text-center">{{ $student->gwa }}</td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">{{ $student->total }}</td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <a href="{{ route('students.edit', $student->id) }}" class="btn btn-warning">Edit</a>
+                                        <a href="#" 
+                                            class="btn btn-warning" 
+                                            data-student-id="{{ $student->id }}" 
+                                            onclick="openModalEdit(this)">
+                                            Edit
+                                        </a>
+
+                                        {{-- <a href="{{ route('students.edit', $student->id) }}" class="btn btn-warning" >Edit</a> --}}
                                         <form action="{{ route('students.destroy', $student->id) }}" method="POST" class="inline-block">
                                             @csrf
                                             <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
@@ -72,23 +79,49 @@
 
     <!-- Modal -->
     <div id="taskModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-50 max-w-md">
             <h2 class="text-lg font-semibold mb-4 text-center">Select Task</h2>
             <div class="space-y-3">
                 <a href="{{ route('students_add', ['task' => 'INTERVIEW', 'student_course' => $student_course]) }}"
-                class="block text-center py-2 px-4 bg-sky-600 text-dark rounded-lg hover:bg-sky-700">
+                class="block text-center py-2 px-4 bg-danger-600 text-dark rounded-lg hover:bg-danger-700 select_task">
                 INTERVIEW
                 </a>
                 <a href="{{ route('students_add', ['task' => 'SKILL_TEST', 'student_course' => $student_course]) }}"
-                class="block text-center py-2 px-4 bg-emerald-600 text-dark rounded-lg hover:bg-success">
+                class="block text-center py-2 px-4 bg-emerald-600 text-dark rounded-lg hover:bg-success select_task">
                 SKILL TEST
                 </a>
                 <a href="{{ route('students_add', ['task' => 'GWA', 'student_course' => $student_course]) }}"
-                class="block text-center py-2 px-4 bg-indigo-600 text-dark rounded-lg hover:bg-indigo-700">
+                class="block text-center py-2 px-4 bg-indigo-600 text-dark rounded-lg hover:bg-indigo-700 select_task">
                 GWA
                 </a>
             </div>
             <button onclick="closeModal()"
+                    class="mt-6 w-full py-2 px-4 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+                Cancel
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="taskModalEdit" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-50 max-w-md">
+            <h2 class="text-lg font-semibold mb-4 text-center">Select Task</h2>
+            <div class="space-y-3">
+
+                <input type="hidden" id="edit-student-id" name="student_id">
+
+
+                <a href="{{ route('students.edit', ['id' => , 'task' => 'SKILL_TEST', 'student_course' => $student_course]) }}"
+                    class="block text-center py-2 px-4 bg-danger-600 text-dark rounded-lg hover:bg-danger-700 select_task">
+                    SKILL TEST
+                 </a>
+                 
+                <a href="{{ route('students.edit', ['id' => $student->id,'task' => 'GWA', 'student_course' => $student_course]) }}"
+                class="block text-center py-2 px-4 bg-indigo-600 text-dark rounded-lg hover:bg-indigo-700 select_task">
+                GWA
+                </a>
+            </div>
+            <button onclick="closeModalEdit()"
                     class="mt-6 w-full py-2 px-4 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
                 Cancel
             </button>
@@ -105,6 +138,21 @@
         function closeModal() {
             document.getElementById('taskModal').classList.add('hidden');
             document.getElementById('taskModal').classList.remove('flex');
+        }
+
+
+        // EDIT
+        function openModalEdit(element) {
+            const studentId = element.getAttribute('data-student-id');
+            document.getElementById('edit-student-id').value = studentId;
+
+            document.getElementById('taskModalEdit').classList.remove('hidden');
+            document.getElementById('taskModalEdit').classList.add('flex');
+        }
+
+        function closeModalEdit() {
+            document.getElementById('taskModalEdit').classList.add('hidden');
+            document.getElementById('taskModalEdit').classList.remove('flex');
         }
     </script>
 </x-app-layout>
