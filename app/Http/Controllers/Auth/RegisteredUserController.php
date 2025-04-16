@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\EntranceExam;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -27,11 +28,11 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request):RedirectResponse
     {
         $request->validate([
-            'firstname' => ['required', 'string', 'max:255'],
-            'lastname' => ['required', 'string', 'max:255'],
+            'fullname' => ['required', 'string', 'max:255'],
+            'phone_number' => ['required', 'max:15'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             // 'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'password' => [
@@ -45,17 +46,40 @@ class RegisteredUserController extends Controller
                     ],
         ]);
 
-        $user = User::create([
-            'firstname' => $request->firstname,
-            'lastname' => $request->lastname,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        // Let's verify first if this student already pass the entrance exam
+        // Lets create a dashboard later for entrance exam admin
+        // for now, lets override it first.
 
-        event(new Registered($user));
+        $exists = EntranceExam::where('fullname', $request->fullname)->exists();
 
-        Auth::login($user);
+        if ($exists) {
+            $student = EntranceExam::where('fullname', $request->fullname)->first();
+            if ($student->status == 'pending') {
+                return back()->with('message', 'Your exam status is still pending. Please wait for the result.');
+            }else if ($student->status == 'failed') {
+                return back()->with('message', 'Better luck next time');
+            }else{
+                $user = User::create([
+                    'fullname' => $request->fullname,
+                    'phone_number' => $request->phone_number,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                ]);
 
-        return redirect(route('dashboard', absolute: false));
+                event(new Registered($user));
+
+                Auth::login($user);
+
+                return redirect(route('dashboard'));
+            }
+
+        } else {
+            // Student does not exist
+            return back()->with('message', 'Your name not found.');
+        }
+
+
+
+        
     }
 }

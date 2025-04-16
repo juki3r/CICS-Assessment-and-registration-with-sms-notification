@@ -9,12 +9,12 @@ use App\Http\Controllers\BLISStudentsController;
 use App\Http\Controllers\BSITStudentsController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/', function () {
+    return view('welcome');
+});
 
-Route::get('/', [AuthenticatedSessionController::class, 'create'])
-        ->name('login');
+// Route::get('/', [AuthenticatedSessionController::class, 'create'])
+//         ->name('welcome');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
