@@ -7,7 +7,7 @@
             {{ session('message') }}
         </div>
     @endif
-    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('admin.register.save') }}" enctype="multipart/form-data">
         @csrf
         
         <!-- Name -->
@@ -16,21 +16,6 @@
             <x-text-input id="fullname" class="block mt-1 w-full text-capitalize" type="text" name="fullname" :value="old('fullname')" required autofocus autocomplete="fullname" />
             <x-input-error :messages="$errors->get('fullname')" class="mt-2" />
         </div>
-
-        <!-- Address -->
-        <div class="mb-4">
-            <x-input-label for="address" :value="__('Address (.eg. Street/zone. Brgy, District)')" />
-            <x-text-input id="address" class="block mt-1 w-full text-capitalize" type="text" name="address" :value="old('address')" required autofocus autocomplete="address" />
-            <x-input-error :messages="$errors->get('address')" class="mt-2" />
-        </div>
-
-        <!-- Age -->
-        <div class="mb-4">
-            <x-input-label for="age" :value="__('Age')" />
-            <x-text-input id="age" class="block mt-1 w-full text-capitalize" type="number" name="age" :value="old('age')" required autofocus autocomplete="age" />
-            <x-input-error :messages="$errors->get('age')" class="mt-2" />
-        </div>
-
 
         <!-- Phone number -->
         <div class="mb-4">
@@ -46,26 +31,6 @@
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
-
-        <!-- Course -->
-        <div class="mt-4">
-            <label for="course">Course</label>
-            <select name="course" id="course" class="block mt-1 w-full form-control" required>
-                <option value="">-- Select Course --</option>
-                <option value="bsit">BSIT</option>
-                <option value="bscs">BSCS</option>
-                <option value="blis">BLIS</option>
-            </select>
-            <x-input-error :messages="$errors->get('course')" class="mt-2" />
-        </div>
-
-        <!-- Image -->
-            <div class="mb-4">
-                <x-input-label for="image" :value="__('Upload your image')" />
-                <input type="file" name="image" accept="image/*" required>
-                <x-input-error :messages="$errors->get('image')" class="mt-2" />
-            </div>
-
 
         <!-- Password -->
         <div class="mt-4">

@@ -5,10 +5,50 @@ namespace App\Http\Controllers;
 use App\Models\Report;
 use App\Models\Students;
 use Illuminate\Http\Request;
+use App\Mail\GeneralNotification;
+use App\Models\AdminNotification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class MainController extends Controller
 {
+
+    public function dashboard()
+    {  
+        $notificationCount = AdminNotification::where('read', false)->count();
+        return view('dashboard', compact('notificationCount'));
+    }
+
+    //OTP
+    public function verify_otp()
+    {
+        // call function to send otp
+        return view('students.verify_otp');
+    }
+
+    public function go_verify(Request $request)
+    {
+        $request->validate([
+            'otp' => ['required', 'max:6']
+        ]);
+
+        if($request->otp == Auth::user()->otp)
+        {   
+            Auth::user()->update([
+                'phone_verified' => true,
+            ]);
+            return redirect()->route('dashboard')->with('message', 'Phone number verified');
+        }
+        else
+        {
+            return back()->with('error', 'Phone number does not match !');
+        }
+
+
+
+
+    }
+
      // BSIT DASHBOARD
      public function show(Request $request)
      {
