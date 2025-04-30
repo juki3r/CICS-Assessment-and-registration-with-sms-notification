@@ -50,6 +50,9 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::get('/exam_results/{course}', [AdminController::class, 'show_exam_results'])->name('exam_results');
     Route::post('/admin/update-exam-field', [AdminController::class, 'updateExamField'])->name('admin.update_exam_field');
 
+    //Entrance exam
+    Route::get('/entrance_exam', [AdminController::class, 'entrance_exam'])->name('entrance_exam');
+
 
 
 

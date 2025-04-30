@@ -30,6 +30,9 @@
             <x-nav-link :href="route('exam_results', ['course' => 'bsit'])" :active="request()->routeIs('exam_results') && in_array(request()->route('course'), ['bsit', 'bscs', 'blis'])" class="my-2 text-light">
                 {{ __('Exam Results') }}
             </x-nav-link>
+            <x-nav-link :href="route('exam_results')" :active="request()->routeIs('exam_results'))" class="my-2 text-light">
+                {{ __('Entrance Exam') }}
+            </x-nav-link>
         @else
             <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="my-2 text-light mt-5">
                 {{ __('Dashboard') }}

@@ -239,6 +239,13 @@ class AdminController extends Controller
     }
 
 
+    //Entrance Exam
+    public function entrance_exam()
+    {
+        return view('admin.entranceexam');
+    }
+
+
 
 
 
