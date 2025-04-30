@@ -39,8 +39,43 @@
                 <div class="p-6 text-gray-900">
                     
                     @if(Auth::guard('admin')->user()->role == "admin")
-                    <!-- Content for admin users -->
-                @endif
+
+
+                    <h1>Exam Results</h1>
+
+                    <canvas id="examResultChart" width="400" height="200"></canvas>
+                    <script>
+                        var ctx = document.getElementById('examResultChart').getContext('2d');
+                        var examResultChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: ['Passed', 'Failed', 'Pending'],
+                                datasets: [{
+                                    label: 'Exam Results',
+                                    data: [{{ $passed }}, {{ $failed }}, {{ $pending }}], // Passing the data from Laravel
+                                    backgroundColor: ['green', 'red', 'yellow'],
+                                    borderColor: ['green', 'red', 'yellow'],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+                    </script>
+                    
+
+
+
+
+
+
+
+                    @endif
                 
                     
                 </div>

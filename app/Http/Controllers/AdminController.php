@@ -204,9 +204,16 @@ class AdminController extends Controller
     }
 
     public function dashboard()
-    {  
+    { 
+         // Count the number of each remark
+         $passed = ExamResult::where('remarks', 'passed')->count();
+         $failed = ExamResult::where('remarks', 'failed')->count();
+         $pending = ExamResult::where('remarks', 'pending')->count();
+
+
+
         $notificationCount = AdminNotification::where('read', false)->count();
-        return view('admin.dashboard', compact('notificationCount'));
+        return view('admin.dashboard', compact('notificationCount', 'passed', 'failed', 'pending'));
     }
 
     public function updateExamField(Request $request)
