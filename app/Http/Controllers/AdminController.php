@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Admins;
 use App\Models\ExamResult;
+use App\Models\EntranceExam;
 use Illuminate\Http\Request;
 use App\Mail\GeneralNotification;
 use App\Models\AdminNotification;
@@ -242,7 +243,55 @@ class AdminController extends Controller
     //Entrance Exam
     public function entrance_exam()
     {
-        return view('admin.entranceexam');
+
+        // Fetch all data from the EntranceExam model
+        $entranceExams = EntranceExam::all();
+
+        // Count notifications
+        $notificationCount = AdminNotification::where('read', false)->count();
+
+        // Return the view with data
+        return view('admin.entranceexam', compact('notificationCount', 'entranceExams'));
+    }
+
+    public function save_passed_student(Request $request)
+    {
+        // Validate input
+        $request->validate([
+            'fullname' => 'required|string|max:255|unique:entrance_exams,fullname',
+            'status' => 'required|in:Pending,Failed,Passed',
+        ]);
+
+        // Create record in EntranceExam table
+        EntranceExam::create([
+            'fullname' => $request->fullname,
+            'status' => $request->status,
+        ]);
+
+        $notificationCount = AdminNotification::where('read', false)->count();
+
+        return redirect()->route('entrance_exam')->with([
+            'success' => 'Student added successfully!',
+            'notificationCount' => $notificationCount
+        ]);
+    }
+
+    public function delete_entrance($id)
+    {
+        // Find the entrance exam record by its ID
+        $entranceExam = EntranceExam::find($id);
+    
+        // Check if the record exists
+        if ($entranceExam) {
+            // Delete the record
+            $entranceExam->delete();
+    
+            // Redirect back to the entrance exam page with a success message
+            return redirect()->route('entrance_exam')->with('success', 'Student deleted successfully!');
+        }
+    
+        // If the record was not found, redirect with an error message
+        return redirect()->route('entrance_exam')->with('alert_message', 'Student not found.');
     }
 
 

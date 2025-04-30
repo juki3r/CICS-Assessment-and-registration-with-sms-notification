@@ -52,6 +52,9 @@ Route::middleware(['auth:admin'])->group(function () {
 
     //Entrance exam
     Route::get('/entrance_exam', [AdminController::class, 'entrance_exam'])->name('entrance_exam');
+    Route::post('/save_passed_student', [AdminController::class, 'save_passed_student'])->name('save_passed_student');
+    Route::get('/entrance-exam/delete/{id}', [AdminController::class, 'delete_entrance'])->name('delete_entrance_student');
+
 
 
 

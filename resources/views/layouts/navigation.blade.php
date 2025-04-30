@@ -2,19 +2,19 @@
     <!-- Sidebar / Navbar -->
     <nav class=" bg-black text-light  flex-column align-items-center  h-100 d-none d-lg-flex px-3">
         
-        @if(Auth::guard('admin')->user()->role == "admin")
+        @if(Auth::guard('admin')->check() && Auth::guard('admin')->user()->role == "admin")
             <a href="{{ route('admin.dashboard') }}" >
-                <img src="{{asset('logo.png')}}" alt="" style="width:120px;">
+                <img src="{{ asset('logo.png') }}" alt="" style="width:120px;">
             </a>
         @else
             <a href="{{ route('dashboard') }}" >
-                <img src="{{asset('logo.png')}}" alt="" style="width:120px;">
+                <img src="{{ asset('logo.png') }}" alt="" style="width:120px;">
             </a>
         @endif
 
        
 
-        @if(Auth::guard('admin')->user()->role == "admin")
+        @if(Auth::guard('admin')->check() && Auth::guard('admin')->user()->role == "admin")
             <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" class="my-2 text-light mt-5">
                 {{ __('Dashboard') }}
             </x-nav-link>
@@ -30,7 +30,7 @@
             <x-nav-link :href="route('exam_results', ['course' => 'bsit'])" :active="request()->routeIs('exam_results') && in_array(request()->route('course'), ['bsit', 'bscs', 'blis'])" class="my-2 text-light">
                 {{ __('Exam Results') }}
             </x-nav-link>
-            <x-nav-link :href="route('exam_results')" :active="request()->routeIs('exam_results'))" class="my-2 text-light">
+            <x-nav-link :href="route('entrance_exam')" :active="request()->routeIs('entrance_exam')" class="my-2 text-light">
                 {{ __('Entrance Exam') }}
             </x-nav-link>
         @else
@@ -39,6 +39,8 @@
             </x-nav-link>
 
         @endif
+
+
   
     </nav>
     <nav class="navbar navbar-expand-lg bg-body-tertiary d-block d-lg-none p-3">
