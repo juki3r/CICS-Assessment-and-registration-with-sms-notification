@@ -43,7 +43,7 @@
 
                     <h1>Exam Results</h1>
 
-                    <canvas id="examResultChart" width="400" height="200"></canvas>
+                    <canvas id="examResultChart" width="300" height="150"></canvas>
                     <script>
                         var ctx = document.getElementById('examResultChart').getContext('2d');
                         var examResultChart = new Chart(ctx, {
