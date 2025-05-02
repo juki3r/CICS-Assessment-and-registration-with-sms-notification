@@ -40,10 +40,9 @@
                     
                     @if(Auth::guard('admin')->user()->role == "admin")
 
-
                     <h1>Exam Results</h1>
-                    <div style="width:300px; height:200px">
-                        <canvas id="examResultChart" width="200" height="100"></canvas>
+                    <div style="width:50%;">
+                        <canvas id="examResultChart" width="100%"></canvas>
                     </div>
                     
                     <script>
