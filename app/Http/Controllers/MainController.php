@@ -28,7 +28,7 @@ class MainController extends Controller
         $otp = Auth::user()->otp;
         $cpnumber = Auth::user()->phone_number;
 
-        $result = $sms->sendsms($cpnumber,"Your OTP is: . $otp");
+        $result = $sms->sendsms($cpnumber,"Your OTP is: $otp");
         return $result;
         // return view('students.verify_otp');
     }
