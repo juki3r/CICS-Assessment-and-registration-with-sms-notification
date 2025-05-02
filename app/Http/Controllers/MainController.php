@@ -9,9 +9,17 @@ use App\Mail\GeneralNotification;
 use App\Models\AdminNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Services\SmsService;
 
 class MainController extends Controller
 {
+
+    protected $smsService;
+
+    public function __construct(SmsService $smsService)
+    {
+        $this->smsService = $smsService;
+    }
 
     public function dashboard()
     {  
@@ -23,6 +31,12 @@ class MainController extends Controller
     public function verify_otp()
     {
         // call function to send otp
+
+        $otp = Auth::user()->otp;
+        $cpnumber = Auth::user()->phone_number;
+
+
+        $response = $this->smsService->sendSMS($cpnumber, "Your OTP is " . $otp);
         return view('students.verify_otp');
     }
 
