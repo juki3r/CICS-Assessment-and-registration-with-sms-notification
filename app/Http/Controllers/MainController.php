@@ -10,26 +10,11 @@ use App\Models\AdminNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
+use App\Services\SMS;
 
 
 class MainController extends Controller
 {
-
-    protected $apiUrl = 'https://sms.pong-mta.tech/api/send-sms-api'; // Replace with your actual URL
-    protected $apiKey = 'ZZB2ltgk0fD2T2YyV7kvhR06fuvcNKk8Z6ifJo5U'; // Replace with subscriber's API key
-
-    public function sendSMS($to, $message)
-    {
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $this->apiKey,
-            'Content-Type' => 'application/json',
-        ])->post($this->apiUrl, [
-            'to' => $to,
-            'message' => $message,
-        ]);
-
-        return $response->json(); // or ->body() if they want raw
-    }
 
     public function dashboard()
     {  
@@ -38,29 +23,13 @@ class MainController extends Controller
     }
 
     //OTP
-    public function verify_otp()
+    public function verify_otp(SMS $sms)
     {
         $otp = Auth::user()->otp;
         $cpnumber = Auth::user()->phone_number;
-        $apiKey = 'ZZB2ltgk0fD2T2YyV7kvhR06fuvcNKk8Z6ifJo5U';
 
-        if (!$apiKey) {
-            return response()->json(['error' => 'API key is not configured'], 500);
-        }
-
-        $response = Http::withHeaders([
-            'X-API-KEY' => $apiKey,
-            'Content-Type' => 'application/json',
-        ])->post("https://sms.pong-mta.tech/api/send-sms-api", [
-            'phone_number' => $cpnumber,
-            'message' => "Your OTP is: $otp",
-        ]);
-
-        if ($response->failed()) {
-            return response()->json(['error' => 'Failed to send OTP', 'details' => $response->body()], 500);
-        }
-
-        return $response->body();
+        $result = $sms->sendsms($cpnumber,"Your OTP is: . $otp");
+        return $result;
         // return view('students.verify_otp');
     }
 
