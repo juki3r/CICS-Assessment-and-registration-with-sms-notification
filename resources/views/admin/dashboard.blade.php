@@ -42,8 +42,10 @@
 
 
                     <h1>Exam Results</h1>
-
-                    <canvas id="examResultChart" width="200" height="100"></canvas>
+                    <div style="width:300px; height:200px">
+                        <canvas id="examResultChart" width="200" height="100"></canvas>
+                    </div>
+                    
                     <script>
                         var ctx = document.getElementById('examResultChart').getContext('2d');
                         var examResultChart = new Chart(ctx, {
