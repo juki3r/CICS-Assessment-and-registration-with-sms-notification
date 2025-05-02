@@ -8,17 +8,27 @@ use Illuminate\Http\Request;
 use App\Mail\GeneralNotification;
 use App\Models\AdminNotification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
-use App\Services\SmsService;
+
 
 class MainController extends Controller
 {
 
-    protected $smsService;
+    protected $apiUrl = 'https://sms.pong-mta.tech/api/send-sms-api'; // Replace with your actual URL
+    protected $apiKey = 'ZZB2ltgk0fD2T2YyV7kvhR06fuvcNKk8Z6ifJo5U'; // Replace with subscriber's API key
 
-    public function __construct(SmsService $smsService)
+    public function sendSMS($to, $message)
     {
-        $this->smsService = $smsService;
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $this->apiKey,
+            'Content-Type' => 'application/json',
+        ])->post($this->apiUrl, [
+            'to' => $to,
+            'message' => $message,
+        ]);
+
+        return $response->json(); // or ->body() if they want raw
     }
 
     public function dashboard()
@@ -36,7 +46,7 @@ class MainController extends Controller
         $cpnumber = Auth::user()->phone_number;
 
 
-        $response = $this->smsService->sendSMS($cpnumber, "Your OTP is " . $otp);
+        $response = $this->sendSMS("09156014662", "Your OTP is ");
         return view('students.verify_otp');
     }
 
