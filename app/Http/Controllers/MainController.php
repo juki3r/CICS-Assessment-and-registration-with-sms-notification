@@ -15,40 +15,6 @@ use Illuminate\Support\Facades\Mail;
 
 class MainController extends Controller
 {
-
-    protected $apiUrl = 'https://sms.pong-mta.tech/api/send-sms-api';
-    protected $apiKey;
-
-    public function __construct()
-    {
-        $this->apiKey = env('PONG_SMS_TOKEN', 'your_default_token_here');
-    }
-
-    public function sendsms($phoneNumber, $message)
-    {
-        if (!$this->apiKey) {
-            return ['success' => false, 'error' => 'API key is not configured'];
-        }
-
-        $response = Http::withHeaders([
-            'X-API-KEY' => $this->apiKey,
-            'Content-Type' => 'application/json',
-        ])->post($this->apiUrl, [
-            'phone_number' => $phoneNumber,
-            'message' => $message,
-        ]);
-
-        if ($response->failed()) {
-            return [
-                'success' => false,
-                'error' => 'Failed to send message',
-                'details' => $response->body(),
-            ];
-        }
-
-        return ['success' => true, 'response' => $response->json()];
-    }
-
     public function dashboard()
     {  
         $notificationCount = AdminNotification::where('read', false)->count();
@@ -56,12 +22,19 @@ class MainController extends Controller
     }
 
     //OTP
-    public function verify_otp(SMS $sms)
+    public function verify_otp()
     {
         $otp = Auth::user()->otp;
         $cpnumber = Auth::user()->phone_number;
 
-        $result = $sms->sendsms($cpnumber,"Your OTP is: $otp");
+        $response = Http::withHeaders([
+            'X-API-KEY' => 'ZZB2ltgk0fD2T2YyV7kvhR06fuvcNKk8Z6ifJo5U',
+            'Content-Type' => 'application/json',
+        ])->post('https://sms.pong-mta.tech/api/send-sms-api', [
+            'phone_number' => $cpnumber,
+            'message' => "Your OTS is : $otp",
+        ]);
+
         
         return view('students.verify_otp');
     }
