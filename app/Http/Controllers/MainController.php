@@ -42,18 +42,17 @@ class MainController extends Controller
     {
         $otp = Auth::user()->otp;
         $cpnumber = Auth::user()->phone_number;
-        $apiKey = 'CZH91pcpjQeVCNpjtGA9wkIPgGLV1xb7eg3d1ssv';
+        $apiKey = 'ZZB2ltgk0fD2T2YyV7kvhR06fuvcNKk8Z6ifJo5U';
 
-        // Check if API key is set
         if (!$apiKey) {
             return response()->json(['error' => 'API key is not configured'], 500);
         }
 
         $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $apiKey,
+            'X-API-KEY' => $apiKey,
             'Content-Type' => 'application/json',
         ])->post("https://sms.pong-mta.tech/api/send-sms-api", [
-            'to' => $cpnumber,
+            'phone_number' => $cpnumber,
             'message' => "Your OTP is: $otp",
         ]);
 
