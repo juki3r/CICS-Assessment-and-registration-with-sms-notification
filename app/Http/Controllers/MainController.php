@@ -40,13 +40,20 @@ class MainController extends Controller
     //OTP
     public function verify_otp()
     {
-        // call function to send otp
-
         $otp = Auth::user()->otp;
         $cpnumber = Auth::user()->phone_number;
 
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . env('PONG_SMS_TOKEN'),
+            'Content-Type' => 'application/json',
+        ])->post("https://sms.pong-mta.tech/api/send-sms-api", [
+            'to' => $cpnumber,
+            'message' => "Your OTP is: $otp",
+        ]);
 
-        $response = $this->sendSMS("09156014662", "Your OTP is ");
+        // Optionally check response status or log it
+        // Log::info($response->body());
+
         return view('students.verify_otp');
     }
 
