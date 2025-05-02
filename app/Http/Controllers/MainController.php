@@ -42,7 +42,7 @@ class MainController extends Controller
     {
         $otp = Auth::user()->otp;
         $cpnumber = Auth::user()->phone_number;
-        $apiKey = env('PONG_SMS_TOKEN');
+        $apiKey = 'ZZB2ltgk0fD2T2YyV7kvhR06fuvcNKk8Z6ifJo5U';
 
         // Check if API key is set
         if (!$apiKey) {
