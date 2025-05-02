@@ -53,8 +53,8 @@ class MainController extends Controller
 
         // Optionally check response status or log it
         // Log::info($response->body());
-
-        return view('students.verify_otp');
+        return $response->body();
+        // return view('students.verify_otp');
     }
 
     public function go_verify(Request $request)
