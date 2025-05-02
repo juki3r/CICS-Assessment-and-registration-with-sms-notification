@@ -41,7 +41,7 @@
                     @if(Auth::guard('admin')->user()->role == "admin")
 
                     <h1>Exam Results</h1>
-                    <div style="width:50%;">
+                    <div style="width:50%;" class="p-3">
                         <canvas id="examResultChart" width="100%"></canvas>
                     </div>
                     
