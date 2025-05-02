@@ -42,17 +42,25 @@ class MainController extends Controller
     {
         $otp = Auth::user()->otp;
         $cpnumber = Auth::user()->phone_number;
+        $apiKey = env('PONG_SMS_TOKEN');
+
+        // Check if API key is set
+        if (!$apiKey) {
+            return response()->json(['error' => 'API key is not configured'], 500);
+        }
 
         $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . env('PONG_SMS_TOKEN'),
+            'Authorization' => 'Bearer ' . $apiKey,
             'Content-Type' => 'application/json',
         ])->post("https://sms.pong-mta.tech/api/send-sms-api", [
             'to' => $cpnumber,
             'message' => "Your OTP is: $otp",
         ]);
 
-        // Optionally check response status or log it
-        // Log::info($response->body());
+        if ($response->failed()) {
+            return response()->json(['error' => 'Failed to send OTP', 'details' => $response->body()], 500);
+        }
+
         return $response->body();
         // return view('students.verify_otp');
     }
