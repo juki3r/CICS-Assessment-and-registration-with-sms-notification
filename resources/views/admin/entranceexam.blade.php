@@ -48,15 +48,15 @@
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
+                                    {{-- <th>Status</th>
+                                    <th>Action</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($entranceExams as $entranceExam)
                                     <tr>
                                         <td class="text-capitalize">{{$entranceExam->fullname}}</td>
-                                        <td class="text-capitalize">{{$entranceExam->status}}</td>
+                                        {{-- <td class="text-capitalize">{{$entranceExam->status}}</td>
                                         <td style="width: 10px" >
                                             <a href="{{ route('delete_entrance_student', ['id' => $entranceExam->id]) }}" class="flex justify-center">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class=" text-danger bi bi-trash3-fill" viewBox="0 0 16 16">
@@ -64,7 +64,7 @@
                                                 </svg>
                                             </a>
                                         </td>
-                                    </tr>
+                                    </tr> --}}
                                 @endforeach
                             </tbody>
                         </table>
@@ -102,7 +102,7 @@
                                 </div>
                     
                                 <!-- Status dropdown -->
-                                <div class="my-3">
+                                {{-- <div class="my-3">
                                 <label for="status" class="form-label">Status:</label>
                                 <select 
                                     class="form-control @error('status') is-invalid @enderror" 
@@ -118,9 +118,9 @@
                                 @error('status')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                                </div>
+                                </div> --}}
                     
-                                <button type="submit" class="btn btn-primary w-100">Submit</button>
+                                <button type="submit" class="btn btn-primary w-100">Add</button>
                             </form>
                             </div>
                     

@@ -18,7 +18,7 @@
             {{ session('error') }}
         </div>
     @endif
-
+        <h3 class="fs-3 text-center mb-3">Admin Login</h3>
     <form method="POST" action="{{ route('admin.login.proceed') }}">
         @csrf
 

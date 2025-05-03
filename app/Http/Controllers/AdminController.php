@@ -167,7 +167,6 @@ class AdminController extends Controller
     {
         $request->validate([
             'fullname' => 'required|unique:admins,fullname',
-            'phone_number' => 'required|max:11|unique:admins,phone_number',
             'email' => 'required|email|unique:admins,email',
             'password' => 'required|confirmed|min:8',
         ]);
@@ -175,7 +174,6 @@ class AdminController extends Controller
         Admins::create([
             'fullname' => $request->fullname,
             'email' => $request->email,
-            'phone_number' => $request->phone_number,
             'password' => bcrypt($request->password), // bcrypt version
         ]);
 
@@ -266,13 +264,13 @@ class AdminController extends Controller
         // Validate input
         $request->validate([
             'fullname' => 'required|string|max:255|unique:entrance_exams,fullname',
-            'status' => 'required|in:Pending,Failed,Passed',
+            // 'status' => 'required|in:Pending,Failed,Passed',
         ]);
 
         // Create record in EntranceExam table
         EntranceExam::create([
             'fullname' => $request->fullname,
-            'status' => $request->status,
+            // 'status' => $request->status,
         ]);
 
         $notificationCount = AdminNotification::where('read', false)->count();

@@ -7,6 +7,7 @@ use App\Models\Students;
 use Illuminate\Http\Request;
 use App\Mail\GeneralNotification;
 use App\Models\AdminNotification;
+use App\Models\ExamResult;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
@@ -17,50 +18,16 @@ class MainController extends Controller
 {
     public function dashboard()
     {  
-        $notificationCount = AdminNotification::where('read', false)->count();
-        return view('dashboard', compact('notificationCount'));
-    }
-
-    //OTP
-    public function verify_otp()
-    {
-        $otp = Auth::user()->otp;
-        $cpnumber = Auth::user()->phone_number;
-
-        $response = Http::withHeaders([
-            'X-API-KEY' => 'ZZB2ltgk0fD2T2YyV7kvhR06fuvcNKk8Z6ifJo5U',
-            'Content-Type' => 'application/json',
-        ])->post('https://sms.pong-mta.tech/api/send-sms-api', [
-            'phone_number' => $cpnumber,
-            'message' => "Your OTS is : $otp",
-        ]);
-
+        $user_exam = ExamResult::where('user_id', Auth::user()->id)->firstOrFail();
         
-        return view('students.verify_otp');
+
+        $notificationCount = AdminNotification::where('read', false)->count();
+        return view('dashboard', compact('notificationCount', 'user_exam'));
     }
 
-    public function go_verify(Request $request)
-    {
-        $request->validate([
-            'otp' => ['required', 'max:6']
-        ]);
-
-        if($request->otp == Auth::user()->otp)
-        {   
-            Auth::user()->update([
-                'phone_verified' => true,
-            ]);
-            return redirect()->route('dashboard')->with('message', 'Phone number verified');
-        }
-        else
-        {
-            return back()->with('error', 'Phone number does not match !');
-        }
 
 
-
-
-    }
+   
 
      // BSIT DASHBOARD
      public function show(Request $request)

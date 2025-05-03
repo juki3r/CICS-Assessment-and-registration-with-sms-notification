@@ -1,15 +1,17 @@
 <?php
 
-use App\Http\Controllers\AdminController;
 use App\Mail\GeneralNotification;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MyController;
+use App\Http\Controllers\ExamController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BSCSStudentController;
 use App\Http\Controllers\BLISStudentsController;
 use App\Http\Controllers\BSITStudentsController;
+use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/', function () {
@@ -24,9 +26,20 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [MainController::class, 'dashboard'])->name('dashboard');
+
+    Route::get('/exam', [ExamController::class, 'start'])->name('exam.start');
+    Route::post('/exam/submit', [ExamController::class, 'submit'])->name('exam.submit');
+
+
+
+
+
     //OTP
     Route::get('/verify_otp', [MainController::class, 'verify_otp'])->name('verify.otp');
     Route::post('/verify_otp', [MainController::class, 'go_verify'])->name('go.verify');
+
+    //Exam
+    Route::post('/exam', [MainController::class, 'examsave'])->name('submit.exam');
 });
 
 
@@ -54,6 +67,12 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::get('/entrance_exam', [AdminController::class, 'entrance_exam'])->name('entrance_exam');
     Route::post('/save_passed_student', [AdminController::class, 'save_passed_student'])->name('save_passed_student');
     Route::get('/entrance-exam/delete/{id}', [AdminController::class, 'delete_entrance'])->name('delete_entrance_student');
+
+
+
+
+    Route::resource('questions', \App\Http\Controllers\Admin\QuestionController::class);
+    Route::get('/admin/questionaire', [QuestionController::class, 'index'])->name('show.questions');
 
 
 

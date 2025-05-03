@@ -14,18 +14,13 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('fullname');
-            $table->string('address');
-            $table->integer('age');
-            $table->string('phone_number');
+            $table->string('address')->nullable();
+            $table->string('phone_number')->nullable();
             $table->boolean('is_new_register')->default(true);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('course', ['bsit', 'bscs', 'blis']);
-            $table->string('role')->default('student');
-            $table->string('image');
-            $table->string('otp');
-            $table->boolean('phone_verified')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

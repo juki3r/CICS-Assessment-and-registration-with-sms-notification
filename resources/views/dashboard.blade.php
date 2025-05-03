@@ -18,55 +18,22 @@
             @endif
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    
-                    <div class="flex justify-center">
+                    @if($user_exam->exam == NULL)
+                        <div class="container">
+                            <h2 class="fs-3 mb-5 fw-bold">Exam Instructions</h2>
+                            <p class="mb-3">Welcome to your exam. Please read the instructions below carefully before starting:</p>
+                            <ul>
+                                <li>1. This exam contains multiple-choice questions.</li>
+                                <li>2. Choose the best answer for each question.</li>
+                                <li>3. The exam must be completed in one sitting—you cannot pause and resume later.</li>
+                                <li>4. Ensure you are in a quiet environment with a stable internet connection.</li>
+                                <li>5. You will have [time limit] minutes to finish the exam.</li>
+                            </ul>
+                            <p class="my-4">Click the button below when you're ready to begin.</p>
                         
-                        {{-- STUDENT DASHBOARD --}}
-                        @if(Auth::user()->role == "student")
-                            @if(Auth::user()->phone_verified == 0)
-                            <div class="card p-lg-5 border-0">
-                                <p class=" p-lg-5">
-                                    🎉 Welcome! Congratulations on passing the general entrance exam of Northern Iloilo State University.
-                                    To proceed with your enrollment, please verify your cellphone number.
-                                </p>
-                                <h3 class="px-lg-5 mt-5 mt-lg-0">
-                                    <a href="{{route('verify.otp')}}">
-                                        <button class="btn btn-primary">
-                                            Verify registered number
-                                        </button>
-                                    </a>
-                                </h3>
-                            </div>
-                            @elseif(Auth::user()->is_new_register == 1)
-                            
-                            <div class="card p-lg-5 border-0">
-                                <p class=" p-lg-5">
-                                    You are all set. Please wait for admin approval to start your next exam. 
-                                    Please keep checking your email (.e.g spam) and phone messages because we will notify you 
-                                    as soon as your account has been approved. Thanks you and have a good day.
-                                </p>
-                            </div>
-                            @else
-                                <div class="card p-lg-5 border-0">
-                                    <p class=" p-lg-5">
-                                        Welcome! To continue, please click start exam. Goodluck!.
-                                    </p>
-
-                                    <div class="mt-lg-5 px-lg-5 mt-5 text-center">
-                                        <a href="">
-                                            <div class="btn btn-primary">
-                                                Start exam
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            @endif
-                        
-                        @elseif(Auth::admin()->role == "admin")
-                        
-                        @endif
-                        
-                    </div>
+                            <a href="{{route('exam.start')}}" class="btn btn-primary my-4">Start exam </a>
+                        </div>
+                    @endif
                     
                 </div>
             </div>

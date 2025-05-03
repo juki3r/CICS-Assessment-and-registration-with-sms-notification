@@ -33,6 +33,9 @@
             <x-nav-link :href="route('entrance_exam')" :active="request()->routeIs('entrance_exam')" class="my-2 text-light">
                 {{ __('Entrance Exam') }}
             </x-nav-link>
+            <x-nav-link :href="route('show.questions')" :active="request()->routeIs('show.questions')" class="my-2 text-light">
+                {{ __('Questionaire') }}
+            </x-nav-link>
         @else
             <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="my-2 text-light mt-5">
                 {{ __('Dashboard') }}

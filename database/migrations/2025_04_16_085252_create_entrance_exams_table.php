@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('entrance_exams', function (Blueprint $table) {
             $table->id();
             $table->string('fullname');
-            $table->enum('status', ['passed', 'failed', 'pending']);
+            // $table->enum('status', ['passed', 'failed', 'pending']);
             $table->timestamps();
         });
     }

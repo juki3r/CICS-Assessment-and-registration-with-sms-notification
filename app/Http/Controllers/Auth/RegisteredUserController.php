@@ -36,20 +36,12 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'fullname' => ['required', 'string', 'max:255'],
-            'address' => ['required'],
-            'age' => ['required'],
-            'image' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:10240'],
-            'phone_number' => ['required', 'max:11', 'unique:users,phone_number'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'course' => ['required', Rule::in(['bsit', 'bscs', 'blis'])],
             'password' => [
                         'required',
                         'confirmed',
                         Rules\Password::min(8)
-                            ->letters()
-                            ->mixedCase() // Requires uppercase and lowercase letters
-                            ->numbers() // Requires at least one number
-                            ->symbols(), // Requires at least one special character (optional)
                     ],
         ]);
 
@@ -66,30 +58,16 @@ class RegisteredUserController extends Controller
             }else if ($student->status == 'failed') {
                 return back()->with('message', 'You failed exam. Better luck next time');
             }else{
-                // Store image in "students/{id}" folder
-                $folderName = 'students/' . $student->id;
-                $imagePath = $request->file('image')->store($folderName, 'public');
-                $randomCode = rand(100000, 999999);
+
                 $user = User::create([
                     'fullname' => $request->fullname,
                     'address' => $request->address,
-                    'age' => $request->age,
                     'course' => $request->course,
-                    'phone_number' => $request->phone_number,
                     'email' => $request->email,
                     'password' => Hash::make($request->password),
-                    'image' => $imagePath,
-                    'otp' => $randomCode,
                 ]);
 
                 
-                //Send Email to admin
-                Mail::to('deepong25@gmail.com')->send(
-                    new GeneralNotification('New student registered', 'New student register named  and need your approval. Please login and verify new student
-                    at http://127.0.0.1:8000/login')
-                );
-                //Add here for sms
-                 
 
                 //ADD to admin notify
                 $user = User::where('fullname', $request->fullname)->first();
