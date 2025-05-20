@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Admins;
+use App\Models\SubAdmin;
 use App\Models\ExamResult;
 use App\Models\EntranceExam;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class AdminController extends Controller
             })
             ->orderBy('created_at', 'desc')  // Sort by latest notification
             ->paginate(10);  // Paginate the results (5 per page)
-        
+
         // If it's an AJAX request, return just the table part
         if ($request->ajax()) {
             return view('admin.notification_table', compact('notifications'))->render();
@@ -38,7 +39,7 @@ class AdminController extends Controller
         return view('admin.notification', compact('notifications', 'notificationCount'));
     }
 
-    
+
 
     //show and read notification
     public function showNotification($id, $category, $user_id)
@@ -48,11 +49,10 @@ class AdminController extends Controller
         // // Mark as read
         // $notification->update(['read' => true]);
         // $notificationCount = AdminNotification::where('read', false)->count();
-        
+
 
         //PUT extra functions to write
-        if($category == 'registration')
-        {
+        if ($category == 'registration') {
             $user = User::findOrFail($user_id);
             $notificationCount = AdminNotification::where('read', false)->count();
 
@@ -60,10 +60,8 @@ class AdminController extends Controller
             $notification = AdminNotification::findOrFail($id);
             // Mark as read
             $notification->update(['read' => true]);
-            return view('admin.notification_detail_student', compact(['notificationCount','user'])); 
-        }
-        else if(in_array($category, ['exam', 'gwa', 'interview', 'skill_test']))
-        {
+            return view('admin.notification_detail_student', compact(['notificationCount', 'user']));
+        } else if (in_array($category, ['exam', 'gwa', 'interview', 'skill_test'])) {
             $notificationCount = AdminNotification::where('read', false)->count();
 
             // Find the notification by ID
@@ -80,9 +78,9 @@ class AdminController extends Controller
                 $studentId = $matches[1];
                 $student = User::find($studentId);
             }
-            return view('admin.notification_detail_non_student', compact(['notificationCount','notification', 'user_modified', 'student'])); 
+            return view('admin.notification_detail_non_student', compact(['notificationCount', 'notification', 'user_modified', 'student']));
         }
-       
+
 
 
         // $user->update(['is_new_register' => false]);
@@ -94,17 +92,17 @@ class AdminController extends Controller
         //     new GeneralNotification('Registration approved', 'Hello, You can now proceed to the next task. have a good day.')
         // );
         // //Add here for sms
-        
+
     }
 
     //Admin approval for new students
     public function admin_approval()
-    {   
+    {
         $notificationCount = AdminNotification::where('read', false)->count();
         // Fetch only unread notifications and sort them by created_at (latest first)
         $newstudents = User::where('is_new_register', true)
-                                        ->orderBy('created_at', 'desc')
-                                        ->get();
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('admin.new_students_approval', compact(['newstudents', 'notificationCount']));
     }
@@ -114,7 +112,7 @@ class AdminController extends Controller
         $notificationCount = AdminNotification::where('read', false)->count();
         // Mark as read
         $user = User::findOrFail($id);
-        return view('admin.notification_detail_student', compact(['notificationCount','user'])); 
+        return view('admin.notification_detail_student', compact(['notificationCount', 'user']));
     }
 
     public function admin_approved_student($id)
@@ -124,7 +122,7 @@ class AdminController extends Controller
         return redirect('admin/dashboard')->with('message', 'New student approved.');
     }
     // Deny student - user will be deleted
-    public function admin_denied_student($id)   
+    public function admin_denied_student($id)
     {
         $user = User::findOrFail($id);
         $user->delete(); // This deletes the user
@@ -133,7 +131,7 @@ class AdminController extends Controller
     }
 
     // Show students
-    public function show_students($course)   
+    public function show_students($course)
     {
         $notificationCount = AdminNotification::where('read', false)->count();
         $students = User::where('course', $course)->where('is_new_register', false)->get();
@@ -141,7 +139,7 @@ class AdminController extends Controller
     }
 
     // Show students
-    public function show_exam_results($course)   
+    public function show_exam_results($course)
     {
         $notificationCount = AdminNotification::where('read', false)->count();
         $students = User::where('course', $course)->get();
@@ -195,18 +193,17 @@ class AdminController extends Controller
             $request->session()->regenerate();
 
             return redirect()->route('admin.dashboard');
-
         }
 
         return redirect()->route('admin.login')->with('error', 'Invalid credentials');
     }
 
     public function dashboard()
-    { 
-         // Count the number of each remark
-         $passed = ExamResult::where('remarks', 'passed')->count();
-         $failed = ExamResult::where('remarks', 'failed')->count();
-         $pending = ExamResult::where('remarks', 'pending')->count();
+    {
+        // Count the number of each remark
+        $passed = ExamResult::where('remarks', 'passed')->count();
+        $failed = ExamResult::where('remarks', 'failed')->count();
+        $pending = ExamResult::where('remarks', 'pending')->count();
 
 
 
@@ -285,23 +282,54 @@ class AdminController extends Controller
     {
         // Find the entrance exam record by its ID
         $entranceExam = EntranceExam::find($id);
-    
+
         // Check if the record exists
         if ($entranceExam) {
             // Delete the record
             $entranceExam->delete();
-    
+
             // Redirect back to the entrance exam page with a success message
             return redirect()->route('entrance_exam')->with('success', 'Student deleted successfully!');
         }
-    
+
         // If the record was not found, redirect with an error message
         return redirect()->route('entrance_exam')->with('alert_message', 'Student not found.');
     }
 
 
+    // Accounts
+    public function admin_users()
+    {
+        // Count the number of each remark
+        $passed = ExamResult::where('remarks', 'passed')->count();
+        $failed = ExamResult::where('remarks', 'failed')->count();
+        $pending = ExamResult::where('remarks', 'pending')->count();
+        $subAdmins = SubAdmin::all();
 
 
+        $notificationCount = AdminNotification::where('read', false)->count();
+        return view('admin.users', compact('notificationCount', 'passed', 'failed', 'pending', 'subAdmins'));
+    }
+    //Add Sub admin account
 
+    public function admin_users_add(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:sub_admins,name',
+        ]);
 
+        SubAdmin::create([
+            'name' => $request->name,
+        ]);
+
+        // Redirect back with success message
+        return back()->with('message', 'Sub Admin added successfully');
+    }
+
+    //Delete sub admin
+    public function delete($id)
+    {
+        SubAdmin::findOrFail($id)->delete();
+        return back()->with('message', 'Sub Admin deleted successfully');
+    }
 }

@@ -18,11 +18,11 @@
             <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" class="my-2 text-light mt-5">
                 {{ __('Dashboard') }}
             </x-nav-link>
-            <x-nav-link :href="route('admin.notification')" :active="request()->routeIs('admin.notification')" class="my-2 text-light">
-                {{ __('Notifications') }}
+            <x-nav-link :href="route('admin.users')" :active="request()->routeIs('admin.user')" class="my-2 text-light">
+                {{ __('User Account') }}
             </x-nav-link>
-            <x-nav-link :href="route('admin.approval')" :active="request()->routeIs('admin.approval')" class="my-2 text-light">
-                {{ __('New register') }}
+            <x-nav-link :href="route('entrance_exam')" :active="request()->routeIs('entrance_exam')" class="my-2 text-light">
+                {{ __('Registration') }}
             </x-nav-link>
             <x-nav-link :href="route('students', ['course' => 'bsit'])" :active="request()->routeIs('students') && in_array(request()->route('course'), ['bsit', 'bscs', 'blis'])" class="my-2 text-light">
                 {{ __('Students') }}
@@ -30,9 +30,7 @@
             <x-nav-link :href="route('exam_results', ['course' => 'bsit'])" :active="request()->routeIs('exam_results') && in_array(request()->route('course'), ['bsit', 'bscs', 'blis'])" class="my-2 text-light">
                 {{ __('Exam Results') }}
             </x-nav-link>
-            <x-nav-link :href="route('entrance_exam')" :active="request()->routeIs('entrance_exam')" class="my-2 text-light">
-                {{ __('Entrance Exam') }}
-            </x-nav-link>
+            
             <x-nav-link :href="route('show.questions')" :active="request()->routeIs('show.questions')" class="my-2 text-light">
                 {{ __('Questionaire') }}
             </x-nav-link>

@@ -44,12 +44,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 
-    // ADMIN
-    Route::get('/admin/register', [AdminController::class, 'register'])->name('admin.register');
-    Route::post('/admin/register', [AdminController::class, 'register_save'])->name('admin.register.save');
-    Route::get('/admin/login', [AdminController::class, 'login'])->name('admin.login');
-    Route::post('/admin/login', [AdminController::class, 'login_proceed'])->name('admin.login.proceed');
-    
+// ADMIN
+Route::get('/admin/register', [AdminController::class, 'register'])->name('admin.register');
+Route::post('/admin/register', [AdminController::class, 'register_save'])->name('admin.register.save');
+Route::get('/admin/login', [AdminController::class, 'login'])->name('admin.login');
+Route::post('/admin/login', [AdminController::class, 'login_proceed'])->name('admin.login.proceed');
+
 Route::middleware(['auth:admin'])->group(function () {
     //Dashboard
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
@@ -62,6 +62,11 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::get('/students/{course}', [AdminController::class, 'show_students'])->name('students');
     Route::get('/exam_results/{course}', [AdminController::class, 'show_exam_results'])->name('exam_results');
     Route::post('/admin/update-exam-field', [AdminController::class, 'updateExamField'])->name('admin.update_exam_field');
+
+    Route::get('/admin/users', [AdminController::class, 'admin_users'])->name('admin.users');
+    Route::post('/admin/users', [AdminController::class, 'admin_users_add'])->name('add.admin.user');
+    Route::get('/subadmin/delete/{id}', [AdminController::class, 'delete'])->name('subadmin.delete');
+
 
     //Entrance exam
     Route::get('/entrance_exam', [AdminController::class, 'entrance_exam'])->name('entrance_exam');
@@ -87,7 +92,7 @@ Route::middleware(['auth:admin'])->group(function () {
 
     //SELECTION OF TASK
     Route::get('/students_add/{task}/{student_course}', [MainController::class, 'students_add'])->name('students_add');
-    
+
 
 
     Route::post('/students_store/{student_course}/{task}', [MainController::class, 'store'])->name('students.store');
@@ -110,7 +115,7 @@ Route::middleware(['auth:admin'])->group(function () {
     // Route::get('/bscs', [BSCSStudentController::class, 'bscs'])->name('bscs');
     // Route::get('/students_add_bscs', [BSCSStudentController::class, 'students_add_bscs'])->name('students_add_bscs');
     // Route::post('/students_store_bscs', [BSCSStudentController::class, 'store_bscs'])->name('students_bscs.store');
-    
+
 
 
     // // BLIS Routes
@@ -119,9 +124,8 @@ Route::middleware(['auth:admin'])->group(function () {
     // Route::post('/students_store_blis', [BLISStudentsController::class, 'store_blis'])->name('students_blis.store');
 
 
-    
-    Route::get('/smslogs', [MyController::class, 'smslogs'])->name('smslogs');
 
+    Route::get('/smslogs', [MyController::class, 'smslogs'])->name('smslogs');
 });
 
 
@@ -131,4 +135,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

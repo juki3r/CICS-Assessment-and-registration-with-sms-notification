@@ -41,22 +41,20 @@
                         <!-- Button trigger modal -->
                         <div class="text-end pb-3">
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                Add passed student
+                                Add student
                             </button>
                         </div>
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    {{-- <th>Status</th>
-                                    <th>Action</th> --}}
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($entranceExams as $entranceExam)
                                     <tr>
                                         <td class="text-capitalize">{{$entranceExam->fullname}}</td>
-                                        {{-- <td class="text-capitalize">{{$entranceExam->status}}</td>
                                         <td style="width: 10px" >
                                             <a href="{{ route('delete_entrance_student', ['id' => $entranceExam->id]) }}" class="flex justify-center">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class=" text-danger bi bi-trash3-fill" viewBox="0 0 16 16">
@@ -64,7 +62,7 @@
                                                 </svg>
                                             </a>
                                         </td>
-                                    </tr> --}}
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>
