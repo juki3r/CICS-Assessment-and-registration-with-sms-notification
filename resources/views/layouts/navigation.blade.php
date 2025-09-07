@@ -1,8 +1,14 @@
 <div class="row w-100 py-2">
     {{-- NAV --}}
     <div class="col d-flex align-items-center">
+      
 
-        <a href="{{ route('admin.dashboard') }}"
+        
+
+        
+         @if(Auth::guard('admin')->user() && Auth::guard('admin')->user()->role === 'admin')
+
+         <a href="{{ route('admin.dashboard') }}"
            class="nav-link mx-3 {{ request()->routeIs('admin.dashboard') ? 'active-nav' : '' }}">
             Dashboard
         </a>
@@ -26,7 +32,6 @@
            class="nav-link mx-3 {{ request()->routeIs('admin.skilltest') ? 'active-nav' : '' }}">
             Skill Test
         </a>
-
         <a href="{{ route('show.questions') }}"
            class="nav-link mx-3 {{ request()->routeIs('show.questions') ? 'active-nav' : '' }}">
             Test Questionaires
@@ -41,6 +46,7 @@
            class="nav-link mx-3 {{ request()->routeIs('show.questions') ? 'active-nav' : '' }}">
             Sms Logs
         </a>
+        @endif
 
         
     </div>

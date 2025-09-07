@@ -202,9 +202,13 @@ class AdminController extends Controller
 
     public function dashboard()
     {
+        if (Auth::guard('admin')->check() && Auth::guard('admin')->user()->role === 'admin') {
+            $notificationCount = AdminNotification::where('read', false)->count();
+            return view('admin.dashboard', compact('notificationCount'));
+        }
 
-        $notificationCount = AdminNotification::where('read', false)->count();
-        return view('admin.dashboard', compact('notificationCount'));
+        // if not admin, redirect somewhere else
+        return redirect()->route('admin.login')->with('error', 'Unauthorized access.');
     }
 
     public function updateExamField(Request $request)
