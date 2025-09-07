@@ -18,6 +18,7 @@ class StudentRegistrations extends Model
         'rating_communication',
         'rating_confidence',
         'rating_thinking',
-        'interview_result'
+        'interview_result',
+        'skilltest'
     ];
 }

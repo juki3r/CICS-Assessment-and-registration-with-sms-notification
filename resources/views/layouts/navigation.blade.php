@@ -22,6 +22,11 @@
             Interview
         </a>
 
+        <a href="{{ route('admin.skilltest') }}"
+           class="nav-link mx-3 {{ request()->routeIs('admin.skilltest') ? 'active-nav' : '' }}">
+            Skill Test
+        </a>
+
         <a href="{{ route('show.questions') }}"
            class="nav-link mx-3 {{ request()->routeIs('show.questions') ? 'active-nav' : '' }}">
             Test Questionaires

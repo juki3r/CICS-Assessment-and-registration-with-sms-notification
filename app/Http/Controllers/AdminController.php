@@ -464,6 +464,35 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Interview details updated successfully.');
     }
 
+    // Skill test
+    public function skilltest(Request $request)
+    {
+        $query = StudentRegistrations::query();
+
+        // Apply search
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where('fullname', 'like', "%{$search}%");
+        }
+
+        $registrations = $query->paginate(6)->withQueryString();
+
+        if ($request->ajax()) {
+            return view('admin.partials.interview_table', compact('registrations'))->render();
+        }
+        return view('skilltest.index', compact('registrations'));
+    }
+    public function updateSkilltest(Request $request, $id)
+    {
+        $registration = StudentRegistrations::findOrFail($id);
+
+        $registration->update([
+            'skilltest' => $request->skilltest,
+        ]);
+
+        return redirect()->back()->with('success', 'Skilltest details updated successfully.');
+    }
+
 
 
 

@@ -9,7 +9,7 @@
     <tbody>
         @forelse ($registrations as $registration)
             <tr>
-                <td>{{ $registration->fullname }}</td>
+                <td class="text-capitalize">{{ $registration->fullname }}</td>
                 <td class="text-center">
                     <a href="{{ route('student.delete', ['id' => $registration->id]) }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash text-danger" viewBox="0 0 16 16">

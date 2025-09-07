@@ -59,6 +59,10 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::put('/registrations/{id}/interview-result', [AdminController::class, 'updateInterviewResult'])
         ->name('registrations.updateInterviewResult');
 
+    Route::get('/admin/skilltest', [AdminController::class, 'skilltest'])->name('admin.skilltest');
+    Route::put('/registrations/{id}/skilltest', [AdminController::class, 'updateSkilltest'])
+        ->name('registrations.updateSkilltest');
+
 
     //Questionaires
     Route::resource('questions', \App\Http\Controllers\Admin\QuestionController::class);

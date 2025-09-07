@@ -14,7 +14,7 @@
         <tbody>
             @forelse ($registrations as $registration)
                 <tr data-bs-toggle="modal" data-bs-target="#studentModal{{ $registration->id }}" style="cursor:pointer;">
-                    <td>{{ $registration->fullname }}</td>
+                    <td class="text-capitalize">{{ $registration->fullname }}</td>
                 </tr>
             @empty
                 <tr>
@@ -40,7 +40,7 @@
                 @method('PUT')
 
                 <div class="modal-header">
-                    <h5 class="modal-title">Interview - {{ $registration->fullname }}</h5>
+                    <h5 class="modal-title text-capitalize">Interview - {{ $registration->fullname }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
@@ -54,7 +54,7 @@
 
                                 <div class="mb-3">
                                     <label class="form-label">Fullname:</label>
-                                    <input type="text" class="form-control" value="{{ $registration->fullname }}" readonly>
+                                    <input type="text" class="form-control text-capitalize" value="{{ $registration->fullname }}" readonly>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Address:</label>
