@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>CICS</title>
-        <link rel="shortcut icon" href="{{ asset('logo.png') }}" type="image/x-icon">
+        <link rel="shortcut icon" href="{{asset('logo.png')}}" type="image/x-icon">
 
         <!-- BOOTSTRAP -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -15,6 +15,9 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+         <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+        <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
