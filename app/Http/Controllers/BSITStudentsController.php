@@ -33,7 +33,7 @@ class BSITStudentsController extends Controller
         $request->validate([
             'fullname' => 'required|string|max:255|unique:students,fullname',
             'address' => 'required|string|max:255',
-            'contact_number' => 'required|string|min:11|max:15|unique:students,contact_number',
+            'contact_number' => 'required|string|min:11|max:14|unique:students,contact_number',
             'school' => 'required|string|max:255',
             'strand' => 'required|string|max:255',
             'age' => 'required|numeric|max:255',
