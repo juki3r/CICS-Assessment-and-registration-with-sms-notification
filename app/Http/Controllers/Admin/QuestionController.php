@@ -11,10 +11,11 @@ class QuestionController extends Controller
 {
     public function index()
     {
+
         // Count notifications
         $notificationCount = AdminNotification::where('read', false)->count();
-        $questions = Question::latest()->paginate(10);
-        return view('admin.questions.index', compact('questions','notificationCount'));
+        $questions = Question::orderBy('id', 'desc')->paginate(6);
+        return view('admin.questions.index', compact('questions', 'notificationCount'));
     }
 
     public function create()
@@ -32,11 +33,19 @@ class QuestionController extends Controller
             'option_b' => 'required|string',
             'option_c' => 'required|string',
             'option_d' => 'required|string',
-            'correct_answer' => 'required|in:a,b,c,d',
+            'option_e' => 'nullable|string',
+            'correct_answer' => 'required|in:a,b,c,d,e',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        Question::create($validated); // Only validated fields are passed (no _token)
-        
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('questions', 'public');
+            $validated['image'] = $path;
+        }
+
+        Question::create($validated);
+
         return redirect()->route('questions.index')->with('success', 'Question added!');
     }
 
@@ -47,16 +56,29 @@ class QuestionController extends Controller
 
     public function update(Request $request, Question $question)
     {
-        $request->validate([
-            'question' => 'required',
-            'option_a' => 'required',
-            'option_b' => 'required',
-            'option_c' => 'required',
-            'option_d' => 'required',
-            'correct_answer' => 'required|in:a,b,c,d',
+        $validated = $request->validate([
+            'question' => 'required|string',
+            'option_a' => 'required|string',
+            'option_b' => 'required|string',
+            'option_c' => 'required|string',
+            'option_d' => 'required|string',
+            'option_e' => 'nullable|string',
+            'correct_answer' => 'required|in:a,b,c,d,e',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $question->update($request->all());
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($question->image && \Storage::disk('public')->exists($question->image)) {
+                \Storage::disk('public')->delete($question->image);
+            }
+
+            $path = $request->file('image')->store('questions', 'public');
+            $validated['image'] = $path;
+        }
+
+        $question->update($validated);
 
         return redirect()->route('questions.index')->with('success', 'Question updated.');
     }

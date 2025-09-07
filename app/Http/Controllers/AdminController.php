@@ -7,13 +7,15 @@ use App\Models\Admins;
 use App\Models\SubAdmin;
 use App\Models\ExamResult;
 use App\Models\EntranceExam;
-use Illuminate\Http\Request;
 use App\Mail\GeneralNotification;
 use App\Models\AdminNotification;
+use App\Models\StudentRegistrations;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
@@ -134,7 +136,7 @@ class AdminController extends Controller
     public function show_students($course)
     {
         $notificationCount = AdminNotification::where('read', false)->count();
-        $students = User::where('course', $course)->where('is_new_register', false)->get();
+        $students = User::where('course', $course)->where('is_new_register', true)->get();
         return view('admin.show_students', compact(['notificationCount', 'students']));
     }
 
@@ -200,15 +202,9 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        // Count the number of each remark
-        $passed = ExamResult::where('remarks', 'passed')->count();
-        $failed = ExamResult::where('remarks', 'failed')->count();
-        $pending = ExamResult::where('remarks', 'pending')->count();
-
-
 
         $notificationCount = AdminNotification::where('read', false)->count();
-        return view('admin.dashboard', compact('notificationCount', 'passed', 'failed', 'pending'));
+        return view('admin.dashboard', compact('notificationCount'));
     }
 
     public function updateExamField(Request $request)
@@ -247,7 +243,7 @@ class AdminController extends Controller
     {
 
         // Fetch all data from the EntranceExam model
-        $entranceExams = EntranceExam::all();
+        $entranceExams = StudentRegistrations::all();
 
         // Count notifications
         $notificationCount = AdminNotification::where('read', false)->count();
@@ -260,12 +256,12 @@ class AdminController extends Controller
     {
         // Validate input
         $request->validate([
-            'fullname' => 'required|string|max:255|unique:entrance_exams,fullname',
+            'fullname' => 'required|string|max:255|unique:student_registrations,fullname',
             // 'status' => 'required|in:Pending,Failed,Passed',
         ]);
 
         // Create record in EntranceExam table
-        EntranceExam::create([
+        StudentRegistrations::create([
             'fullname' => $request->fullname,
             // 'status' => $request->status,
         ]);
@@ -295,41 +291,191 @@ class AdminController extends Controller
         // If the record was not found, redirect with an error message
         return redirect()->route('entrance_exam')->with('alert_message', 'Student not found.');
     }
+    //==================================================DOWNSIDE OKAY
 
+    // Show list of student registrations
+    public function admin_registrations(Request $request)
+    {
+
+        $query = StudentRegistrations::query();
+
+        // Apply search
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where('fullname', 'like', "%{$search}%");
+        }
+
+        $registrations = $query->paginate(6)->withQueryString();
+
+        if ($request->ajax()) {
+            return view('admin.partials.registrations_table', compact('registrations'))->render();
+        }
+
+        return view('admin.registrations', compact('registrations'));
+    }
+
+
+
+
+
+    // Add new student registration
+    public function admin_registrations_add(Request $request)
+    {
+        $request->validate([
+            'fullname' => 'required|string|max:255|unique:student_registrations,fullname',
+        ]);
+
+        try {
+            // Create SubAdmin
+            StudentRegistrations::create([
+                'fullname' => $request->fullname,
+            ]);
+
+            // Redirect back with success message
+            return back()->with('message', 'Student added successfully');
+        } catch (\Exception $e) {
+            // Redirect back with error message
+            return back()->with('alert', 'Something went wrong: ' . $e->getMessage());
+        }
+    }
+
+    //Delete sub admin
+    public function delete_student($id)
+    {
+        StudentRegistrations::findOrFail($id)->delete();
+        return back()->with('message', 'Student deleted successfully');
+    }
 
     // Accounts
-    public function admin_users()
+    public function admin_users(Request $request)
     {
-        // Count the number of each remark
         $passed = ExamResult::where('remarks', 'passed')->count();
         $failed = ExamResult::where('remarks', 'failed')->count();
         $pending = ExamResult::where('remarks', 'pending')->count();
-        $subAdmins = SubAdmin::all();
 
+        $query = SubAdmin::query();
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        $subAdmins = $query->paginate(6)->withQueryString();
+
+        // 👉 If AJAX, return partial only
+        if ($request->ajax()) {
+            return view('admin.partials.subadmins-table', compact('subAdmins'))->render();
+        }
 
         $notificationCount = AdminNotification::where('read', false)->count();
+
         return view('admin.users', compact('notificationCount', 'passed', 'failed', 'pending', 'subAdmins'));
     }
-    //Add Sub admin account
 
+
+    public function search(Request $request)
+    {
+        $subAdmins = SubAdmin::query()
+            ->when($request->search, function ($query, $search) {
+                return $query->where('name', 'like', "%{$search}%");
+            })
+            ->paginate(6);
+
+        return view('admin.partials.subadmins-table', compact('subAdmins'))->render();
+    }
+
+
+
+    //Add Sub admin account
     public function admin_users_add(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:sub_admins,name',
         ]);
+        try {
+            // Create SubAdmin
+            SubAdmin::create([
+                'name' => $request->name,
+            ]);
 
-        SubAdmin::create([
-            'name' => $request->name,
-        ]);
-
-        // Redirect back with success message
-        return back()->with('message', 'Sub Admin added successfully');
+            // Redirect back with success message
+            return back()->with('message', 'Sub Admin added successfully');
+        } catch (\Exception $e) {
+            // Redirect back with error message
+            return back()->with('alert', 'Something went wrong: ' . $e->getMessage());
+        }
     }
-
     //Delete sub admin
     public function delete($id)
     {
         SubAdmin::findOrFail($id)->delete();
         return back()->with('message', 'Sub Admin deleted successfully');
+    }
+
+
+
+
+    // INTERVIEW
+    public function interview(Request $request)
+    {
+        $query = StudentRegistrations::query();
+
+        // Apply search
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where('fullname', 'like', "%{$search}%");
+        }
+
+        $registrations = $query->paginate(6)->withQueryString();
+
+        if ($request->ajax()) {
+            return view('admin.partials.interview_table', compact('registrations'))->render();
+        }
+        return view('interview.index', compact('registrations'));
+    }
+
+
+    // Update the interview
+    public function updateInterviewResult(Request $request, $id)
+    {
+        $registration = StudentRegistrations::findOrFail($id);
+
+        // Compute overall rating (average of non-null ratings)
+        $ratings = collect([
+            $request->rating_communication,
+            $request->rating_confidence,
+            $request->rating_thinking,
+        ])->filter()->map(fn($val) => (int) $val);
+
+        $overall = $ratings->count() > 0 ? round($ratings->avg(), 2) : null;
+        $gwa_final = (($request->gwa * 100) / 100) * .3;
+        $registration->update([
+            'address'              => $request->address,
+            'contact_details'      => $request->contact_details,
+            'gwa'                  => $gwa_final,
+            'school'               => $request->school,
+            'strand'               => $request->strand,
+            'rating_communication' => $request->rating_communication,
+            'rating_confidence'    => $request->rating_confidence,
+            'rating_thinking'      => $request->rating_thinking,
+            'interview_result'       => $overall,
+        ]);
+
+        return redirect()->back()->with('success', 'Interview details updated successfully.');
+    }
+
+
+
+
+
+
+    public function reports()
+    {
+        return view('reports.index');
+    }
+
+    public function smslogs()
+    {
+        return view('smslogs.index');
     }
 }

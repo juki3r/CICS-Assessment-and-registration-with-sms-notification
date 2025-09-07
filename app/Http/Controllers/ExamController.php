@@ -6,34 +6,24 @@ use App\Models\Question;
 use App\Models\ExamResult;
 use Illuminate\Http\Request;
 use App\Models\AdminNotification;
+use App\Models\StudentRegistrations;
 use Illuminate\Support\Facades\Auth;
 
 class ExamController extends Controller
 {
-    public function start()
+    public function start(Request $request, $name)
     {
-        // Prevent retake
-        if (ExamResult::where('user_id', Auth::id())->exists()) {
-            return redirect()->route('dashboard')->with('alert_message', 'You already took the exam.');
-        }
+        $fullname = $name;
 
-        // Track exam start
-        if (!session()->has('exam_start')) {
-            session(['exam_start' => now()]);
-        }
-
-        // Check if time expired
-        $start = session('exam_start');
-        if (now()->diffInMinutes($start) >= 60) {
-            return redirect()->route('dashboard')->with('alert_message', 'Your 1-hour exam time is up.');
-        }
-        
         // You can limit the number of questions if needed: ->inRandomOrder()->take(10)
         $questions = Question::inRandomOrder()->get();
-        return view('exam.start', compact('questions'));
+        return view('exam.start', [
+            'questions' => $questions,
+            'fullname' => $fullname,
+        ]);
     }
 
-    public function submit(Request $request)
+    public function submit(Request $request, $name)
     {
         $score = 0;
         $total = count($request->questions ?? []);
@@ -45,16 +35,15 @@ class ExamController extends Controller
             }
         }
 
-        $user_exam = ExamResult::where('user_id', Auth::user()->id)->firstOrFail();
-        $user_exam->update(['exam' => $score]);
+        // Find the student record by fullname
+        $user_exam = StudentRegistrations::where('fullname', $name)->first();
 
-        // Count notifications
-        $notificationCount = AdminNotification::where('read', false)->count();
+        if ($user_exam) {
+            $user_exam->update([
+                'exam_result' => $score . '/' . $total
+            ]);
+        }
 
-        return view('exam.result', [
-            'score' => $score,
-            'total' => $total,
-            'notificationCount' => $notificationCount,
-        ]);
+        return view('auth.login')->with('success', 'Exam submitted successfully! Your score: ' . $score . '/' . $total);
     }
 }

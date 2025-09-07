@@ -32,22 +32,12 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request):RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'fullname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'fullname' => ['required', 'string', 'max:255', 'unique:' . User::class],
             'course' => ['required', Rule::in(['bsit', 'bscs', 'blis'])],
-            'password' => [
-                        'required',
-                        'confirmed',
-                        Rules\Password::min(8)
-                    ],
         ]);
-
-        // Let's verify first if this student already pass the entrance exam
-        // Lets create a dashboard later for entrance exam admin
-        // for now, lets override it first.
 
         $exists = EntranceExam::where('fullname', $request->fullname)->exists();
 
@@ -55,23 +45,18 @@ class RegisteredUserController extends Controller
             $student = EntranceExam::where('fullname', $request->fullname)->first();
             if ($student->status == 'pending') {
                 return back()->with('message', 'Your exam status is still pending. Please wait for the result.');
-            }else if ($student->status == 'failed') {
+            } else if ($student->status == 'failed') {
                 return back()->with('message', 'You failed exam. Better luck next time');
-            }else{
+            } else {
 
                 $user = User::create([
                     'fullname' => $request->fullname,
-                    'address' => $request->address,
                     'course' => $request->course,
-                    'email' => $request->email,
-                    'password' => Hash::make($request->password),
                 ]);
-
-                
 
                 //ADD to admin notify
                 $user = User::where('fullname', $request->fullname)->first();
-                if($user){
+                if ($user) {
                     AdminNotification::create([
                         'user_id' => $user->id,
                         'category' => 'registration',
@@ -85,14 +70,9 @@ class RegisteredUserController extends Controller
 
                 return redirect(route('dashboard'));
             }
-
         } else {
             // Student does not exist
             return back()->with('message', 'Upon checking, your name is not found!');
         }
-
-
-
-        
     }
 }

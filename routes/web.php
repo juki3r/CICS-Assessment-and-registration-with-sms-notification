@@ -13,34 +13,20 @@ use App\Http\Controllers\BLISStudentsController;
 use App\Http\Controllers\BSITStudentsController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\StudentController;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    if (session()->has('student_name')) {
+        return redirect()->route('student.dashboard');
+    }
+    return view('auth.login');
+})->name('student.login.form');
+Route::post('/student/login', [StudentController::class, 'login'])->name('student.login');
+Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
+Route::post('/student/logout', [StudentController::class, 'logout'])->name('student.logout');
+Route::get('/exam/{name}', [ExamController::class, 'start'])->name('exam.start');
+Route::post('/exam/submit/{name}', [ExamController::class, 'submit'])->name('exam.submit');
 
-// Route::get('/', [AuthenticatedSessionController::class, 'create'])
-//         ->name('welcome');
-
-
-
-
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', [MainController::class, 'dashboard'])->name('dashboard');
-
-    Route::get('/exam', [ExamController::class, 'start'])->name('exam.start');
-    Route::post('/exam/submit', [ExamController::class, 'submit'])->name('exam.submit');
-
-
-
-
-
-    //OTP
-    Route::get('/verify_otp', [MainController::class, 'verify_otp'])->name('verify.otp');
-    Route::post('/verify_otp', [MainController::class, 'go_verify'])->name('go.verify');
-
-    //Exam
-    Route::post('/exam', [MainController::class, 'examsave'])->name('submit.exam');
-});
 
 
 
@@ -51,8 +37,36 @@ Route::get('/admin/login', [AdminController::class, 'login'])->name('admin.login
 Route::post('/admin/login', [AdminController::class, 'login_proceed'])->name('admin.login.proceed');
 
 Route::middleware(['auth:admin'])->group(function () {
+    //Checked ----------------------------------------------------------------------------------------
+    Route::get('/admin/users', [AdminController::class, 'admin_users'])->name('admin.users');
+    Route::post('/admin/users', [AdminController::class, 'admin_users_add'])->name('add.admin.user');
+    Route::get('/subadmin/delete/{id}', [AdminController::class, 'delete'])->name('subadmin.delete');
+    Route::get('/admin/users/search', [AdminController::class, 'search'])->name('admin.users.search');
+
+    // ------------------------------------------------------------------------------------------------
+
     //Dashboard
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
+
+    //Registrations
+    Route::get('/admin/registrations', [AdminController::class, 'admin_registrations'])->name('admin.registrations');
+    Route::get('/admin/registrations/search', [AdminController::class, 'admin_registrations'])->name('admin.registrations.search');
+    Route::post('/admin/registrations/add', [AdminController::class, 'admin_registrations_add'])->name('add.registration');
+    Route::get('/student/delete/{id}', [AdminController::class, 'delete_student'])->name('student.delete');
+
+    Route::get('/admin/interview', [AdminController::class, 'interview'])->name('admin.interview');
+    Route::put('/registrations/{id}/interview-result', [AdminController::class, 'updateInterviewResult'])
+        ->name('registrations.updateInterviewResult');
+
+
+    //Questionaires
+    Route::resource('questions', \App\Http\Controllers\Admin\QuestionController::class);
+    Route::get('/admin/questionaire', [QuestionController::class, 'index'])->name('show.questions');
+
+
+
+
     Route::get('/admin-notification', [AdminController::class, 'admin_notification'])->name('admin.notification');
     Route::get('admin/notification/{id}/{category}/{user_id}', [AdminController::class, 'showNotification'])->name('admin.notification.show');
     Route::get('/admin-approval', [AdminController::class, 'admin_approval'])->name('admin.approval');
@@ -63,21 +77,19 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::get('/exam_results/{course}', [AdminController::class, 'show_exam_results'])->name('exam_results');
     Route::post('/admin/update-exam-field', [AdminController::class, 'updateExamField'])->name('admin.update_exam_field');
 
-    Route::get('/admin/users', [AdminController::class, 'admin_users'])->name('admin.users');
-    Route::post('/admin/users', [AdminController::class, 'admin_users_add'])->name('add.admin.user');
-    Route::get('/subadmin/delete/{id}', [AdminController::class, 'delete'])->name('subadmin.delete');
+
 
 
     //Entrance exam
     Route::get('/entrance_exam', [AdminController::class, 'entrance_exam'])->name('entrance_exam');
     Route::post('/save_passed_student', [AdminController::class, 'save_passed_student'])->name('save_passed_student');
     Route::get('/entrance-exam/delete/{id}', [AdminController::class, 'delete_entrance'])->name('delete_entrance_student');
+    Route::get('/interview', [AdminController::class, 'interview'])->name('interview');
+
+    Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
+    Route::get('/smslogs', [AdminController::class, 'smslogs'])->name('smslogs');
 
 
-
-
-    Route::resource('questions', \App\Http\Controllers\Admin\QuestionController::class);
-    Route::get('/admin/questionaire', [QuestionController::class, 'index'])->name('show.questions');
 
 
 
@@ -104,28 +116,6 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::put('/students_update/{id}', [MainController::class, 'update'])->name('students.update');
 
     Route::get('/reports', [MainController::class, 'show_reports'])->name('reports');
-
-
-
-
-
-
-
-    // // BSCS ROUTES
-    // Route::get('/bscs', [BSCSStudentController::class, 'bscs'])->name('bscs');
-    // Route::get('/students_add_bscs', [BSCSStudentController::class, 'students_add_bscs'])->name('students_add_bscs');
-    // Route::post('/students_store_bscs', [BSCSStudentController::class, 'store_bscs'])->name('students_bscs.store');
-
-
-
-    // // BLIS Routes
-    // Route::get('/blis', [BLISStudentsController::class, 'blis'])->name('blis');
-    // Route::get('/students_add_blis', [BLISStudentsController::class, 'students_add_blis'])->name('students_add_blis');
-    // Route::post('/students_store_blis', [BLISStudentsController::class, 'store_blis'])->name('students_blis.store');
-
-
-
-    Route::get('/smslogs', [MyController::class, 'smslogs'])->name('smslogs');
 });
 
 

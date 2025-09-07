@@ -2,48 +2,36 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('login') }}">
+    <form method="POST" action="{{ route('student.login') }}">
         @csrf
 
-        <!-- Email Address -->
+        <!-- Full name -->
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <h1 class="fs-3 text-center mb-3">Student Login</h1>
+            <x-input-label for="name" :value="__('Name')" />
+            <x-text-input id="name" 
+                          class="block mt-1 w-full form-control" 
+                          style="text-transform: capitalize;"  
+                          type="text" 
+                          name="name" 
+                          required 
+                          autofocus />
+            <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <!-- Course Dropdown -->
+        <div class="mt-3">
+            <x-input-label for="course" :value="__('Course')" />
+            <select id="course" name="course" class="form-select block mt-1 w-full" required>
+                <option value="">-- Select Course --</option>
+                <option value="bsit" {{ old('course') == 'bsit' ? 'selected' : '' }}>BSIT</option>
+                <option value="bscs" {{ old('course') == 'bscs' ? 'selected' : '' }}>BSCS</option>
+                <option value="blis" {{ old('course') == 'blis' ? 'selected' : '' }}>BLIS</option>
+            </select>
+            <x-input-error :messages="$errors->get('course')" class="mt-2" />
         </div>
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <button class="btn btn-dark w-full my-3">Login</button>
-
-        <div class="flex items-center justify-between mt-4" >
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('register') }}">
-                {{ __('Register') }}
-            </a>
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-        </div>
-
+        <!-- Submit Button -->
+        <button class="btn btn-dark w-100 my-3">Proceed</button>
     </form>
 </x-guest-layout>

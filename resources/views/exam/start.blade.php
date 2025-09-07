@@ -1,75 +1,186 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight uppercase">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam</title>
+    <link rel="shortcut icon" href="{{ asset('logo.png') }}" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+    @vite('resources/css/app.css')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            @if (session('message'))
-                <div class="mb-4 text-green-600 font-semibold">
-                    {{ session('message') }}
-                </div>
-            @elseif (session('alert_message'))
-                <div class="mb-4 text-red-600 font-semibold">
-                    {{ session('alert_message') }}
-                </div>
-            @endif
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                   
-                <div class="container">
-                    <h1 class="fs-3 mb-3">Exam</h1>
-                    <div id="timer" class="mb-4 text-red-600 font-semibold text-xl"></div>
-                    <form action="{{ route('exam.submit') }}" method="POST">
-                        @csrf
-                        @foreach ($questions as $index => $question)
-                            <div class="mb-4">
-                                <p><strong>Q{{ $index + 1 }}: {{ $question->question }}</strong></p>
-                                <div>
-                                    <label><input type="radio" name="questions[{{ $question->id }}]" value="a" required> A. {{ $question->option_a }}</label><br>
-                                    <label><input type="radio" name="questions[{{ $question->id }}]" value="b"> B. {{ $question->option_b }}</label><br>
-                                    <label><input type="radio" name="questions[{{ $question->id }}]" value="c"> C. {{ $question->option_c }}</label><br>
-                                    <label><input type="radio" name="questions[{{ $question->id }}]" value="d"> D. {{ $question->option_d }}</label>
-                                </div>
-                            </div>
-                        @endforeach
-                        <button type="submit" class="btn btn-success">Submit Exam</button>
-                    </form>
-                    <script>
-                        let remainingTime = 3600; // 1 hour in seconds
-                        const timerDisplay = document.getElementById('timer');
-                    
-                        const countdown = setInterval(() => {
-                            const minutes = Math.floor(remainingTime / 60);
-                            const seconds = remainingTime % 60;
-                            timerDisplay.textContent = `Time Left: ${minutes}:${seconds.toString().padStart(2, '0')}`;
-                            
-                            if (remainingTime <= 0) {
-                                clearInterval(countdown);
-                                alert("Time's up! Submitting exam.");
-                                document.querySelector('form').submit(); // auto-submit
-                            }
-                    
-                            remainingTime--;
-                        }, 1000);
-                        // Disable refresh
-                        window.addEventListener("keydown", function (e) {
-                            if ((e.key === "F5") || (e.ctrlKey && e.key === "r")) {
-                                e.preventDefault();
-                                alert("Refreshing is disabled during the exam.");
-                            }
-                        });
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden; /* 🚫 Prevent scrolling */
+            background-color: #f8f9fa;
+        }
 
-                        // Warn on close or reload
-                        window.onbeforeunload = function () {
-                            return "Are you sure you want to leave? Your answers will be lost.";
-                        };
-                    </script>
-                </div>  
+        .exam-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 30px;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .exam-body {
+            display: flex;
+            justify-content: center;  
+            align-items: center;      
+            height: calc(100vh - 130px); /* Viewport minus header+footer */
+            margin-top: 70px; /* push below header */
+            padding: 20px;
+            text-align: center;
+            overflow: hidden; /* 🚫 no scroll */
+        }
+
+        .exam-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #fff;
+            border-top: 1px solid #ddd;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between; /* prev left / next right */
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .question-container {
+            max-width: 700px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="exam-header">
+        <h2 class="m-0 fw-bold">EXAM , {{$fullname}}</h2>
+        <span id="timer" class="text-danger fw-bold fs-4"></span>
+    </div>
+
+    <!-- Exam Body -->
+    <div class="exam-body">
+        <form action="{{ route('exam.submit', ['name' => $fullname]) }}" method="POST" id="examForm" class="w-100 d-flex flex-column align-items-center">
+            @csrf
+            @foreach ($questions as $index => $question)
+                <div class="question-container text-center" id="question-{{ $index }}" style="{{ $index === 0 ? '' : 'display:none;' }}">
+                    <p class="fs-4 fw-semibold">Question {{ $index + 1 }}</p>
+                    <p class="fs-5 mt-3">{{ $question->question }}</p>
+
+                    <!-- Options -->
+                    <div class="mt-4 text-start d-inline-block">
+                        <label class="mb-2 d-block">
+                            <input type="radio" name="questions[{{ $question->id }}]" value="a" required> 
+                            A. {{ $question->option_a }}
+                        </label>
+                        <label class="mb-2 d-block">
+                            <input type="radio" name="questions[{{ $question->id }}]" value="b"> 
+                            B. {{ $question->option_b }}
+                        </label>
+                        <label class="mb-2 d-block">
+                            <input type="radio" name="questions[{{ $question->id }}]" value="c"> 
+                            C. {{ $question->option_c }}
+                        </label>
+                        <label class="mb-2 d-block">
+                            <input type="radio" name="questions[{{ $question->id }}]" value="d"> 
+                            D. {{ $question->option_d }}
+                        </label>
+                        @if (!empty($question->option_e))
+                            <label class="mb-2 d-block">
+                                <input type="radio" name="questions[{{ $question->id }}]" value="e"> 
+                                E. {{ $question->option_e }}
+                            </label>
+                        @endif
+                    </div>
                 </div>
-            </div>
+            @endforeach
+        </form>
+    </div>
+
+    <!-- Navigation -->
+    <div class="exam-footer">
+        <button type="button" class="btn btn-secondary prev-btn" style="display:none;">Previous</button>
+        <div>
+            <button type="button" class="btn btn-primary next-btn">Next</button>
+            <button type="submit" form="examForm" class="btn btn-success submit-btn" style="display:none;">Submit Exam</button>
         </div>
     </div>
-</x-app-layout>
+
+    <script>
+        // Timer
+        let remainingTime = 3600; // 1 hour
+        const timerDisplay = document.getElementById('timer');
+        const countdown = setInterval(() => {
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+            timerDisplay.textContent = `Time Left: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+            if (remainingTime <= 0) {
+                clearInterval(countdown);
+                alert("Time's up! Submitting exam.");
+                document.getElementById('examForm').submit();
+            }
+            remainingTime--;
+        }, 1000);
+
+        // Navigation
+        const questions = document.querySelectorAll('.question-container');
+        let current = 0;
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        const submitBtn = document.querySelector('.submit-btn');
+
+        function showQuestion(index) {
+            questions.forEach((q, i) => q.style.display = (i === index) ? 'block' : 'none');
+            prevBtn.style.display = index > 0 ? 'inline-block' : 'none';
+            nextBtn.style.display = index < questions.length - 1 ? 'inline-block' : 'none';
+            submitBtn.style.display = index === questions.length - 1 ? 'inline-block' : 'none';
+        }
+
+        // ✅ Check if user selected an answer before moving to next
+        function hasAnswer(index) {
+            const radios = questions[index].querySelectorAll('input[type="radio"]');
+            return Array.from(radios).some(r => r.checked);
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (!hasAnswer(current)) {
+                alert("⚠️ Please select an answer before proceeding.");
+                return;
+            }
+            if (current < questions.length - 1) current++;
+            showQuestion(current);
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (current > 0) current--;
+            showQuestion(current);
+        });
+
+        showQuestion(current);
+
+        // Disable refresh
+        window.addEventListener("keydown", function (e) {
+            if ((e.key === "F5") || (e.ctrlKey && e.key === "r")) {
+                e.preventDefault();
+                alert("Refreshing is disabled during the exam.");
+            }
+        });
+
+        // Warn before closing
+        window.onbeforeunload = function () {
+            return "Are you sure you want to leave? Your answers will be lost.";
+        };
+    </script>
+</body>
+</html>
