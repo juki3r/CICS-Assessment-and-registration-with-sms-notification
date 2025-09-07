@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('student_registrations', function (Blueprint $table) {
-            $table->integer('skilltest')->nullable()->after('interview_result');
+            $table->decimal('skilltest', 4, 2)->nullable()->after('interview_result');
         });
     }
 
