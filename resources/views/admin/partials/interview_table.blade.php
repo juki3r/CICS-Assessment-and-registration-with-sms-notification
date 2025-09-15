@@ -62,7 +62,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Contact details:</label>
-                                    <input type="text" class="form-control" name="contact_details" value="{{ $registration->contact_details }}">
+                                    <input type="number" class="form-control" name="contact_details" value="{{ $registration->contact_details }}">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">GWA:</label>
