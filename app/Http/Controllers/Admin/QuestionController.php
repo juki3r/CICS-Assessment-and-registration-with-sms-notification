@@ -14,7 +14,7 @@ class QuestionController extends Controller
 
         // Count notifications
         $notificationCount = AdminNotification::where('read', false)->count();
-        $questions = Question::orderBy('id', 'desc')->paginate(6);
+        $questions = Question::orderBy('id', 'asc')->paginate(6);
         return view('admin.questions.index', compact('questions', 'notificationCount'));
     }
 
