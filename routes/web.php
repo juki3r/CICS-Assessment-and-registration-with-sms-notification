@@ -14,13 +14,16 @@ use App\Http\Controllers\BSITStudentsController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\SubAdminController;
 
 Route::get('/', function () {
     if (session()->has('student_name')) {
         return redirect()->route('student.dashboard');
     }
-    return view('auth.login');
-})->name('student.login.form');
+    return view('auth.navigator');
+})->name('navigator');
+
+
 Route::post('/student/login', [StudentController::class, 'login'])->name('student.login');
 Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
 Route::post('/student/logout', [StudentController::class, 'logout'])->name('student.logout');
@@ -55,13 +58,7 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::post('/admin/registrations/add', [AdminController::class, 'admin_registrations_add'])->name('add.registration');
     Route::get('/student/delete/{id}', [AdminController::class, 'delete_student'])->name('student.delete');
 
-    Route::get('/admin/interview', [AdminController::class, 'interview'])->name('admin.interview');
-    Route::put('/registrations/{id}/interview-result', [AdminController::class, 'updateInterviewResult'])
-        ->name('registrations.updateInterviewResult');
 
-    Route::get('/admin/skilltest', [AdminController::class, 'skilltest'])->name('admin.skilltest');
-    Route::put('/registrations/{id}/skilltest', [AdminController::class, 'updateSkilltest'])
-        ->name('registrations.updateSkilltest');
 
 
     //Questionaires
@@ -93,34 +90,37 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
     Route::get('/smslogs', [AdminController::class, 'smslogs'])->name('smslogs');
 
-
-
-
-
-
-
-
-
-
-
-    // BSIT ROUTES
-    Route::get('/main', [MainController::class, 'show'])->name('main');
-
-    //SELECTION OF TASK
-    Route::get('/students_add/{task}/{student_course}', [MainController::class, 'students_add'])->name('students_add');
-
-
-
-    Route::post('/students_store/{student_course}/{task}', [MainController::class, 'store'])->name('students.store');
-
-
-
-    Route::get('/students_edit/{id}', [MainController::class, 'edit'])->name('students.edit');
-    Route::post('/students_destroy/{id}', [MainController::class, 'destroy'])->name('students.destroy');
-    Route::put('/students_update/{id}', [MainController::class, 'update'])->name('students.update');
-
-    Route::get('/reports', [MainController::class, 'show_reports'])->name('reports');
+    //Notiffications
+    Route::get('/admin/notifications', [AdminController::class, 'notifications'])->name('admin.notifications');
+    Route::post('/admin/notifications/{id}/mark-read', [AdminController::class, 'markNotificationRead'])->name('admin.notifications.markRead');
 });
+
+Route::get('/admin/interview', [AdminController::class, 'interview'])->name('admin.interview');
+Route::put('/registrations/{id}/interview-result', [AdminController::class, 'updateInterviewResult'])
+    ->name('registrations.updateInterviewResult');
+
+Route::get('/admin/skilltest', [AdminController::class, 'skilltest'])->name('admin.skilltest');
+Route::put('/registrations/{id}/skilltest', [AdminController::class, 'updateSkilltest'])
+    ->name('registrations.updateSkilltest');
+
+Route::post('/student/logout', [StudentController::class, 'logout'])->name('student.logout');
+
+
+
+
+//SUBADMIN/ FACULTY
+Route::get('/subadmin/login', [SubAdminController::class, 'index']);
+Route::post('/subadmin/login', [SubAdminController::class, 'login'])->name('subadmin.login');
+
+Route::get('/subadmin/dashboard', [SubAdminController::class, 'dashboard'])->name('subadmin.dashboard');
+
+
+
+// Admin routes (already exist)
+Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
+
+// Subadmin routes
+Route::post('/subadmin/logout', [SubAdminController::class, 'logout'])->name('subadmin.logout');
 
 
 Route::middleware('auth')->group(function () {

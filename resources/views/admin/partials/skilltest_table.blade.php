@@ -64,7 +64,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                     @if($registration->interview_result == null)
+                     @if($registration->skilltest == null)
                     <button type="submit" class="btn btn-primary">Save</button>
                     @endif
                 </div>

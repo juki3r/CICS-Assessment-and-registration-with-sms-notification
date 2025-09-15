@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('admins', function (Blueprint $table) {
+        Schema::create('admin_notif', function (Blueprint $table) {
             $table->id();
-            $table->string('fullname');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->enum('role', ['admin', 'subadmin'])->default('admin');
-            $table->boolean('approved')->default(false);
-            $table->rememberToken();
+            $table->string('action'); // e.g. "Saved interview result"
+            $table->string('actor');  // admin or subadmin name
             $table->timestamps();
         });
     }
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('admins');
+        Schema::dropIfExists('admin_notif');
     }
 };

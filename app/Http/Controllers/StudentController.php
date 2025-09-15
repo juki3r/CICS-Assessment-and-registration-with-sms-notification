@@ -64,7 +64,7 @@ class StudentController extends Controller
         session()->forget('student_name'); // remove student session
         session()->flush(); // optional, clears everything
 
-        return redirect()->route('student.login.form')
+        return redirect()->route('navigator')
             ->with('status', 'You have been logged out.');
     }
 }

@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('student_registrations', function (Blueprint $table) {
-            $table->decimal('skilltest', 5, 2)->nullable()->after('interview_result');
+        Schema::table('admin_notif', function (Blueprint $table) {
+            $table->boolean('marked')->default(false)->after('actor');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('student_registrations', function (Blueprint $table) {
-            $table->dropColumn('skilltest');
+        Schema::table('admin_notif', function (Blueprint $table) {
+            $table->dropColumn('marked');
         });
     }
 };

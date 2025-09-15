@@ -5,17 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Admins;
 use App\Models\SubAdmin;
+use App\Models\AdminNotif;
 use App\Models\ExamResult;
 use App\Models\EntranceExam;
+use Illuminate\Http\Request;
 use App\Mail\GeneralNotification;
 use App\Models\AdminNotification;
 use App\Models\StudentRegistrations;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\Password;
 
 class AdminController extends Controller
 {
@@ -451,7 +452,9 @@ class AdminController extends Controller
             $request->rating_thinking,
         ])->filter()->map(fn($val) => (int) $val);
 
-        $overall = $ratings->count() > 0 ? round($ratings->avg(), 2) : null;
+        $overall = $ratings->count() > 0 ? $ratings->avg() : null;
+        $final_interview_result = (($overall * 100) / 5) * 0.2;
+
         $gwa_final = (($request->gwa * 100) / 100) * .3;
         $registration->update([
             'address'              => $request->address,
@@ -462,7 +465,18 @@ class AdminController extends Controller
             'rating_communication' => $request->rating_communication,
             'rating_confidence'    => $request->rating_confidence,
             'rating_thinking'      => $request->rating_thinking,
-            'interview_result'       => $overall,
+            'interview_result'       => $final_interview_result,
+        ]);
+
+        // Identify actor
+        $actor = Auth::guard('admin')->check()
+            ? Auth::guard('admin')->user()->fullname
+            : (session('subadmin_name') ?? 'Unknown');
+
+        // Log notification
+        AdminNotif::create([
+            'action' => "Saved interview result for {$registration->fullname}",
+            'actor' => $actor,
         ]);
 
         return redirect()->back()->with('success', 'Interview details updated successfully.');
@@ -491,7 +505,18 @@ class AdminController extends Controller
         $registration = StudentRegistrations::findOrFail($id);
         $final_skilltest = (($request->skilltest * 100) / 100) * .25;
         $registration->update([
-            'skilltest' => $final_skilltest,
+            'skilltest' => round($final_skilltest, 2),
+        ]);
+
+        // Identify actor
+        $actor = Auth::guard('admin')->check()
+            ? Auth::guard('admin')->user()->fullname
+            : (session('subadmin_name') ?? 'Unknown');
+
+        // Log notification
+        AdminNotif::create([
+            'action' => "Saved skill test  for {$registration->fullname}",
+            'actor' => $actor,
         ]);
 
         return redirect()->back()->with('success', 'Skilltest details updated successfully.');
@@ -499,16 +524,51 @@ class AdminController extends Controller
 
 
 
-
-
-
-    public function reports()
+    public function notifications()
     {
-        return view('reports.index');
+        $notifications = AdminNotif::where('marked', false)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('admin.notifications', compact('notifications'));
+    }
+
+    public function markNotificationRead($id)
+    {
+        $notif = AdminNotif::findOrFail($id);
+        $notif->marked = true;
+        $notif->save();
+
+        return redirect()->back()->with('success', 'Notification marked as read.');
+    }
+
+
+    public function reports(Request $request)
+    {
+        // Get the selected course from query string ?course=BSIT
+        $course = $request->query('course');
+
+        if ($course) {
+            $registrations = StudentRegistrations::where('course', $course)->get();
+        } else {
+            $registrations = StudentRegistrations::all();
+        }
+
+        return view('reports.index', compact('registrations', 'course'));
     }
 
     public function smslogs()
     {
         return view('smslogs.index');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::guard('admin')->logout(); // logs out the admin
+
+        $request->session()->invalidate(); // invalidate session
+        $request->session()->regenerateToken(); // regenerate CSRF token
+
+        return redirect()->route('navigator')->with('status', 'Logged out successfully.');
     }
 }

@@ -194,7 +194,11 @@
                                     </table>
                                 </div>
                                 <div class="mt-3 text-center d-flex flex-column justify-content-center align-items-center">
-                                    <input type="text" name="" id="" class="text-center w-75" value="DEMO" readonly style="border: none; border-bottom:1px solid grey">
+                                    <input type="text" 
+                                    name="" id="" 
+                                    class="text-center w-75" 
+                                    value="{{ Auth::guard('admin')->check() ? Auth::guard('admin')->user()->fullname : (session('subadmin_name') ?? 'Guest') }}" 
+                                     readonly style="border: none; border-bottom:1px solid grey">
                                     <span class="mt-2"><strong>Interviewer</strong></span>
                                 </div>
                             </div>
