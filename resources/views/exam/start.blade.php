@@ -139,6 +139,7 @@
         const prevBtn = document.querySelector('.prev-btn');
         const nextBtn = document.querySelector('.next-btn');
         const submitBtn = document.querySelector('.submit-btn');
+        const examForm = document.getElementById('examForm');
 
         function showQuestion(index) {
             questions.forEach((q, i) => q.style.display = (i === index) ? 'block' : 'none');
@@ -177,10 +178,17 @@
             }
         });
 
-        // Warn before closing
-        window.onbeforeunload = function () {
-            return "Are you sure you want to leave? Your answers will be lost.";
-        };
+        submitBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // prevent default submission
+            const confirmSubmit = confirm(
+                "Are you sure you want to submit? Once you do, your answers will be saved."
+            );
+            if (confirmSubmit) {
+                // Disable the leave warning
+                window.onbeforeunload = null;
+                examForm.submit(); // submit the form
+            }
+        });
     </script>
 </body>
 </html>

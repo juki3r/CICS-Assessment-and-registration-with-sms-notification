@@ -40,10 +40,13 @@ class ExamController extends Controller
 
         if ($user_exam) {
             $user_exam->update([
-                'exam_result' => $score . '/' . $total
+                'exam_result' => round(($score / $total) * 100, 2),
             ]);
         }
 
-        return view('auth.login')->with('success', 'Exam submitted successfully! Your score: ' . $score . '/' . $total);
+        session()->forget('student_name'); // remove student session
+
+
+        return redirect()->route('navigator')->with('status', 'Exam submitted successfully!');
     }
 }
