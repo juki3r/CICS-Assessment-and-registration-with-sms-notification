@@ -20,137 +20,9 @@ use Illuminate\Validation\Rules\Password;
 
 class AdminController extends Controller
 {
-    public function admin_notification(Request $request)
-    {
-        $notificationCount = AdminNotification::where('read', false)->count();
-        // Check if there is a search query and apply it
-        $notifications = AdminNotification::where('read', false)
-            ->when($request->search, function ($query, $search) {
-                // Filter by 'message' or 'category' fields
-                $query->where('message', 'like', "%$search%")
-                    ->orWhere('category', 'like', "%$search%");
-            })
-            ->orderBy('created_at', 'desc')  // Sort by latest notification
-            ->paginate(10);  // Paginate the results (5 per page)
-
-        // If it's an AJAX request, return just the table part
-        if ($request->ajax()) {
-            return view('admin.notification_table', compact('notifications'))->render();
-        }
-
-        // Return the full page if it's not an AJAX request
-        return view('admin.notification', compact('notifications', 'notificationCount'));
-    }
 
 
 
-    //show and read notification
-    public function showNotification($id, $category, $user_id)
-    {
-        // Find the notification by ID
-        // $notification = AdminNotification::findOrFail($id);
-        // // Mark as read
-        // $notification->update(['read' => true]);
-        // $notificationCount = AdminNotification::where('read', false)->count();
-
-
-        //PUT extra functions to write
-        if ($category == 'registration') {
-            $user = User::findOrFail($user_id);
-            $notificationCount = AdminNotification::where('read', false)->count();
-
-            // Find the notification by ID
-            $notification = AdminNotification::findOrFail($id);
-            // Mark as read
-            $notification->update(['read' => true]);
-            return view('admin.notification_detail_student', compact(['notificationCount', 'user']));
-        } else if (in_array($category, ['exam', 'gwa', 'interview', 'skill_test'])) {
-            $notificationCount = AdminNotification::where('read', false)->count();
-
-            // Find the notification by ID
-            $notification = AdminNotification::findOrFail($id);
-            $user_modified = Admins::findOrFail($notification->user_id)->fullname;
-            // Mark as read
-            $notification->update(['read' => true]);
-
-            // Example: get student from notification message
-            preg_match("/student ID #(\d+)/", $notification->message, $matches);
-
-            $student = null;
-            if (!empty($matches[1])) {
-                $studentId = $matches[1];
-                $student = User::find($studentId);
-            }
-            return view('admin.notification_detail_non_student', compact(['notificationCount', 'notification', 'user_modified', 'student']));
-        }
-
-
-
-        // $user->update(['is_new_register' => false]);
-        // $user_email = $user->email;
-        // $user_phoneNumber = $user->phone_number;
-
-        // //Send Email to admin
-        // Mail::to($user_email)->send(
-        //     new GeneralNotification('Registration approved', 'Hello, You can now proceed to the next task. have a good day.')
-        // );
-        // //Add here for sms
-
-    }
-
-    //Admin approval for new students
-    public function admin_approval()
-    {
-        $notificationCount = AdminNotification::where('read', false)->count();
-        // Fetch only unread notifications and sort them by created_at (latest first)
-        $newstudents = User::where('is_new_register', true)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return view('admin.new_students_approval', compact(['newstudents', 'notificationCount']));
-    }
-
-    public function admin_student_details($id)
-    {
-        $notificationCount = AdminNotification::where('read', false)->count();
-        // Mark as read
-        $user = User::findOrFail($id);
-        return view('admin.notification_detail_student', compact(['notificationCount', 'user']));
-    }
-
-    public function admin_approved_student($id)
-    {
-        $user = User::findOrFail($id);
-        $user->update(['is_new_register' => false]);
-        return redirect('admin/dashboard')->with('message', 'New student approved.');
-    }
-    // Deny student - user will be deleted
-    public function admin_denied_student($id)
-    {
-        $user = User::findOrFail($id);
-        $user->delete(); // This deletes the user
-
-        return redirect('admin.dashboard')->with('alert_message', 'Student has been denied and deleted.');
-    }
-
-    // Show students
-    public function show_students($course)
-    {
-        $notificationCount = AdminNotification::where('read', false)->count();
-        $students = User::where('course', $course)->where('is_new_register', true)->get();
-        return view('admin.show_students', compact(['notificationCount', 'students']));
-    }
-
-    // Show students
-    public function show_exam_results($course)
-    {
-        $notificationCount = AdminNotification::where('read', false)->count();
-        $students = User::where('course', $course)->get();
-        $students_exam_results = ExamResult::where('course', $course)->get();
-
-
-        return view('admin.show_students_exam_results', compact(['notificationCount', 'students_exam_results', 'students']));
-    }
 
     //ADMINS register
     public function register()
@@ -201,16 +73,39 @@ class AdminController extends Controller
         return redirect()->route('admin.login')->with('error', 'Invalid credentials');
     }
 
+    // public function dashboard()
+    // {
+    //     if (Auth::guard('admin')->check() && Auth::guard('admin')->user()->role === 'admin') {
+    //         $notificationCount = AdminNotification::where('read', false)->count();
+    //         return view('admin.dashboard', compact('notificationCount'));
+    //     }
+
+    //     // if not admin, redirect somewhere else
+    //     return redirect()->route('admin.login')->with('error', 'Unauthorized access.');
+    // }
+
+
     public function dashboard()
     {
-        if (Auth::guard('admin')->check() && Auth::guard('admin')->user()->role === 'admin') {
-            $notificationCount = AdminNotification::where('read', false)->count();
-            return view('admin.dashboard', compact('notificationCount'));
+        if (!Auth::guard('admin')->check() || Auth::guard('admin')->user()->role !== 'admin') {
+            return redirect()->route('admin.login')->with('error', 'Unauthorized access.');
         }
 
-        // if not admin, redirect somewhere else
-        return redirect()->route('admin.login')->with('error', 'Unauthorized access.');
+        // Count students by course and remarks
+        $courses = ['BSIT', 'BSCS', 'BLIS'];
+        $chartData = [];
+
+        foreach ($courses as $course) {
+            $chartData[$course] = [
+                'passed' => StudentRegistrations::where('course', $course)->where('remarks', 'Passed')->count(),
+                'failed' => StudentRegistrations::where('course', $course)->where('remarks', 'Failed')->count(),
+                'pending' => StudentRegistrations::where('course', $course)->whereNull('remarks')->count(),
+            ];
+        }
+
+        return view('admin.dashboard', compact('chartData'));
     }
+
 
     public function updateExamField(Request $request)
     {
