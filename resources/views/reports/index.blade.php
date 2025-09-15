@@ -44,13 +44,12 @@
                                 <th>#</th>
                                 <th>Fullname</th>
                                 <th>Course</th>
-                                <th>Strand</th>
+                                <th>Exam</th>
                                 <th>GWA</th>
-                                <th>Address</th>
-                                <th>Contact Details</th>
-                                <th>School</th>
-                                <th>Interview Result</th>
-                                <th>Skill Test Result</th>
+                                <th>Interview</th>
+                                <th>Skill Test</th>
+                                <th>Total</th>
+                                <th>Remarks</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -59,13 +58,13 @@
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $reg->fullname }}</td>
                                     <td>{{ $reg->course }}</td>
-                                    <td>{{ $reg->strand }}</td>
-                                    <td>{{ $reg->gwa }}</td>
-                                    <td>{{ $reg->address }}</td>
-                                    <td>{{ $reg->contact_details }}</td>
-                                    <td>{{ $reg->school }}</td>
+                                    <td>{{ $reg->exam_result ?? 'Pending' }}</td>
+                                    <td>{{ $reg->gwa ?? 'Pending'}}</td>
                                     <td>{{ $reg->interview_result ?? 'Pending' }}</td>
                                     <td>{{ $reg->skill_test_result ?? 'Pending' }}</td>
+                                    <td></td>
+                                    <td></td>
+                                    
                                 </tr>
                             @empty
                                 <tr>
