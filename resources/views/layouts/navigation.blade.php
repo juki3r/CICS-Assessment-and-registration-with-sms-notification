@@ -40,8 +40,8 @@
                 Reports
             </a>
 
-            <a href="{{ route('show.questions') }}"
-               class="nav-link mx-3 {{ request()->routeIs('show.questions') ? 'active-nav' : '' }}">
+            <a href="{{ route('smslogs') }}"
+               class="nav-link mx-3 {{ request()->routeIs('smslogs') ? 'active-nav' : '' }}">
                 Sms Logs
             </a>
 
