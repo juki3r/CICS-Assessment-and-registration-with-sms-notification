@@ -19,6 +19,26 @@ class StudentRegistrations extends Model
         'rating_confidence',
         'rating_thinking',
         'interview_result',
-        'skilltest'
+        'skilltest',
+        'total',
+        'remarks',
     ];
+
+    // Hook into saving event
+    protected static function booted()
+    {
+        static::saving(function ($registration) {
+            $exam       = $registration->exam_result;
+            $gwa        = $registration->gwa;
+            $interview  = $registration->interview_result;
+            $skilltest  = $registration->skilltest;
+
+            // Only calculate if all values are not null
+            if (!is_null($exam) && !is_null($gwa) && !is_null($interview) && !is_null($skilltest)) {
+                $registration->total = round(($exam + $gwa + $interview + $skilltest), 2);
+
+                $registration->remarks = $registration->total >= 75 ? 'Passed' : 'Failed';
+            }
+        });
+    }
 }

@@ -62,9 +62,8 @@
                                     <td>{{ $reg->gwa ?? 'Pending'}}</td>
                                     <td>{{ $reg->interview_result ?? 'Pending' }}</td>
                                     <td>{{ $reg->skilltest ?? 'Pending' }}</td>
-                                    <td></td>
-                                    <td></td>
-                                    
+                                    <td>{{ $reg->total ?? 'Pending' }}</td>
+                                    <td>{{ $reg->remarks ?? 'Pending' }}</td>   
                                 </tr>
                             @empty
                                 <tr>
