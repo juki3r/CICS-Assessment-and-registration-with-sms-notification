@@ -78,6 +78,13 @@
                     <p class="fs-4 fw-semibold">Question {{ $index + 1 }}</p>
                     <p class="fs-5 mt-3">{{ $question->question }}</p>
 
+                    <!-- Display image if available -->
+                    @if (!empty($question->image))
+                        <div class="my-3">
+                            <img src="{{ asset('storage/' . $question->image) }}" alt="Question Image" class="img-fluid" style="max-height:250px;">
+                        </div>
+                    @endif
+
                     <!-- Options -->
                     <div class="mt-4 text-start d-inline-block">
                         <label class="mb-2 d-block">
@@ -105,6 +112,7 @@
                     </div>
                 </div>
             @endforeach
+
         </form>
     </div>
 
