@@ -7,6 +7,7 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+
             @if (session('message'))
                 <div class="mb-4 text-green-600 font-semibold">
                     {{ session('message') }}
@@ -19,21 +20,48 @@
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
 
-                {{-- Mini Navigation --}}
-                @php
-                    $courses = ['BSIT', 'BSCS', 'BLIS'];
-                @endphp
-                <div class="mb-4">
-                    <a href="{{ route('reports') }}"
-                       class="btn btn-sm {{ request('course') === null ? 'btn-primary' : 'btn-outline-primary' }} mx-1">
-                        All
-                    </a>
-                    @foreach ($courses as $c)
-                        <a href="{{ route('reports', ['course' => $c]) }}"
-                           class="btn btn-sm {{ request('course') === $c ? 'btn-primary' : 'btn-outline-primary' }} mx-1">
-                            {{ $c }}
-                        </a>
-                    @endforeach
+                {{-- Filters --}}
+                <div class="mb-4 d-flex align-items-center gap-3">
+
+                    {{-- Course Dropdown --}}
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="courseDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ request('course') ?? 'All Courses' }}
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="courseDropdown">
+                            <li><a class="dropdown-item" href="{{ route('reports', array_merge(request()->query(), ['course' => null])) }}">All Courses</a></li>
+                            @foreach(['BSIT', 'BSCS', 'BLIS'] as $c)
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('reports', array_merge(request()->query(), ['course' => $c])) }}">
+                                        {{ $c }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+
+                    {{-- Status Dropdown --}}
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="statusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ ucfirst(request('status') ?? 'All Status') }}
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="statusDropdown">
+                            <li><a class="dropdown-item" href="{{ route('reports', array_merge(request()->query(), ['status' => null])) }}">All Status</a></li>
+                            <li><a class="dropdown-item" href="{{ route('reports', array_merge(request()->query(), ['status' => 'passed'])) }}">Passed</a></li>
+                            <li><a class="dropdown-item" href="{{ route('reports', array_merge(request()->query(), ['status' => 'failed'])) }}">Failed</a></li>
+                        </ul>
+                    </div>
+
+                    {{-- Ranking Checkbox --}}
+                    <div class="form-check ms-3">
+                        <input class="form-check-input" type="checkbox" value="1" id="rankingCheck"
+                               onchange="location = this.checked ? '{{ route('reports', array_merge(request()->query(), ['rank' => 1])) }}' : '{{ route('reports', array_merge(request()->query(), ['rank' => null])) }}';"
+                               {{ request()->has('rank') ? 'checked' : '' }}>
+                        <label class="form-check-label" for="rankingCheck">
+                            Rank by Total
+                        </label>
+                    </div>
+
                 </div>
 
                 {{-- Table --}}
@@ -67,7 +95,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="10" class="text-center">No registrations found.</td>
+                                    <td colspan="9" class="text-center">No registrations found.</td>
                                 </tr>
                             @endforelse
                         </tbody>

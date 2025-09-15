@@ -545,17 +545,33 @@ class AdminController extends Controller
 
     public function reports(Request $request)
     {
-        // Get the selected course from query string ?course=BSIT
-        $course = $request->query('course');
+        $course = $request->query('course'); // BSIT, BSCS, BLIS
+        $status = $request->query('status'); // passed, failed
+        $rank = $request->query('rank'); // if set, sort by total desc
+
+        $registrations = StudentRegistrations::query();
 
         if ($course) {
-            $registrations = StudentRegistrations::where('course', $course)->get();
-        } else {
-            $registrations = StudentRegistrations::all();
+            $registrations->where('course', $course);
         }
 
-        return view('reports.index', compact('registrations', 'course'));
+        if ($status) {
+            if ($status === 'passed') {
+                $registrations->where('remarks', 'Passed');
+            } elseif ($status === 'failed') {
+                $registrations->where('remarks', 'Failed');
+            }
+        }
+
+        if ($rank) {
+            $registrations->orderByDesc('total');
+        }
+
+        $registrations = $registrations->get();
+
+        return view('reports.index', compact('registrations', 'course', 'status', 'rank'));
     }
+
 
     public function smslogs()
     {
