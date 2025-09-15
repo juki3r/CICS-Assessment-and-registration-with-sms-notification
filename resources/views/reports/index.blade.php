@@ -61,7 +61,7 @@
                                     <td>{{ $reg->exam_result ?? 'Pending' }}</td>
                                     <td>{{ $reg->gwa ?? 'Pending'}}</td>
                                     <td>{{ $reg->interview_result ?? 'Pending' }}</td>
-                                    <td>{{ $reg->skill_test_result ?? 'Pending' }}</td>
+                                    <td>{{ $reg->skilltest ?? 'Pending' }}</td>
                                     <td></td>
                                     <td></td>
                                     
