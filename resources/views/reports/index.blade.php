@@ -13,7 +13,9 @@
         <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
         <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
         <style>
-            
+            body{
+                margin: 0;
+            }
             ol { font-size: 16px; margin-bottom: 0; }
             .page-break { page-break-after: always; }
 
@@ -25,6 +27,16 @@
                     .bg-black {
                         background-color: black !important;
                         color: white !important;
+                    }
+                    .footer {
+                        position: fixed;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+                        padding: 8px;
+                        text-align: center;
+                        font-size: 12px;
+                        border-top: 1px solid #000;
                     }
                 }
         </style>
@@ -81,7 +93,7 @@
                             <td style="border: 1px solid #000; padding: 6px; text-align: center;">
                                 {{ $counter + 1 }}
                             </td>
-                            <td style="border: 1px solid #000; padding: 6px;" class="text-uppercase">
+                            <td style="border: 1px solid #000; padding: 6px; font-weight:bold" class="text-uppercase">
                                 {{ $reg->fullname }}
                             </td>
                         </tr>
@@ -110,6 +122,19 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+
+        <div class="footer  d-flex justify-content-between">
+            <div class="d-flex flex-column text-start px-3">
+                <span>Tel. No.: 3970-314(1021)</span>
+                <span>Facebook Fanpage: NISU CICS</span>
+                <span>Official Facebook Account: NISU CICS</span>
+            </div>
+
+            <div class="d-flex flex-column text-start px-3">
+                <span>Website Address: <a href="www.nipsc.edu.ph">www.nipsc.edu.ph</a></span>
+                <span >E-mail Address: <span style="text-decoration:underline; color:blue">cics@nipsc.edu.ph</span><span>
+            </div>
         </div>
 
         <style>
