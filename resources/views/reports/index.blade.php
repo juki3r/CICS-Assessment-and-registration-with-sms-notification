@@ -213,7 +213,7 @@
                             @forelse($registrations as $index => $reg)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $reg->fullname }}</td>
+                                    <td class="text-capitalize">{{ $reg->fullname }}</td>
                                     <td>{{ $reg->course }}</td>
                                     <td>{{ $reg->exam_result ?? 'Pending' }}</td>
                                     <td>{{ $reg->gwa ?? 'Pending'}}</td>
