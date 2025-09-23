@@ -44,8 +44,8 @@
                     NISU Main Campus, V Cudilla Sr. Ave, Estancia, Iloilo
                 </h6>
             </div>
-            <div class="ps-4 text-center">
-            <img src="{{asset('cics.png')}}" alt="" width="100px">
+            <div class="ps-4 text-center mt-3">
+            <img src="{{asset('ci.png')}}" alt="" width="100px">
             </div>
         </div>
         <div class="text-center bg-black py-1">
@@ -186,7 +186,10 @@
                     @if(request('course') && request('status') === 'passed')
                         <button class="btn btn-sm btn-primary ms-auto"
                                 onclick="window.open('{{ route('reports', array_merge(request()->query(), ['print' => 1])) }}', '_blank')">
-                            Print
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer-fill" viewBox="0 0 16 16">
+                            <path d="M5 1a2 2 0 0 0-2 2v1h10V3a2 2 0 0 0-2-2zm6 8H5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1"/>
+                            <path d="M0 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v-2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2H2a2 2 0 0 1-2-2zm2.5 1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1"/>
+                            </svg> Print
                         </button>
                     @endif
 
