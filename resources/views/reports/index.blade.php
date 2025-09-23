@@ -19,6 +19,10 @@
             ol { font-size: 16px; margin-bottom: 0; }
             .page-break { page-break-after: always; }
 
+            @page {
+                margin-bottom: 30mm; /* make space for footer */
+            }
+
              @media print {
                     * {
                         -webkit-print-color-adjust: exact !important;
@@ -28,15 +32,17 @@
                         background-color: black !important;
                         color: white !important;
                     }
+
+
                     .footer {
                         position: fixed;
                         bottom: 0;
                         left: 0;
                         right: 0;
-                        padding: 8px;
+                        border-top: 1px solid #000;
                         text-align: center;
                         font-size: 12px;
-                        border-top: 1px solid #000;
+                        padding: 8px;
                     }
                 }
         </style>
