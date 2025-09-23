@@ -34,16 +34,17 @@
         .exam-body {
             display: flex;
             justify-content: center;  
+            flex-direction: column;
             align-items: center;      
-            height: calc(100vh - 130px); /* Viewport minus header+footer */
+            height: 80vh; /* Viewport minus header+footer */
             margin-top: 70px; /* push below header */
-            padding: 20px;
             text-align: center;
             overflow: hidden; /* 🚫 no scroll */
         }
 
+
         .exam-footer {
-            position: fixed;
+            /* position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
@@ -51,9 +52,12 @@
             border-top: 1px solid #ddd;
             padding: 15px 30px;
             display: flex;
-            justify-content: space-between; /* prev left / next right */
+            justify-content: space-between;
             align-items: center;
-            z-index: 1000;
+            z-index: 1000; */
+            display:flex;
+            justify-content: center;
+            margin: auto;
         }
 
         .question-container {
@@ -74,7 +78,7 @@
         <form action="{{ route('exam.submit', ['name' => $fullname]) }}" method="POST" id="examForm" class="w-100 d-flex flex-column align-items-center">
             @csrf
             @foreach ($questions as $index => $question)
-                <div class="question-container text-center" id="question-{{ $index }}" style="{{ $index === 0 ? '' : 'display:none;' }}">
+                <div class="question-container text-center  px-5 py-2 " id="question-{{ $index }}" style="{{ $index === 0 ? '' : 'display:none;' }}">
                     <p class="fs-4 fw-semibold">Question {{ $index + 1 }}</p>
                     <p class="fs-5 mt-3">{{ $question->question }}</p>
 
@@ -114,16 +118,19 @@
             @endforeach
 
         </form>
-    </div>
-
-    <!-- Navigation -->
-    <div class="exam-footer">
-        <button type="button" class="btn btn-secondary prev-btn" style="display:none;">Previous</button>
-        <div>
-            <button type="button" class="btn btn-primary next-btn">Next</button>
-            <button type="submit" form="examForm" class="btn btn-success submit-btn" style="display:none;">Submit Exam</button>
+            <!-- Navigation -->
+        <div class="exam-footer gap-5">
+            <button type="button" class="btn btn-secondary prev-btn" style="display:none;">Previous</button>
+            <div>
+                <button type="button" class="btn btn-primary next-btn">Next</button>
+                <button type="submit" form="examForm" class="btn btn-success submit-btn" style="display:none;">Submit Exam</button>
+            </div>
         </div>
     </div>
+
+    
+
+   
 
     <script>
         // Timer
