@@ -7,11 +7,13 @@
 
     <div class="py-12 d-flex justify-content-center">
         <div class="border rounded w-75 mt-5 p-3 shadow bg-white">
-            
-            @if($notifications->isEmpty())
+
+            {{-- Unread Notifications --}}
+            <h4>Unread Notifications</h4>
+            @if($unreadNotifications->isEmpty())
                 <p class="text-center text-muted">No unread notifications 🎉</p>
             @else
-                <table class="table table-bordered table-striped">
+                <table class="table table-bordered table-striped mb-5">
                     <thead class="table-dark">
                         <tr>
                             <th>#</th>
@@ -22,7 +24,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($notifications as $index => $notif)
+                        @foreach($unreadNotifications as $index => $notif)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ $notif->action ?? 'No message' }}</td>
@@ -36,6 +38,33 @@
                                         </button>
                                     </form>
                                 </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif
+
+            {{-- Read Notifications --}}
+            <h4 class="mt-4">Read Notifications</h4>
+            @if($readNotifications->isEmpty())
+                <p class="text-center text-muted">No read notifications yet.</p>
+            @else
+                <table class="table table-bordered table-striped">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th>#</th>
+                            <th>Message</th>
+                            <th>Faculty</th>
+                            <th>Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($readNotifications as $index => $notif)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $notif->action ?? 'No message' }}</td>
+                                <td>{{ $notif->actor ?? '' }}</td>
+                                <td>{{ $notif->created_at->format('M d, Y h:i A') }}</td>
                             </tr>
                         @endforeach
                     </tbody>

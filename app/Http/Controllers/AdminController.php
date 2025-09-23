@@ -421,12 +421,19 @@ class AdminController extends Controller
 
     public function notifications()
     {
-        $notifications = AdminNotif::where('marked', false)
+        // Unread notifications
+        $unreadNotifications = AdminNotif::where('marked', false)
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('admin.notifications', compact('notifications'));
+        // Read notifications
+        $readNotifications = AdminNotif::where('marked', true)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('admin.notifications', compact('unreadNotifications', 'readNotifications'));
     }
+
 
     public function markNotificationRead($id)
     {
