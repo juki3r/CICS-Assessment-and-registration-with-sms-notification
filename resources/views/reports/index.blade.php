@@ -81,7 +81,7 @@
                             <td style="border: 1px solid #000; padding: 6px; text-align: center;">
                                 {{ $counter + 1 }}
                             </td>
-                            <td style="border: 1px solid #000; padding: 6px;">
+                            <td style="border: 1px solid #000; padding: 6px;" class="text-uppercase">
                                 {{ $reg->fullname }}
                             </td>
                         </tr>
