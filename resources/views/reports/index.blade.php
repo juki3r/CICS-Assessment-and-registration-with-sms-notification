@@ -141,7 +141,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
 
                 {{-- Filters --}}
-                <div class="mb-4 d-flex align-items-center gap-3">
+                <div class="mb-4 d-flex align-items-center gap-3 p-3">
 
                     {{-- Course Dropdown --}}
                     <div class="dropdown">
@@ -194,7 +194,7 @@
                 </div>
 
                 {{-- Table --}}
-                <div class="table-responsive">
+                <div class="table-responsive p-3">
                     <table class="table table-bordered table-striped">
                         <thead class="table-light">
                             <tr>
