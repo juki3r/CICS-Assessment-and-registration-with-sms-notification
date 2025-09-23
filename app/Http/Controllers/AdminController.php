@@ -512,9 +512,34 @@ class AdminController extends Controller
 
 
 
-    public function smslogs()
+    public function smslogs(Request $request)
     {
-        return view('smslogs.index');
+        $course = $request->query('course', 'BSIT'); // BSIT, BSCS, BLIS
+        $status = $request->query('status', 'passed'); // passed, failed
+        $print = $request->query('print');   // if set, print-friendly
+
+        $registrations = StudentRegistrations::query();
+
+        if ($course) {
+            $registrations->where('course', $course);
+        }
+
+        if ($status) {
+            if ($status === 'passed') {
+                $registrations->where('remarks', 'Passed');
+            } elseif ($status === 'failed') {
+                $registrations->where('remarks', 'Failed');
+            }
+        }
+
+
+        if ($print) {
+            $registrations->where('remarks', 'Passed')->orderBy('fullname', 'asc'); // alphabetical
+        }
+
+        $registrations = $registrations->get();
+
+        return view('smslogs.index', compact('registrations', 'course', 'status', 'print'));
     }
 
     public function logout(Request $request)
