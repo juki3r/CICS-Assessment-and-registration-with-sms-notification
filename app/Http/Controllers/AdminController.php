@@ -445,11 +445,41 @@ class AdminController extends Controller
     }
 
 
+    // public function reports(Request $request)
+    // {
+    //     $course = $request->query('course'); // BSIT, BSCS, BLIS
+    //     $status = $request->query('status'); // passed, failed
+    //     $rank = $request->query('rank'); // if set, sort by total desc
+
+    //     $registrations = StudentRegistrations::query();
+
+    //     if ($course) {
+    //         $registrations->where('course', $course);
+    //     }
+
+    //     if ($status) {
+    //         if ($status === 'passed') {
+    //             $registrations->where('remarks', 'Passed');
+    //         } elseif ($status === 'failed') {
+    //             $registrations->where('remarks', 'Failed');
+    //         }
+    //     }
+
+    //     if ($rank) {
+    //         $registrations->orderByDesc('total');
+    //     }
+
+    //     $registrations = $registrations->get();
+
+    //     return view('reports.index', compact('registrations', 'course', 'status', 'rank'));
+    // }
+
     public function reports(Request $request)
     {
         $course = $request->query('course'); // BSIT, BSCS, BLIS
         $status = $request->query('status'); // passed, failed
-        $rank = $request->query('rank'); // if set, sort by total desc
+        $rank = $request->query('rank');     // if set, sort by total desc
+        $print = $request->query('print');   // if set, print-friendly
 
         $registrations = StudentRegistrations::query();
 
@@ -469,10 +499,17 @@ class AdminController extends Controller
             $registrations->orderByDesc('total');
         }
 
+        if ($print) {
+            $registrations->where('remarks', 'Passed')->orderBy('fullname', 'asc'); // alphabetical
+        }
+
         $registrations = $registrations->get();
 
-        return view('reports.index', compact('registrations', 'course', 'status', 'rank'));
+        return view('reports.index', compact('registrations', 'course', 'status', 'rank', 'print'));
     }
+
+
+
 
 
     public function smslogs()

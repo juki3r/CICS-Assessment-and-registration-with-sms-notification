@@ -5,6 +5,126 @@
         </h2>
     </x-slot>
 
+    {{-- PRINT VIEW --}}
+    @if(request()->has('print'))
+    <html>
+    <head>
+        <title>Passed Students List @if($course) ({{ $course }}) @endif</title>
+        <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+        <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <style>
+            
+            ol { font-size: 16px; margin-bottom: 0; }
+            .page-break { page-break-after: always; }
+
+             @media print {
+                    * {
+                        -webkit-print-color-adjust: exact !important;
+                        color-adjust: exact !important;
+                    }
+                    .bg-black {
+                        background-color: black !important;
+                        color: white !important;
+                    }
+                }
+        </style>
+    </head>
+    <body onload="window.print()">
+
+         <div class="d-flex justify-content-center py-3">
+            <div class="pe-4 text-center">
+                <img src="{{asset('logo.png')}}" alt="" width="100px">
+            </div>
+            <div class="">
+                <h6 class="text-center">Republic of the Philippines</h6>
+                <h3 class="fs-3 text-center">
+                    NORTHERN ILOILO STATE UNIVERSITY
+                </h3>
+                <h6 class="text-center" style="font-weight: light !important">
+                    NISU Main Campus, V Cudilla Sr. Ave, Estancia, Iloilo
+                </h6>
+            </div>
+            <div class="ps-4 text-center">
+            <img src="{{asset('cics.png')}}" alt="" width="100px">
+            </div>
+        </div>
+        <div class="text-center bg-black py-1">
+            <strong>COLLEGE OF INFORMATION AND COMPUTING STUDIES</strong>
+        </div>
+
+        
+
+        <h4 class="text-center mt-3 mb-5">
+            LIST OF QUALIFIED INCOMING FIRST YEAR STUDENT
+            <br>
+            @if($course == 'BSIT')
+                BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY
+            @elseif($course == 'BSCS')
+                BACHELOR OF SCIENCE IN COMPUTER SCIENCE
+            @elseif($course == 'BLIS')
+                BACHELOR OF LIBRARY AND INFORMATION SCIENCE
+            @endif
+        </h4>
+
+        <div>
+            @php $counter = 0; @endphp
+            <table class="table table-bordered" style="width:50%; margin:0 auto; border-collapse: collapse; font-size: 16px;">
+                <thead>
+                    <tr>
+                        <th style="border: 1px solid #000; padding: 6px; text-align: center;">#</th>
+                        <th style="border: 1px solid #000; padding: 6px;">Fullname</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($registrations as $reg)
+                        <tr>
+                            <td style="border: 1px solid #000; padding: 6px; text-align: center;">
+                                {{ $counter + 1 }}
+                            </td>
+                            <td style="border: 1px solid #000; padding: 6px;">
+                                {{ $reg->fullname }}
+                            </td>
+                        </tr>
+                        @php $counter++; @endphp
+
+                        {{-- Insert page break every 30 students --}}
+                        @if($counter % 30 === 0 && !$loop->last)
+                            </tbody>
+                        </table>
+
+                        <div class="page-break"></div>
+
+                        <table class="table table-bordered" style="width:50%; margin:0 auto; border-collapse: collapse; font-size: 16px;">
+                            <thead>
+                                <tr>
+                                    <th style="border: 1px solid #000; padding: 6px; text-align: center;">#</th>
+                                    <th style="border: 1px solid #000; padding: 6px;">Fullname</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                        @endif
+                    @empty
+                        <tr>
+                            <td colspan="2" style="text-align:center; padding:10px;">No students found.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <style>
+            .page-break { page-break-after: always; }
+        </style>
+
+
+
+    </body>
+    </html>
+    @php return; @endphp
+@endif
+
+    {{-- END PRINT VIEW --}}
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
@@ -61,6 +181,15 @@
                             Rank by Total
                         </label>
                     </div>
+
+                    {{-- Print Button: show only if a course is selected AND status is passed --}}
+                    @if(request('course') && request('status') === 'passed')
+                        <button class="btn btn-sm btn-primary ms-auto"
+                                onclick="window.open('{{ route('reports', array_merge(request()->query(), ['print' => 1])) }}', '_blank')">
+                            Print
+                        </button>
+                    @endif
+
 
                 </div>
 
