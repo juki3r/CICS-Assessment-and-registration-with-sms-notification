@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Http;
+
 
 class AdminController extends Controller
 {
@@ -542,6 +544,36 @@ class AdminController extends Controller
         return view('smslogs.index', compact('registrations', 'course', 'status', 'print'));
     }
 
+    public function sent(Request $request)
+    {
+        $course = $request->query('course', 'BSIT'); // BSIT, BSCS, BLIS
+        $status = $request->query('status', 'passed'); // passed, failed
+        $print = $request->query('print');   // if set, print-friendly
+
+        $registrations = StudentRegistrations::query();
+
+        if ($course) {
+            $registrations->where('course', $course);
+        }
+
+        if ($status) {
+            if ($status === 'passed') {
+                $registrations->where('remarks', 'Passed');
+            } elseif ($status === 'failed') {
+                $registrations->where('remarks', 'Failed');
+            }
+        }
+
+
+        if ($print) {
+            $registrations->where('remarks', 'Passed')->orderBy('fullname', 'asc'); // alphabetical
+        }
+
+        $registrations = $registrations->get();
+
+        return view('smslogs.sent', compact('registrations', 'course', 'status', 'print'));
+    }
+
     public function logout(Request $request)
     {
         Auth::guard('admin')->logout(); // logs out the admin
@@ -550,5 +582,52 @@ class AdminController extends Controller
         $request->session()->regenerateToken(); // regenerate CSRF token
 
         return redirect()->route('navigator')->with('status', 'Logged out successfully.');
+    }
+
+
+
+    //Send SMS gateway
+    public function sendSmsFromClient(Request $request)
+    {
+        $request->validate([
+            'selected' => 'required|array|min:1'
+        ]);
+
+        $apiKey   = 'TqAQpf9H7OO3ooYk0Vp48FbWFf2SXCzZW9nP750R';
+        $endpoint = 'https://sms.pong-mta.tech/api/send-sms-api';
+
+        $selectedIds    = $request->input('selected');
+        $registrations  = StudentRegistrations::whereIn('id', $selectedIds)->get();
+
+        $results = [];
+
+        foreach ($registrations as $student) {
+            $name  = $student->fullname;
+            $phone = $student->contact_details;
+
+            $message = "Congratulations {$name}, you are qualified incoming
+                        First year student in {$student->course} A.Y 2025-2026.
+                        Don't reply to this message, system generated. Thanks!";
+
+            $response = Http::withHeaders([
+                'X-API-KEY' => $apiKey,
+                'Accept'    => 'application/json',
+            ])
+                ->post($endpoint, [
+                    'phone_number' => $phone,
+                    'message'      => $message,
+                ]);
+
+            $results[] = [
+                'student' => $name,
+                'phone'   => $phone,
+                'status'  => $response->successful() ? 'queued' : 'failed',
+                'details' => $response->json(),
+            ];
+        }
+
+        return redirect()->back()
+            ->with('message', 'SMS sent to selected students.')
+            ->with('results', $results);
     }
 }
