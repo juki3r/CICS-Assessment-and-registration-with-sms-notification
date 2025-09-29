@@ -43,23 +43,26 @@
                         <table class="table table-bordered table-striped">
                             <thead class="table-light">
                                 <tr>
-                                    <th>
-                                        <input type="checkbox" id="selectAll">
-                                    </th>
+                                    
                                     <th>#</th>
                                     <th>Name of student</th>
                                     <th>Mobile No.</th>
+                                    <th>
+                                        <input type="checkbox" id="selectAll">
+                                        <label for="selectAll" class="ms-1">Select All</label>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($registrations as $index => $reg)
                                     <tr>
-                                        <td>
-                                            <input type="checkbox" name="selected[]" value="{{ $reg->id }}" class="select-item">
-                                        </td>
+                                        
                                         <td>{{ $index + 1 }}</td>
                                         <td class="text-capitalize">{{ $reg->fullname }}</td>
                                         <td>{{ $reg->contact_details }}</td>
+                                        <td>
+                                            <input type="checkbox" name="selected[]" value="{{ $reg->id }}" class="select-item">
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
