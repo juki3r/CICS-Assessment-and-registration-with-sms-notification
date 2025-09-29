@@ -586,8 +586,6 @@ class AdminController extends Controller
     }
 
 
-
-    //Send SMS gateway
     public function sendSmsFromClient(Request $request)
     {
         $request->validate([
@@ -605,39 +603,34 @@ class AdminController extends Controller
         foreach ($registrations as $student) {
             $name  = $student->fullname;
             $phone = $student->contact_details;
-            $course =  $student->course;
+            $course = $student->contact_details;
 
             $message = "Congratulations {$name}, you are qualified incoming
-                        First year student in {$student->course} A.Y 2025-2026.
-                        Don't reply to this message, system generated. Thanks!";
+                        First year student in {$student->course} A.Y 2025-2026.";
 
             $response = Http::withHeaders([
                 'X-API-KEY' => $apiKey,
                 'Accept'    => 'application/json',
-            ])
-                ->post($endpoint, [
-                    'phone_number' => $phone,
-                    'message'      => $message,
-                ]);
+            ])->post('https://sms.pong-mta.tech/api/send-sms-api', [
+                'phone_number' => $phone,
+                'message'      => $message,
+            ]);
 
             SmsLogs::updateOrCreate(
                 [
-                    // these are the "matching" fields to check if the log already exists
                     'name' => $name,
                     'mobile_number' => $phone,
                 ],
                 [
-                    // these fields will be updated or inserted
                     'message' => $message,
                     'status'  => 'sent',
-                    'course' => $course,
+                    'course'       => $student->course,
                 ]
             );
 
             $results[] = [
                 'student' => $name,
                 'phone'   => $phone,
-                'course' => $course,
                 'status'  => $response->successful() ? 'queued' : 'failed',
                 'details' => $response->json(),
             ];
