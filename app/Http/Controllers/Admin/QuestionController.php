@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Timer;
 use App\Models\Question;
 use Illuminate\Http\Request;
 use App\Models\AdminNotification;
@@ -11,11 +12,14 @@ class QuestionController extends Controller
 {
     public function index()
     {
-
         // Count notifications
         $notificationCount = AdminNotification::where('read', false)->count();
         $questions = Question::orderBy('id', 'asc')->paginate(6);
-        return view('admin.questions.index', compact('questions', 'notificationCount'));
+        // fetch timer from table (adjust to your schema)
+        $timerRecord = Timer::first();                 // fetch first row
+        $timers = $timerRecord ? $timerRecord->timer / 60 : 60;
+
+        return view('admin.questions.index', compact('questions', 'notificationCount', 'timers'));
     }
 
     public function create()

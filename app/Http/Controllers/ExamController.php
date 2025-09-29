@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Timer;
 use App\Models\Question;
 use App\Models\ExamResult;
 use Illuminate\Http\Request;
@@ -17,9 +18,11 @@ class ExamController extends Controller
 
         // You can limit the number of questions if needed: ->inRandomOrder()->take(10)
         $questions = Question::inRandomOrder()->get();
+        $timer = Timer::first()->timer ?? 3600;
         return view('exam.start', [
             'questions' => $questions,
             'fullname' => $fullname,
+            'timer' => $timer,
         ]);
     }
 

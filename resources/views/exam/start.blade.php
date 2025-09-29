@@ -134,7 +134,8 @@
 
     <script>
         // Timer
-        let remainingTime = 3600; // 1 hour
+        // let remainingTime = 3600; // 1 hour
+        let remainingTime = {{ $timer }};
         const timerDisplay = document.getElementById('timer');
         const countdown = setInterval(() => {
             const minutes = Math.floor(remainingTime / 60);
