@@ -88,7 +88,16 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::get('/interview', [AdminController::class, 'interview'])->name('interview');
 
     Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
-    Route::get('/smslogs', [AdminController::class, 'smslogs'])->name('smslogs');
+
+
+    Route::get('/smslogs', [AdminController::class, 'smslogs'])->name('smslogs.logs');
+    Route::get('/sent', [AdminController::class, 'sent'])->name('smslogs.sent');
+
+    // Route::get('/send/sms', [AdminController::class, 'sendSmsFromClient'])->name('sendSmsFromClient');
+    Route::post('/send/sms', [AdminController::class, 'sendSmsFromClient'])->name('sendSmsFromClient');
+
+
+
 
     //Notiffications
     Route::get('/admin/notifications', [AdminController::class, 'notifications'])->name('admin.notifications');

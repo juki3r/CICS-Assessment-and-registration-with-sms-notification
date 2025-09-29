@@ -31,7 +31,7 @@
                         <ul class="dropdown-menu" aria-labelledby="courseDropdown">
                             @foreach(['BSIT', 'BSCS', 'BLIS'] as $c)
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('smslogs', array_merge(request()->query(), ['course' => $c, 'status' => 'passed'])) }}">
+                                    <a class="dropdown-item" href="{{ route('smslogs.logs', array_merge(request()->query(), ['course' => $c, 'status' => 'passed'])) }}">
                                         {{ $c }}
                                     </a>
                                 </li>
@@ -46,9 +46,9 @@
                             {{ ucfirst(request('status') ?? 'Passed') }}
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="statusDropdown">
-                            <li><a class="dropdown-item" href="{{ route('smslogs', array_merge(request()->query(), ['status' => null])) }}">All Status</a></li>
-                            <li><a class="dropdown-item" href="{{ route('smslogs', array_merge(request()->query(), ['status' => 'passed'])) }}">Passed</a></li>
-                            <li><a class="dropdown-item" href="{{ route('smslogs', array_merge(request()->query(), ['status' => 'failed'])) }}">Failed</a></li>
+                            <li><a class="dropdown-item" href="{{ route('smslogs.logs', array_merge(request()->query(), ['status' => null])) }}">All Status</a></li>
+                            <li><a class="dropdown-item" href="{{ route('smslogs.logs', array_merge(request()->query(), ['status' => 'passed'])) }}">Passed</a></li>
+                            <li><a class="dropdown-item" href="{{ route('smslogs.logs', array_merge(request()->query(), ['status' => 'failed'])) }}">Failed</a></li>
                         </ul>
                     </div>
 

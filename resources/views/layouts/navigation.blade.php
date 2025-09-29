@@ -40,10 +40,26 @@
                 Reports
             </a>
 
-            <a href="{{ route('smslogs') }}"
-               class="nav-link mx-3 {{ request()->routeIs('smslogs') ? 'active-nav' : '' }}">
-                Sms Logs
-            </a>
+            <div class="dropdown mx-3">
+                <a class="nav-link dropdown-toggle {{ request()->routeIs('smslogs.*') ? 'active-nav' : '' }}"
+                href="#" id="smsLogsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    SMS
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="smsLogsDropdown">
+                    <li>
+                        <a class="dropdown-item {{ request()->routeIs('smslogs.sent') ? 'active-nav' : '' }}"
+                        href="{{ route('smslogs.sent') }}">
+                            Sent
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item {{ request()->routeIs('smslogs.logs') ? 'active-nav' : '' }}"
+                        href="{{ route('smslogs.logs') }}">
+                            Logs
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
         {{-- SUBADMIN NAV --}}
         @elseif(session()->has('subadmin_name'))
