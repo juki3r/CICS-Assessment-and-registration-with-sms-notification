@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Timer;
 use App\Models\Admins;
 use App\Models\SmsLogs;
 use App\Models\SubAdmin;
@@ -616,12 +617,10 @@ class AdminController extends Controller
                 'message'      => $message,
             ]);
 
-            SmsLogs::updateOrCreate(
+            SmsLogs::Create(
                 [
                     'name' => $name,
                     'mobile_number' => $phone,
-                ],
-                [
                     'message' => $message,
                     'status'  => 'sent',
                     'course'       => $student->course,
@@ -639,5 +638,23 @@ class AdminController extends Controller
         return redirect()->back()
             ->with('message', 'SMS sent to selected students.')
             ->with('results', $results);
+    }
+
+    //Edit timer
+
+    public function editTimer(Request $request)
+    {
+        $request->validate([
+            'timer' => 'required',
+        ]);
+
+        $dataTimer = $request->timer * 60;
+
+        Timer::updateOrCreate(
+            ['id' => 1],            // first row
+            ['timer' => $dataTimer]
+        );
+
+        return redirect()->route('questions.index')->with('success', 'Timer edit successful!');
     }
 }

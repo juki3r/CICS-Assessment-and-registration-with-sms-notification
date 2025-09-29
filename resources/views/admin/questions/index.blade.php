@@ -16,11 +16,16 @@
 
                 <h1 class="d-flex justify-content-between">
                     <span class="fs-3">Questions</span>
+                    <span class="fs-3">Time limit: {{$timers}} Minutes 
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Edit
+                        </button>
+                    </span>
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
                         Add New Question
                     </button>
                 </h1>
-
+ 
                 {{-- Questions Table --}}
                 <div class="table-responsive">
                 <table class="table table-bordered align-middle">
@@ -137,6 +142,30 @@
                     </tbody>
                 </table>
                 </div>
+
+                <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-2" id="exampleModalLabel">Edit time limit</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{route('edit.timer')}}" method="POST">
+                                @csrf
+                                <h3 class="fs-4">Enter Minutes</h3>
+                                <input type="number" class="form-control" name="timer" id="" placeholder="Enter time limit in minutes" required>
+                            
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                        </form>
+                        </div>
+                    </div>
+                    </div>
 
                 <div class="d-flex justify-content-center">
                     {{ $questions->links() }}

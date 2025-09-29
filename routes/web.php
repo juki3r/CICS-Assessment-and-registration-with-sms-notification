@@ -95,7 +95,7 @@ Route::middleware(['auth:admin'])->group(function () {
 
     // Route::get('/send/sms', [AdminController::class, 'sendSmsFromClient'])->name('sendSmsFromClient');
     Route::post('/send/sms', [AdminController::class, 'sendSmsFromClient'])->name('sendSmsFromClient');
-
+    Route::post('/edit/timer', [AdminController::class, 'editTimer'])->name('edit.timer');
 
 
 
