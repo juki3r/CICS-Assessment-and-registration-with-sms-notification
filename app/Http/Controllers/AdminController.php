@@ -616,12 +616,10 @@ class AdminController extends Controller
                 'message'      => $message,
             ]);
 
-            SmsLogs::updateOrCreate(
+            SmsLogs::Create(
                 [
                     'name' => $name,
                     'mobile_number' => $phone,
-                ],
-                [
                     'message' => $message,
                     'status'  => 'sent',
                     'course'       => $student->course,
