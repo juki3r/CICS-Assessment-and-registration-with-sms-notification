@@ -58,11 +58,11 @@
 
     <!-- Page Heading -->
     @isset($header)
-    <!-- <header class="">
+    <header class="">
         <div class="p-2 px-3">
             {{ $header }}
         </div>
-    </header> -->
+    </header>
     @endisset
 
     <!-- Page Content -->

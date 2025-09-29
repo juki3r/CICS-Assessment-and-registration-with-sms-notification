@@ -38,21 +38,6 @@
                             @endforeach
                         </ul>
                     </div>
-
-
-                    {{-- Status Dropdown --}}
-                    <div class="dropdown d-none">
-                        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="statusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ ucfirst(request('status') ?? 'Passed') }}
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="statusDropdown">
-                            <li><a class="dropdown-item" href="{{ route('smslogs.logs', array_merge(request()->query(), ['status' => null])) }}">All Status</a></li>
-                            <li><a class="dropdown-item" href="{{ route('smslogs.logs', array_merge(request()->query(), ['status' => 'passed'])) }}">Passed</a></li>
-                            <li><a class="dropdown-item" href="{{ route('smslogs.logs', array_merge(request()->query(), ['status' => 'failed'])) }}">Failed</a></li>
-                        </ul>
-                    </div>
-
-
                 </div>
 
                 {{-- Table --}}
@@ -72,17 +57,14 @@
                             @forelse($registrations as $index => $reg)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td class="text-capitalize">{{ $reg->fullname }}</td>
-                                    <td>{{ $reg->contact_details }}</td>
-                                    <td></td>
-                                    <td>
-                                        <p>
-                                            Congratulations <strong>{{$reg->fullname}}</strong>, you are qualified incoming <br>
-                                            First year student in <strong class="text-uppercase">{{$reg->course}} </strong>A.Y 2025-2026. <br>
-                                            Don't reply to this message, system generated. Thanks!
-                                        </p>
+                                    <td class="text-capitalize">{{ $reg->name }}</td>
+                                    <td>{{ $reg->mobile_number }}</td>
+                                    <td>{{ $reg->status }}</td>
+                                    <td style="white-space: normal; word-wrap: break-word; max-width: 300px;">
+                                        {{ $reg->message }}
                                     </td>
-                                    <td></td> 
+
+                                    <td>{{ $reg->created_at->format('M d, Y h:i A') }}</td>
                                 </tr>
                             @empty
                                 <tr>

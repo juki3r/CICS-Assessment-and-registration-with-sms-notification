@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Admins;
+use App\Models\SmsLogs;
 use App\Models\SubAdmin;
 use App\Models\AdminNotif;
 use App\Models\ExamResult;
@@ -14,10 +15,10 @@ use App\Models\AdminNotification;
 use App\Models\StudentRegistrations;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
-use Illuminate\Support\Facades\Http;
 
 
 class AdminController extends Controller
@@ -520,28 +521,28 @@ class AdminController extends Controller
         $status = $request->query('status', 'passed'); // passed, failed
         $print = $request->query('print');   // if set, print-friendly
 
-        $registrations = StudentRegistrations::query();
+        $registrations = SmsLogs::query();
 
         if ($course) {
             $registrations->where('course', $course);
         }
 
-        if ($status) {
-            if ($status === 'passed') {
-                $registrations->where('remarks', 'Passed');
-            } elseif ($status === 'failed') {
-                $registrations->where('remarks', 'Failed');
-            }
-        }
+        // if ($status) {
+        //     if ($status === 'passed') {
+        //         $registrations->where('remarks', 'Passed');
+        //     } elseif ($status === 'failed') {
+        //         $registrations->where('remarks', 'Failed');
+        //     }
+        // }
 
 
-        if ($print) {
-            $registrations->where('remarks', 'Passed')->orderBy('fullname', 'asc'); // alphabetical
-        }
+        // if ($print) {
+        //     $registrations->where('remarks', 'Passed')->orderBy('fullname', 'asc'); // alphabetical
+        // }
 
         $registrations = $registrations->get();
 
-        return view('smslogs.index', compact('registrations', 'course', 'status', 'print'));
+        return view('smslogs.index', compact('registrations', 'course'));
     }
 
     public function sent(Request $request)
@@ -604,6 +605,7 @@ class AdminController extends Controller
         foreach ($registrations as $student) {
             $name  = $student->fullname;
             $phone = $student->contact_details;
+            $course =  $student->course;
 
             $message = "Congratulations {$name}, you are qualified incoming
                         First year student in {$student->course} A.Y 2025-2026.
@@ -618,9 +620,24 @@ class AdminController extends Controller
                     'message'      => $message,
                 ]);
 
+            SmsLogs::updateOrCreate(
+                [
+                    // these are the "matching" fields to check if the log already exists
+                    'name' => $name,
+                    'mobile_number' => $phone,
+                ],
+                [
+                    // these fields will be updated or inserted
+                    'message' => $message,
+                    'status'  => 'sent',
+                    'course' => $course,
+                ]
+            );
+
             $results[] = [
                 'student' => $name,
                 'phone'   => $phone,
+                'course' => $course,
                 'status'  => $response->successful() ? 'queued' : 'failed',
                 'details' => $response->json(),
             ];
