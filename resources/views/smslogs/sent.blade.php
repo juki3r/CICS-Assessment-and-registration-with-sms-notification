@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight uppercase">
-            {{ __('SMS Gateway') }}
+            {{ __('SMS Logs') }}
         </h2>
     </x-slot>
 
@@ -49,19 +49,20 @@
                                     <th>Mobile No.</th>
                                     <th>
                                         <input type="checkbox" id="selectAll">
-                                        <label for="selectAll" class="ms-1">Select All</label>
+                                         <label for="">Select all</label>
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($registrations as $index => $reg)
                                     <tr>
-                                        
                                         <td>{{ $index + 1 }}</td>
                                         <td class="text-capitalize">{{ $reg->fullname }}</td>
+                                        <td style="display: none">{{ $reg->course }}</td>
                                         <td>{{ $reg->contact_details }}</td>
                                         <td>
                                             <input type="checkbox" name="selected[]" value="{{ $reg->id }}" class="select-item">
+                                           
                                         </td>
                                     </tr>
                                 @empty
