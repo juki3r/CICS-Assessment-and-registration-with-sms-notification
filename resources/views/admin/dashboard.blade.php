@@ -8,12 +8,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <h3 class="mb-6 text-lg font-semibold text-center">Student Registrations Overview</h3>
-                <br>
-                 <br>
-                  <br>
-                   <br>
-                <break>
+                <h3 class="mb-6 text-lg font-semibold">Student Registrations by Course & Remarks</h3>
 
                 @php
                     $courses = ['BSIT', 'BSCS', 'BLIS'];
@@ -66,17 +61,17 @@
                         {
                             label: 'Passed',
                             data: [chartData[course].passed],
-                            backgroundColor: 'rgba(49, 13, 228, 1)'
+                            backgroundColor: 'rgba(5, 9, 242, 1)'
                         },
                         {
                             label: 'Failed',
                             data: [chartData[course].failed],
-                            backgroundColor: 'rgba(155, 6, 6, 0.91)'
+                            backgroundColor: 'rgba(245, 19, 7, 1)'
                         },
                         {
                             label: 'Pending',
                             data: [chartData[course].pending],
-                            backgroundColor: 'rgba(212, 206, 7, 0.7)'
+                            backgroundColor: 'rgba(250, 246, 1, 0.7)'
                         }
                     ]
                 },

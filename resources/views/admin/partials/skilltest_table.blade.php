@@ -49,12 +49,11 @@
                         @if($registration->skilltest == null)
                             <div class="mb-3">
                                 <label for="skilltest" class="form-label">Skill test:</label>
-                                <!-- <input type="number" name="skilltest" class="form-control" min="0" max="10000" > -->
-                                 <select name="skilltest" class="form-control" required>
+                                <select name="skilltest" class="form-control" required>
                                         @for ($i = 10; $i >= 1; $i--)
                                             <option value="{{ $i }}">{{ $i }}</option>
                                         @endfor
-                                </select>
+                                    </select>
                             </div>
                             
                         @else
