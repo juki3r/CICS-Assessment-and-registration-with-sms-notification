@@ -150,7 +150,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Overall Rating <span id="demo"></span></td>
+                                                <td>Overall Rating</td>
                                                 <td>
                                                     <span class="overall fw-bold">N/A</span>
                                                     <input type="hidden" name="overall_rating" class="overall_input">
@@ -160,44 +160,36 @@
 
                                         <script>
 
-                                            $(document).ready(function () {
-                                                $(document).on('change', '.rating', function () {
-                                                    alert("Selected value: " + $(this).val());
+                                        document.addEventListener("DOMContentLoaded", function () {
+                                            const ratings = document.querySelectorAll(".rating");
+                                            const overallSpan = document.querySelector(".overall");
+                                            const overallInput = document.querySelector(".overall_input");
+
+                                            ratings.forEach(select => {
+                                                select.addEventListener("change", () => {
+                                                    let sum = 0;
+                                                    let count = 0;
+                                                    console.log('selected');
+
+                                                    ratings.forEach(r => {
+                                                        
+                                                        if (r.value) {
+                                                            sum += parseInt(r.value);
+                                                            count++;
+                                                        }
+                                                    });
+
+                                                    if (count > 0) {
+                                                        let avg = (sum / count).toFixed(2);
+                                                        overallSpan.textContent = avg;
+                                                        overallInput.value = avg;
+                                                    } else {
+                                                        overallSpan.textContent = "N/A";
+                                                        overallInput.value = "";
+                                                    }
                                                 });
                                             });
-
-
-
-                                        // document.addEventListener("DOMContentLoaded", function () {
-                                        //     const ratings = document.querySelectorAll(".rating");
-                                        //     const overallSpan = document.querySelector(".overall");
-                                        //     const overallInput = document.querySelector(".overall_input");
-
-                                        //     ratings.forEach(select => {
-                                        //         select.addEventListener("change", () => {
-                                        //             let sum = 0;
-                                        //             let count = 0;
-                                        //             console.log('selected');
-
-                                        //             ratings.forEach(r => {
-                                                        
-                                        //                 if (r.value) {
-                                        //                     sum += parseInt(r.value);
-                                        //                     count++;
-                                        //                 }
-                                        //             });
-
-                                        //             if (count > 0) {
-                                        //                 let avg = (sum / count).toFixed(2);
-                                        //                 overallSpan.textContent = avg;
-                                        //                 overallInput.value = avg;
-                                        //             } else {
-                                        //                 overallSpan.textContent = "N/A";
-                                        //                 overallInput.value = "";
-                                        //             }
-                                        //         });
-                                        //     });
-                                        // });
+                                        });
 
                                         </script>
 
