@@ -89,7 +89,6 @@ Route::middleware(['auth:admin'])->group(function () {
 
     Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
 
-
     Route::get('/smslogs', [AdminController::class, 'smslogs'])->name('smslogs.logs');
     Route::get('/sent', [AdminController::class, 'sent'])->name('smslogs.sent');
 
@@ -97,7 +96,8 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::post('/send/sms', [AdminController::class, 'sendSmsFromClient'])->name('sendSmsFromClient');
     Route::post('/edit/timer', [AdminController::class, 'editTimer'])->name('edit.timer');
 
-
+    //Archives
+    Route::get('/archives', [AdminController::class, 'archives'])->name('archives');
 
     //Notiffications
     Route::get('/admin/notifications', [AdminController::class, 'notifications'])->name('admin.notifications');
