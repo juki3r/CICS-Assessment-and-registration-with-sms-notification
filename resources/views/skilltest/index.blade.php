@@ -56,7 +56,7 @@
             $('#search').on('keyup', function(){
                 let search = $(this).val();
                 $.ajax({
-                    url: "{{ route('admin.registrations.search') }}",
+                    url: "{{ route('admin.skilltest') }}",
                     type: "GET",
                     data: { search: search },
                     success: function(data){

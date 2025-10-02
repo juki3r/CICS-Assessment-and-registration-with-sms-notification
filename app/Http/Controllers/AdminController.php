@@ -501,6 +501,9 @@ class AdminController extends Controller
 
         if ($rank) {
             $registrations->orderByDesc('total');
+        } else {
+            // Default alphabetical sort when no ranking is applied
+            $registrations->orderBy('fullname', 'asc');
         }
 
         if ($print) {
