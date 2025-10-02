@@ -395,7 +395,7 @@ class AdminController extends Controller
         $registrations = $query->paginate(6)->withQueryString();
 
         if ($request->ajax()) {
-            return view('admin.partials.interview_table', compact('registrations'))->render();
+            return view('admin.partials.skilltest_table', compact('registrations'))->render();
         }
         return view('skilltest.index', compact('registrations'));
     }
