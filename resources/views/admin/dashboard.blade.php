@@ -8,12 +8,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <h3 class="mb-6 text-lg font-semibold text-center">Student Registrations Overview</h3>
-                <br>
-                 <br>
-                  <br>
-                   <br>
-                <break>
+                <h3 class="mb-6 text-lg font-semibold">Student Registrations by Course & Remarks</h3>
 
                 @php
                     $courses = ['BSIT', 'BSCS', 'BLIS'];
@@ -51,29 +46,17 @@
                         {
                             label: 'Passed',
                             data: [chartData[course].passed],
-<<<<<<< HEAD
-                            backgroundColor: 'rgba(244, 9, 217, 0.96)'
-=======
-                            backgroundColor: 'rgba(49, 13, 228, 1)'
->>>>>>> abf57b4111a4a61e655886ef4f5378a7762c4964
+                            backgroundColor: 'rgba(75, 192, 192, 0.7)'
                         },
                         {
                             label: 'Failed',
                             data: [chartData[course].failed],
-<<<<<<< HEAD
-                            backgroundColor: 'rgba(246, 6, 6, 0.7)'
-=======
-                            backgroundColor: 'rgba(155, 6, 6, 0.91)'
->>>>>>> abf57b4111a4a61e655886ef4f5378a7762c4964
+                            backgroundColor: 'rgba(255, 99, 132, 0.7)'
                         },
                         {
                             label: 'Pending',
                             data: [chartData[course].pending],
-<<<<<<< HEAD
-                            backgroundColor: 'rgba(6, 248, 78, 0.55)'
-=======
-                            backgroundColor: 'rgba(212, 206, 7, 0.7)'
->>>>>>> abf57b4111a4a61e655886ef4f5378a7762c4964
+                            backgroundColor: 'rgba(201, 203, 207, 0.7)'
                         }
                     ]
                 },
