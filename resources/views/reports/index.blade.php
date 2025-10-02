@@ -249,7 +249,12 @@
                                     <td>{{ $index + 1 }}</td>
                                     <td class="text-capitalize">{{ $reg->fullname }}</td>
                                     <td>{{ $reg->course }}</td>
-                                    <td>{{ $reg->exam_result ?? 'Pending' }}</td>
+                                   <td>
+                                        {{ ($reg->exam_result && $reg->actual_result) 
+                                            ? $reg->exam_result . '/' . (int) $reg->actual_result 
+                                            : 'Pending' }}
+                                    </td>
+
                                     <td>{{ $reg->gwa ?? 'Pending'}}</td>
                                     <td>{{ $reg->interview_result ?? 'Pending' }}</td>
                                     <td>{{ $reg->skilltest ?? 'Pending' }}</td>

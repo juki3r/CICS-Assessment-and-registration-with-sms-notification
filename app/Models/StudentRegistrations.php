@@ -22,6 +22,7 @@ class StudentRegistrations extends Model
         'skilltest',
         'total',
         'remarks',
+        'actual_result',
     ];
 
     // Hook into saving event

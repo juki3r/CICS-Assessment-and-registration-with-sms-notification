@@ -78,6 +78,7 @@
                     }
                 });
             });
+            
         });
     </script>
 </x-app-layout>

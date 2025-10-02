@@ -8,7 +8,11 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <h3 class="mb-6 text-lg font-semibold">Student Registrations by Course & Remarks</h3>
+                <h3 class="mb-6 text-lg font-semibold text-center">Student Registrations Overview</h3>
+                <br>
+                <br>
+                <br>
+                <br>
 
                 @php
                     $courses = ['BSIT', 'BSCS', 'BLIS'];

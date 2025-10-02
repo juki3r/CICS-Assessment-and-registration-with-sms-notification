@@ -43,6 +43,7 @@ class ExamController extends Controller
 
         if ($user_exam) {
             $user_exam->update([
+                'actual_result' => $score,
                 'exam_result' => (($score * 100) / 65) * 0.25,
             ]);
         }
