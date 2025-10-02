@@ -402,7 +402,7 @@ class AdminController extends Controller
     public function updateSkilltest(Request $request, $id)
     {
         $registration = StudentRegistrations::findOrFail($id);
-        $final_skilltest = (($request->skilltest * 100) / 100) * .25;
+        $final_skilltest = ($request->skilltest / 10) * 25;
         $registration->update([
             'skilltest' => round($final_skilltest, 2),
         ]);
