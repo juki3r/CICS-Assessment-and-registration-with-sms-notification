@@ -46,17 +46,17 @@
                         {
                             label: 'Passed',
                             data: [chartData[course].passed],
-                            backgroundColor: 'rgba(75, 192, 192, 0.7)'
+                            backgroundColor: 'rgba(244, 9, 217, 0.96)'
                         },
                         {
                             label: 'Failed',
                             data: [chartData[course].failed],
-                            backgroundColor: 'rgba(255, 99, 132, 0.7)'
+                            backgroundColor: 'rgba(246, 6, 6, 0.7)'
                         },
                         {
                             label: 'Pending',
                             data: [chartData[course].pending],
-                            backgroundColor: 'rgba(201, 203, 207, 0.7)'
+                            backgroundColor: 'rgba(6, 248, 78, 0.55)'
                         }
                     ]
                 },

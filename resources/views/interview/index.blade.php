@@ -50,13 +50,15 @@
 
     {{-- AJAX Script for Live Search --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script>
         $(document).ready(function(){
             // Live Search
             $('#search').on('keyup', function(){
                 let search = $(this).val();
                 $.ajax({
-                    url: "{{ route('admin.registrations.search') }}",
+                    // url: "{{ route('admin.registrations.search') }}",
+                    url: "{{ route('interview') }}",
                     type: "GET",
                     data: { search: search },
                     success: function(data){
@@ -77,7 +79,5 @@
                 });
             });
         });
-    </script>
-        
     </script>
 </x-app-layout>
