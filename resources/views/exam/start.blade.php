@@ -93,15 +93,15 @@
                     <div class="mt-4 text-start d-inline-block">
                         <label class="mb-2 d-block">
                             <input type="radio" name="questions[{{ $question->id }}]" value="a" required> 
-                            A. {{ $question->option_a }}
+                            {{ $question->option_a }}
                         </label>
                         <label class="mb-2 d-block">
                             <input type="radio" name="questions[{{ $question->id }}]" value="b"> 
-                            B. {{ $question->option_b }}
+                            {{ $question->option_b }}
                         </label>
                         <label class="mb-2 d-block">
                             <input type="radio" name="questions[{{ $question->id }}]" value="c"> 
-                            C. {{ $question->option_c }}
+                            {{ $question->option_c }}
                         </label>
                         <label class="mb-2 d-block">
                             <input type="radio" name="questions[{{ $question->id }}]" value="d"> 
@@ -110,7 +110,7 @@
                         @if (!empty($question->option_e))
                             <label class="mb-2 d-block">
                                 <input type="radio" name="questions[{{ $question->id }}]" value="e"> 
-                                E. {{ $question->option_e }}
+                                 {{ $question->option_e }}
                             </label>
                         @endif
                     </div>
