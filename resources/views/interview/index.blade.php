@@ -58,7 +58,7 @@
                 let search = $(this).val();
                 $.ajax({
                     // url: "{{ route('admin.registrations.search') }}",
-                    url: "{{ route('interview') }}",
+                    url: "{{ route('admin.interview') }}",
                     type: "GET",
                     data: { search: search },
                     success: function(data){

@@ -113,6 +113,7 @@
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
         @if(Auth::guard('admin')->check())
             <li>
+                <a href="{{route('archives')}}" class="px-3" style="text-decoration: none">Archives</a>
                 <form method="POST" action="{{ route('admin.logout') }}">
                     @csrf
                     <button type="submit" class="dropdown-item text-danger">Logout</button>

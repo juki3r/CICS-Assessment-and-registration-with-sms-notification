@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
+use Carbon\Carbon;
 
 
 class AdminController extends Controller
@@ -89,6 +90,29 @@ class AdminController extends Controller
     // }
 
 
+    // public function dashboard()
+    // {
+    //     if (!Auth::guard('admin')->check() || Auth::guard('admin')->user()->role !== 'admin') {
+    //         return redirect()->route('admin.login')->with('error', 'Unauthorized access.');
+    //     }
+
+    //     // Count students by course and remarks
+    //     $courses = ['BSIT', 'BSCS', 'BLIS'];
+    //     $chartData = [];
+    //     $currentYear = Carbon::now()->year;
+
+    //     foreach ($courses as $course) {
+    //         $chartData[$course] = [
+    //             'passed' => StudentRegistrations::where('course', $course)->where('remarks', 'Passed')->count(),
+    //             'failed' => StudentRegistrations::where('course', $course)->where('remarks', 'Failed')->count(),
+    //             'pending' => StudentRegistrations::where('course', $course)->whereNull('remarks')->count(),
+    //         ];
+    //     }
+
+    //     return view('admin.dashboard', compact('chartData'));
+    // }
+
+
     public function dashboard()
     {
         if (!Auth::guard('admin')->check() || Auth::guard('admin')->user()->role !== 'admin') {
@@ -98,17 +122,30 @@ class AdminController extends Controller
         // Count students by course and remarks
         $courses = ['BSIT', 'BSCS', 'BLIS'];
         $chartData = [];
+        $currentYear = Carbon::now()->year; // 🔥 current year filter
 
         foreach ($courses as $course) {
             $chartData[$course] = [
-                'passed' => StudentRegistrations::where('course', $course)->where('remarks', 'Passed')->count(),
-                'failed' => StudentRegistrations::where('course', $course)->where('remarks', 'Failed')->count(),
-                'pending' => StudentRegistrations::where('course', $course)->whereNull('remarks')->count(),
+                'passed' => StudentRegistrations::where('course', $course)
+                    ->whereYear('created_at', $currentYear)
+                    ->where('remarks', 'Passed')
+                    ->count(),
+
+                'failed' => StudentRegistrations::where('course', $course)
+                    ->whereYear('created_at', $currentYear)
+                    ->where('remarks', 'Failed')
+                    ->count(),
+
+                'pending' => StudentRegistrations::where('course', $course)
+                    ->whereYear('created_at', $currentYear)
+                    ->whereNull('remarks')
+                    ->count(),
             ];
         }
 
-        return view('admin.dashboard', compact('chartData'));
+        return view('admin.dashboard', compact('chartData', 'currentYear'));
     }
+
 
 
     public function updateExamField(Request $request)
@@ -202,6 +239,10 @@ class AdminController extends Controller
     {
 
         $query = StudentRegistrations::query();
+
+        // Filter for the current year
+        $query->whereYear('created_at', Carbon::now()->year);
+
 
         // Apply search
         if ($request->filled('search')) {
@@ -324,6 +365,10 @@ class AdminController extends Controller
     {
         $query = StudentRegistrations::query();
 
+        // Filter for the current year
+        $query->whereYear('created_at', Carbon::now()->year);
+
+
         // Apply search
         if ($request->filled('search')) {
             $search = $request->input('search');
@@ -385,6 +430,10 @@ class AdminController extends Controller
     public function skilltest(Request $request)
     {
         $query = StudentRegistrations::query();
+
+        // Filter for the current year
+        $query->whereYear('created_at', Carbon::now()->year);
+
 
         // Apply search
         if ($request->filled('search')) {
@@ -487,6 +536,9 @@ class AdminController extends Controller
 
         $registrations = StudentRegistrations::query();
 
+        $registrations->whereYear('created_at', Carbon::now()->year);
+
+
         if ($course) {
             $registrations->where('course', $course);
         }
@@ -527,6 +579,8 @@ class AdminController extends Controller
 
         $registrations = SmsLogs::query();
 
+        $registrations->whereYear('created_at', Carbon::now()->year);
+
         if ($course) {
             $registrations->where('course', $course);
         }
@@ -556,6 +610,7 @@ class AdminController extends Controller
         $print = $request->query('print');   // if set, print-friendly
 
         $registrations = StudentRegistrations::query();
+        $registrations->whereYear('created_at', Carbon::now()->year);
 
         if ($course) {
             $registrations->where('course', $course);
@@ -659,5 +714,50 @@ class AdminController extends Controller
         );
 
         return redirect()->route('questions.index')->with('success', 'Timer edit successful!');
+    }
+
+
+    //Archives
+    public function archives(Request $request)
+    {
+        $course = $request->query('course');
+        $rank   = $request->query('rank');
+        $print  = $request->query('print');
+
+        // Default year is the current year
+        $year   = $request->query('year', date('Y'));
+
+        $registrations = StudentRegistrations::query();
+
+        // Always show only "Passed"
+        $registrations->where('remarks', 'Passed');
+
+        if ($course) {
+            $registrations->where('course', $course);
+        }
+
+        // Filter by selected year
+        if ($year) {
+            $registrations->whereYear('created_at', $year);
+        }
+
+        if ($rank) {
+            $registrations->orderByDesc('total');
+        } else {
+            $registrations->orderBy('fullname', 'asc');
+        }
+
+        if ($print) {
+            $registrations->orderBy('fullname', 'asc');
+        }
+
+        $registrations = $registrations->get();
+
+        // Generate a simple list of 5 years: current year + previous 4 years
+        $currentYear = date('Y');
+        $years = collect(range($currentYear, $currentYear - 4));
+
+        return view('archives.index', compact('registrations', 'course', 'rank', 'print', 'year', 'years'))
+            ->with('status', 'passed');
     }
 }
