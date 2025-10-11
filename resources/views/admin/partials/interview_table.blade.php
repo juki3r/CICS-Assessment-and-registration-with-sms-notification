@@ -80,6 +80,10 @@
                                         <option value="HUMSS" {{ $registration->strand == 'HUMSS' ? 'selected' : '' }}>HUMSS</option>
                                         <option value="STEM" {{ $registration->strand == 'STEM' ? 'selected' : '' }}>STEM</option>
                                         <option value="TVL" {{ $registration->strand == 'TVL' ? 'selected' : '' }}>TVL</option>
+                                        <option value="ICT" {{ $registration->strand == 'ICT' ? 'selected' : '' }}>ICT</option>
+                                        <option value="ABM" {{ $registration->strand == 'ABM' ? 'selected' : '' }}>ABM</option>
+                                        <option value="SMAW" {{ $registration->strand == 'SMAW' ? 'selected' : '' }}>SMAW</option>
+                                        <option value="Others" {{ $registration->strand == 'Others' ? 'selected' : '' }}>Others</option>
                                     </select>
                                 </div>
                             </div>
