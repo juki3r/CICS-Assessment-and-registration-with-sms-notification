@@ -8,13 +8,14 @@ use App\Http\Controllers\ExamController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\SubAdminController;
 use App\Http\Controllers\BSCSStudentController;
 use App\Http\Controllers\BLISStudentsController;
 use App\Http\Controllers\BSITStudentsController;
 use App\Http\Controllers\Admin\QuestionController;
+use App\Http\Controllers\ScoringPercentageController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\SubAdminController;
 
 Route::get('/', function () {
     if (session()->has('student_name')) {
@@ -102,6 +103,10 @@ Route::middleware(['auth:admin'])->group(function () {
     //Notiffications
     Route::get('/admin/notifications', [AdminController::class, 'notifications'])->name('admin.notifications');
     Route::post('/admin/notifications/{id}/mark-read', [AdminController::class, 'markNotificationRead'])->name('admin.notifications.markRead');
+
+
+    Route::get('/scoring', [ScoringPercentageController::class, 'index'])->name('scoring.index');
+    Route::post('/scoring', [ScoringPercentageController::class, 'update'])->name('scoring.update');
 });
 
 Route::get('/admin/interview', [AdminController::class, 'interview'])->name('admin.interview');

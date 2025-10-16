@@ -21,9 +21,17 @@
                         Edit
                         </button>
                     </span>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
-                        Add New Question
-                    </button>
+
+                    <div class="p-0 m-0">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
+                            Add New Question
+                        </button>
+
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#percentModal">
+                            Scoring
+                        </button>
+                    </div>
+                    
                 </h1>
  
                 {{-- Questions Table --}}
@@ -232,6 +240,98 @@
                         </div>
                     </div>
                 </div>
+
+
+                <!-- Percentage Scoring Modal -->
+                <div class="modal fade" id="percentModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content border-0 shadow-lg">
+                            <div class="modal-header bg-primary text-white">
+                                <h1 class="modal-title fs-5">
+                                    <i class="bi bi-percent me-2"></i> Percentage Scoring
+                                </h1>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+
+                            <div class="modal-body p-4">
+                                @if (session('status'))
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        {{ session('status') }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                    </div>
+                                @endif
+
+                                <form method="POST" action="{{ route('scoring.update') }}">
+                                    @csrf
+
+                                    <div class="row g-3">
+                                        <!-- Interview -->
+                                        <div class="col-md-6">
+                                            <label for="interview" class="form-label fw-semibold">
+                                                Interview <span class="text-muted">(e.g., 0.20)</span>
+                                            </label>
+                                            <input type="number" step="0.01" name="interview" id="interview"
+                                                value="{{ old('interview', $scoring->interview ?? 0) }}"
+                                                class="form-control form-control-lg @error('interview') is-invalid @enderror" required>
+                                            @error('interview')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <!-- GWA -->
+                                        <div class="col-md-6">
+                                            <label for="gwa" class="form-label fw-semibold">
+                                                GWA <span class="text-muted">(e.g., 0.30)</span>
+                                            </label>
+                                            <input type="number" step="0.01" name="gwa" id="gwa"
+                                                value="{{ old('gwa', $scoring->gwa ?? 0) }}"
+                                                class="form-control form-control-lg @error('gwa') is-invalid @enderror" required>
+                                            @error('gwa')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <!-- Skill Test -->
+                                        <div class="col-md-6">
+                                            <label for="skilltest" class="form-label fw-semibold">
+                                                Skill Test <span class="text-muted">(e.g., 0.50)</span>
+                                            </label>
+                                            <input type="number" step="0.01" name="skilltest" id="skilltest"
+                                                value="{{ old('skilltest', $scoring->skilltest ?? 0) }}"
+                                                class="form-control form-control-lg @error('skilltest') is-invalid @enderror" required>
+                                            @error('skilltest')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <!-- Exam -->
+                                        <div class="col-md-6">
+                                            <label for="exam" class="form-label fw-semibold">
+                                                Exam <span class="text-muted">(e.g., 0.25)</span>
+                                            </label>
+                                            <input type="number" step="0.01" name="exam" id="exam"
+                                                value="{{ old('exam', $scoring->exam ?? 0) }}"
+                                                class="form-control form-control-lg @error('exam') is-invalid @enderror" required>
+                                            @error('exam')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="text-end mt-4">
+                                        <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">
+                                            <i class="bi bi-x-circle"></i> Cancel
+                                        </button>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="bi bi-save2"></i> Save Changes
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
             </div> <!-- /p-6 -->
         </div>

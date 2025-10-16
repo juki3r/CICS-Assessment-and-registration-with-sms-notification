@@ -6,6 +6,7 @@ use App\Models\Timer;
 use App\Models\Question;
 use Illuminate\Http\Request;
 use App\Models\AdminNotification;
+use App\Models\ScoringPercentage;
 use App\Http\Controllers\Controller;
 
 class QuestionController extends Controller
@@ -19,7 +20,9 @@ class QuestionController extends Controller
         $timerRecord = Timer::first();                 // fetch first row
         $timers = $timerRecord ? $timerRecord->timer / 60 : 60;
 
-        return view('admin.questions.index', compact('questions', 'notificationCount', 'timers'));
+        $scoring = ScoringPercentage::first();
+
+        return view('admin.questions.index', compact('questions', 'notificationCount', 'timers', 'scoring'));
     }
 
     public function create()
