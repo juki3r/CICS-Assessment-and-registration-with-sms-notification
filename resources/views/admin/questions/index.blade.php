@@ -14,25 +14,30 @@
 
             <div class="p-6 text-gray-900">
 
-                <h1 class="d-flex justify-content-between">
-                    <span class="fs-3">Questions</span>
-                    <span class="fs-3">Time limit: {{$timers}} Minutes 
-                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                <!-- Left: Title -->
+                <h1 class="fs-3 m-0">Questions</h1>
+
+                <!-- Center: Timer with edit button -->
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-clock-history fs-4 text-primary"></i>
+                    <span class="fs-5">Time limit: <strong>{{ $timers }}</strong> minutes</span>
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         Edit
-                        </button>
-                    </span>
+                    </button>
+                </div>
 
-                    <div class="p-0 m-0">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
-                            Add New Question
-                        </button>
+                <!-- Right: Action buttons -->
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addModal">
+                        <i class="bi bi-plus-circle"></i> Add Question
+                    </button>
+                    <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#percentModal">
+                        <i class="bi bi-percent"></i> Scoring
+                    </button>
+                </div>
+            </div>
 
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#percentModal">
-                            Scoring
-                        </button>
-                    </div>
-                    
-                </h1>
  
                 {{-- Questions Table --}}
                 <div class="table-responsive">
