@@ -21,7 +21,7 @@
             <p class="mb-3">Welcome to your exam. Please read the instructions below carefully before starting:</p>
             <ul>
                 <li>1. This exam contains multiple-choice questions.</li>
-                <li>2. Choose the best answer for each question.</li>
+                <li>2. Choose the best and correct answer.</li>
                 <li>3. The exam must be completed in one sitting—you cannot pause and resume later.</li>
                 <li>4. You will have [time limit] minutes to finish the exam.</li>
                 <li>5. Do not refresh the page to avoid technical disqualification.</li>
