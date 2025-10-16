@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Timer;
 use App\Models\Admins;
@@ -13,6 +14,7 @@ use App\Models\EntranceExam;
 use Illuminate\Http\Request;
 use App\Mail\GeneralNotification;
 use App\Models\AdminNotification;
+use App\Models\ScoringPercentage;
 use App\Models\StudentRegistrations;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -20,7 +22,6 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
-use Carbon\Carbon;
 
 
 class AdminController extends Controller
@@ -396,10 +397,17 @@ class AdminController extends Controller
             $request->rating_thinking,
         ])->filter()->map(fn($val) => (int) $val);
 
-        $overall = $ratings->count() > 0 ? $ratings->avg() : null;
-        $final_interview_result = (($overall * 100) / 5) * 0.2;
+        // Get scoring percentage (assume only one record)
+        $scoring = ScoringPercentage::first();
 
-        $gwa_final = (($request->gwa * 100) / 100) * .3;
+        // Fallback if table empty
+        $examWeight_interview = $scoring->interview ?? 0.20;
+
+        $overall = $ratings->count() > 0 ? $ratings->avg() : null;
+        $final_interview_result = (($overall * 100) / 5) * $examWeight_interview;
+
+        $examWeight_gwa = $scoring->gwa ?? 0.30;
+        $gwa_final = (($request->gwa * 100) / 100) * $examWeight_gwa;
         $registration->update([
             'address'              => $request->address,
             'contact_details'      => $request->contact_details,
@@ -451,7 +459,14 @@ class AdminController extends Controller
     public function updateSkilltest(Request $request, $id)
     {
         $registration = StudentRegistrations::findOrFail($id);
-        $final_skilltest = ($request->skilltest / 10) * 25;
+
+        // Get scoring percentage (assume only one record)
+        $scoring = ScoringPercentage::first();
+
+        // Fallback if table empty
+        $examWeight_skilltest = $scoring->skilltest ?? 0.25;
+
+        $final_skilltest = ($request->skilltest / 10) * $examWeight_skilltest;
         $registration->update([
             'skilltest' => round($final_skilltest, 2),
         ]);
