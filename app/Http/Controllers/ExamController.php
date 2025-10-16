@@ -7,6 +7,7 @@ use App\Models\Question;
 use App\Models\ExamResult;
 use Illuminate\Http\Request;
 use App\Models\AdminNotification;
+use App\Models\ScoringPercentage;
 use App\Models\StudentRegistrations;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,13 +39,23 @@ class ExamController extends Controller
             }
         }
 
+        // Get total number of questions from the database
+        $totalQuestions = Question::count();
+
+        // Get scoring percentage (assume only one record)
+        $scoring = ScoringPercentage::first();
+
+        // Fallback if table empty
+        $examWeight = $scoring->exam ?? 0.25;
+
+
         // Find the student record by fullname
         $user_exam = StudentRegistrations::where('fullname', $name)->first();
 
         if ($user_exam) {
             $user_exam->update([
                 'actual_result' => $score,
-                'exam_result' => (($score * 100) / 65) * 0.25,
+                'exam_result' => (($score * 100) / $totalQuestions) * $examWeight,
             ]);
         }
 
