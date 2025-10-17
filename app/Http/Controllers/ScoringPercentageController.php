@@ -17,18 +17,26 @@ class ScoringPercentageController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'interview' => 'required|numeric|min:0|max:1',
-            'gwa'       => 'required|numeric|min:0|max:1',
-            'skilltest' => 'required|numeric|min:0|max:1',
-            'exam'      => 'required|numeric|min:0|max:1',
+            'interview' => 'required|numeric|min:0|max:100',
+            'gwa'       => 'required|numeric|min:0|max:100',
+            'skilltest' => 'required|numeric|min:0|max:100',
+            'exam'      => 'required|numeric|min:0|max:100',
         ]);
+
+        // Convert percentages to decimal form
+        $data = [
+            'interview' => $request->interview / 100,
+            'gwa'       => $request->gwa / 100,
+            'skilltest' => $request->skilltest,
+            'exam'      => $request->exam / 100,
+        ];
 
         $scoring = ScoringPercentage::first();
 
         if (!$scoring) {
-            $scoring = ScoringPercentage::create($request->only(['interview', 'gwa', 'skilltest', 'exam']));
+            $scoring = ScoringPercentage::create($data);
         } else {
-            $scoring->update($request->only(['interview', 'gwa', 'skilltest', 'exam']));
+            $scoring->update($data);
         }
 
         return redirect()
