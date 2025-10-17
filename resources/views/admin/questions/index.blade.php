@@ -273,9 +273,9 @@
                                         <!-- Interview -->
                                         <div class="col-md-6">
                                             <label for="interview" class="form-label fw-semibold">
-                                                Interview <span class="text-muted">(e.g., 0.20)</span>
+                                                Interview <span class="text-muted">(e.g., 20)</span>
                                             </label>
-                                            <input type="number" step="0.01" name="interview" id="interview"
+                                            <input type="number" step="1" name="interview" id="interview"
                                                 value="{{ old('interview', $scoring->interview ?? 0) }}"
                                                 class="form-control form-control-lg @error('interview') is-invalid @enderror" required>
                                             @error('interview')
@@ -286,9 +286,9 @@
                                         <!-- GWA -->
                                         <div class="col-md-6">
                                             <label for="gwa" class="form-label fw-semibold">
-                                                GWA <span class="text-muted">(e.g., 0.30)</span>
+                                                GWA <span class="text-muted">(e.g., 30)</span>
                                             </label>
-                                            <input type="number" step="0.01" name="gwa" id="gwa"
+                                            <input type="number" step="1" name="gwa" id="gwa"
                                                 value="{{ old('gwa', $scoring->gwa ?? 0) }}"
                                                 class="form-control form-control-lg @error('gwa') is-invalid @enderror" required>
                                             @error('gwa')
@@ -299,9 +299,9 @@
                                         <!-- Skill Test -->
                                         <div class="col-md-6">
                                             <label for="skilltest" class="form-label fw-semibold">
-                                                Skill Test <span class="text-muted">(e.g., 0.50)</span>
+                                                Skill Test <span class="text-muted">(e.g., 50)</span>
                                             </label>
-                                            <input type="number" step="0.01" name="skilltest" id="skilltest"
+                                            <input type="number" step="1" name="skilltest" id="skilltest"
                                                 value="{{ old('skilltest', $scoring->skilltest ?? 0) }}"
                                                 class="form-control form-control-lg @error('skilltest') is-invalid @enderror" required>
                                             @error('skilltest')
@@ -312,9 +312,9 @@
                                         <!-- Exam -->
                                         <div class="col-md-6">
                                             <label for="exam" class="form-label fw-semibold">
-                                                Exam <span class="text-muted">(e.g., 0.25)</span>
+                                                Exam <span class="text-muted">(e.g., 25)</span>
                                             </label>
-                                            <input type="number" step="0.01" name="exam" id="exam"
+                                            <input type="number" step="1" name="exam" id="exam"
                                                 value="{{ old('exam', $scoring->exam ?? 0) }}"
                                                 class="form-control form-control-lg @error('exam') is-invalid @enderror" required>
                                             @error('exam')
