@@ -276,7 +276,7 @@
                                                 Interview <span class="text-muted">(e.g., 20)</span>
                                             </label>
                                             <input type="number" step="0.1" name="interview" id="interview"
-                                                value="{{ old('interview', $scoring->interview ?? 0) }}"
+                                                value="{{ old('interview', $scoring->interview *100 ?? 0) }}"
                                                 class="form-control form-control-lg @error('interview') is-invalid @enderror" required>
                                             @error('interview')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -289,7 +289,7 @@
                                                 GWA <span class="text-muted">(e.g., 30)</span>
                                             </label>
                                             <input type="number" step="0.1" name="gwa" id="gwa"
-                                                value="{{ old('gwa', $scoring->gwa ?? 0) }}"
+                                                value="{{ old('gwa', $scoring->gwa*100 ?? 0) }}"
                                                 class="form-control form-control-lg @error('gwa') is-invalid @enderror" required>
                                             @error('gwa')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -299,10 +299,10 @@
                                         <!-- Skill Test -->
                                         <div class="col-md-6">
                                             <label for="skilltest" class="form-label fw-semibold">
-                                                Skill Test <span class="text-muted">(e.g., 50)</span>
+                                                Skill Test <span class="text-muted">(e.g., 25)</span>
                                             </label>
                                             <input type="number" step="0.1" name="skilltest" id="skilltest"
-                                                value="{{ old('skilltest', $scoring->skilltest ?? 0) }}"
+                                                value="{{ old('skilltest', (int)$scoring->skilltest ?? 0) }}"
                                                 class="form-control form-control-lg @error('skilltest') is-invalid @enderror" required>
                                             @error('skilltest')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -315,7 +315,7 @@
                                                 Exam <span class="text-muted">(e.g., 25)</span>
                                             </label>
                                             <input type="number" step="0.1" name="exam" id="exam"
-                                                value="{{ old('exam', $scoring->exam ?? 0) }}"
+                                                value="{{ old('exam', $scoring->exam*100 ?? 0) }}"
                                                 class="form-control form-control-lg @error('exam') is-invalid @enderror" required>
                                             @error('exam')
                                                 <div class="invalid-feedback">{{ $message }}</div>

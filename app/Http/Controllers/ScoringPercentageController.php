@@ -27,7 +27,7 @@ class ScoringPercentageController extends Controller
         $data = [
             'interview' => $request->interview / 100,
             'gwa'       => $request->gwa / 100,
-            'skilltest' => $request->skilltest,
+            'skilltest' => (int) $request->skilltest,
             'exam'      => $request->exam / 100,
         ];
 
