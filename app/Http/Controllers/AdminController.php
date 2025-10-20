@@ -364,7 +364,8 @@ class AdminController extends Controller
     // INTERVIEW
     public function interview(Request $request)
     {
-        $query = StudentRegistrations::query();
+        $query = StudentRegistrations::query()
+            ->where('interview_result', null);
 
         // Filter for the current year
         $query->whereYear('created_at', Carbon::now()->year);
