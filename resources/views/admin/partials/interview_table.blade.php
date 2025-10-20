@@ -61,8 +61,14 @@
                                     <input type="text" class="form-control" name="address" value="{{ $registration->address }}" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Contact details:</label>
-                                    <input type="number" class="form-control" name="contact_details" value="{{ $registration->contact_details }}" required>
+                                    <label class="form-label">Contact details (.e.g, 09xxx):</label>
+                                 <input type="text" pattern="\d{11}" maxlength="11" minlength="11"
+                                    class="form-control"
+                                    name="contact_details"
+                                    value="{{ $registration->contact_details }}"
+                                    required
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                    title="Please enter exactly 11 digits">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">GWA:</label>
