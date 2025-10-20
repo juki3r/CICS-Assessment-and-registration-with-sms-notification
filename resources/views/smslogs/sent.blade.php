@@ -33,6 +33,17 @@
                             @endforeach
                         </ul>
                     </div>
+
+                    {{-- Ranking Checkbox --}}
+                    <div class="form-check ms-3">
+                        <input class="form-check-input" type="checkbox" value="1" id="rankingCheck"
+                               onchange="location = this.checked ? '{{ route('smslogs.sent', array_merge(request()->query(), ['rank' => 1])) }}' : '{{ route('smslogs.sent', array_merge(request()->query(), ['rank' => null])) }}';"
+                               {{ request()->has('rank') ? 'checked' : '' }}>
+                        <label class="form-check-label" for="rankingCheck">
+                            Rank by Total
+                        </label>
+                    </div>
+
                 </div>
 
                 {{-- Send SMS Form --}}

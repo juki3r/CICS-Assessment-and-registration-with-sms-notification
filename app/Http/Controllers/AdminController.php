@@ -622,6 +622,7 @@ class AdminController extends Controller
     {
         $course = $request->query('course', 'BSIT'); // BSIT, BSCS, BLIS
         $status = $request->query('status', 'passed'); // passed, failed
+        $rank = $request->query('rank');     // if set, sort by total desc
         $print = $request->query('print');   // if set, print-friendly
 
         $registrations = StudentRegistrations::query();
@@ -639,6 +640,13 @@ class AdminController extends Controller
             }
         }
 
+        if ($rank) {
+            $registrations->orderByDesc('total');
+        } else {
+            // Default alphabetical sort when no ranking is applied
+            $registrations->orderBy('fullname', 'asc')->where('remarks', 'Passed');;
+        }
+
 
         if ($print) {
             $registrations->where('remarks', 'Passed')->orderBy('fullname', 'asc'); // alphabetical
@@ -646,7 +654,7 @@ class AdminController extends Controller
 
         $registrations = $registrations->get();
 
-        return view('smslogs.sent', compact('registrations', 'course', 'status', 'print'));
+        return view('smslogs.sent', compact('registrations', 'course', 'status', 'print', 'rank'));
     }
 
     public function logout(Request $request)
