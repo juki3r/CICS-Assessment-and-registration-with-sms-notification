@@ -58,23 +58,23 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Address:</label>
-                                    <input type="text" class="form-control" name="address" value="{{ $registration->address }}">
+                                    <input type="text" class="form-control" name="address" value="{{ $registration->address }}" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Contact details:</label>
-                                    <input type="number" class="form-control" name="contact_details" value="{{ $registration->contact_details }}">
+                                    <input type="number" class="form-control" name="contact_details" value="{{ $registration->contact_details }}" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">GWA:</label>
-                                    <input type="number" step="0.01" class="form-control" name="gwa" value="{{ $registration->gwa }}">
+                                    <input type="number" step="0.01" class="form-control" name="gwa" value="{{ $registration->gwa }}" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Name of school (last attended):</label>
-                                    <input type="text" class="form-control" name="school" value="{{ $registration->school }}">
+                                    <input type="text" class="form-control" name="school" value="{{ $registration->school }}" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Strand:</label>
-                                    <select name="strand" class="form-select">
+                                    <select name="strand" class="form-select" required>
                                         <option value="">-- Select Strand --</option>
                                         <option value="GAS" {{ $registration->strand == 'GAS' ? 'selected' : '' }}>GAS</option>
                                         <option value="HUMSS" {{ $registration->strand == 'HUMSS' ? 'selected' : '' }}>HUMSS</option>
@@ -117,7 +117,7 @@
                                             <tr>
                                                 <td>Tone of voice</td>
                                                 <td>
-                                                    <select name="rating_communication" class="form-select rating">
+                                                    <select name="rating_communication" class="form-select rating" required>
                                                         <option value="">Select</option>
                                                         <option value="5">5 - Excellent</option>
                                                         <option value="4">4 - Good</option>
@@ -130,7 +130,7 @@
                                             <tr>
                                                 <td>Choice of words</td>
                                                 <td>
-                                                    <select name="rating_confidence" class="form-select rating">
+                                                    <select name="rating_confidence" class="form-select rating" required>
                                                         <option value="">Select</option>
                                                         <option value="5">5 - Excellent</option>
                                                         <option value="4">4 - Good</option>
@@ -143,7 +143,7 @@
                                             <tr>
                                                 <td>Ability to present ideas</td>
                                                 <td>
-                                                    <select name="rating_thinking" class="form-select rating">
+                                                    <select name="rating_thinking" class="form-select rating" required>
                                                         <option value="">Select</option>
                                                         <option value="5">5 - Excellent</option>
                                                         <option value="4">4 - Good</option>
@@ -164,38 +164,72 @@
 
                                         <script>
 
-                                        document.addEventListener("DOMContentLoaded", function () {
-                                            const ratings = document.querySelectorAll(".rating");
-                                            const overallSpan = document.querySelector(".overall");
-                                            const overallInput = document.querySelector(".overall_input");
+                                        // document.addEventListener("DOMContentLoaded", function () {
+                                        //     const ratings = document.querySelectorAll(".rating");
+                                        //     const overallSpan = document.querySelector(".overall");
+                                        //     const overallInput = document.querySelector(".overall_input");
 
-                                            ratings.forEach(select => {
-                                                select.addEventListener("change", () => {
-                                                    let sum = 0;
-                                                    let count = 0;
-                                                    console.log('selected');
+                                        //     ratings.forEach(select => {
+                                        //         select.addEventListener("change", () => {
+                                        //             let sum = 0;
+                                        //             let count = 0;
+                                        //             console.log('selected');
 
-                                                    ratings.forEach(r => {
+                                        //             ratings.forEach(r => {
                                                         
-                                                        if (r.value) {
-                                                            sum += parseInt(r.value);
-                                                            count++;
-                                                        }
-                                                    });
+                                        //                 if (r.value) {
+                                        //                     sum += parseInt(r.value);
+                                        //                     count++;
+                                        //                 }
+                                        //             });
 
-                                                    if (count > 0) {
-                                                        let avg = (sum / count).toFixed(2);
-                                                        overallSpan.textContent = avg;
-                                                        overallInput.value = avg;
-                                                    } else {
-                                                        overallSpan.textContent = "N/A";
-                                                        overallInput.value = "";
-                                                    }
-                                                });
-                                            });
-                                        });
+                                        //             if (count > 0) {
+                                        //                 let avg = (sum / count).toFixed(2);
+                                        //                 overallSpan.textContent = avg;
+                                        //                 overallInput.value = avg;
+                                        //             } else {
+                                        //                 overallSpan.textContent = "N/A";
+                                        //                 overallInput.value = "";
+                                        //             }
+                                        //         });
+                                        //     });
+                                        // });
 
-                                        </script>
+                                    //     document.addEventListener("DOMContentLoaded", function () {
+                                    //     // Loop through all modals
+                                    //     document.querySelectorAll('.modal').forEach(modal => {
+                                    //         const ratings = modal.querySelectorAll(".rating");
+                                    //         const overallSpan = modal.querySelector(".overall");
+                                    //         const overallInput = modal.querySelector(".overall_input");
+
+                                    //         if (!ratings.length || !overallSpan || !overallInput) return;
+
+                                    //         ratings.forEach(select => {
+                                    //             select.addEventListener("change", () => {
+                                    //                 let sum = 0;
+                                    //                 let count = 0;
+
+                                    //                 ratings.forEach(r => {
+                                    //                     if (r.value) {
+                                    //                         sum += parseInt(r.value);
+                                    //                         count++;
+                                    //                     }
+                                    //                 });
+
+                                    //                 if (count > 0) {
+                                    //                     const avg = (sum / count).toFixed(2);
+                                    //                     overallSpan.textContent = avg;
+                                    //                     overallInput.value = avg;
+                                    //                 } else {
+                                    //                     overallSpan.textContent = "N/A";
+                                    //                     overallInput.value = "";
+                                    //                 }
+                                    //             });
+                                    //         });
+                                    //     });
+                                    // });
+
+                                         </script>
 
 
                                     </table>

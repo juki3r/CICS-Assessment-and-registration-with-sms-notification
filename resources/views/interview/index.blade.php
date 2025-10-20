@@ -63,6 +63,7 @@
                     data: { search: search },
                     success: function(data){
                         $('#studentsTable').html(data);
+                        initializeRatingSystem(); // ✅ add this
                     }
                 });
             });
@@ -75,10 +76,47 @@
                     url: url,
                     success: function(data){
                         $('#studentsTable').html(data);
+                        initializeRatingSystem(); // ✅ add this
                     }
                 });
             });
             
         });
+
+        function initializeRatingSystem() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                const ratings = modal.querySelectorAll(".rating");
+                const overallSpan = modal.querySelector(".overall");
+                const overallInput = modal.querySelector(".overall_input");
+
+                if (!ratings.length || !overallSpan || !overallInput) return;
+
+                ratings.forEach(select => {
+                    select.addEventListener("change", () => {
+                        let sum = 0;
+                        let count = 0;
+
+                        ratings.forEach(r => {
+                            if (r.value) {
+                                sum += parseInt(r.value);
+                                count++;
+                            }
+                        });
+
+                        if (count > 0) {
+                            const avg = (sum / count).toFixed(2);
+                            overallSpan.textContent = avg;
+                            overallInput.value = avg;
+                        } else {
+                            overallSpan.textContent = "N/A";
+                            overallInput.value = "";
+                        }
+                    });
+                });
+            });
+        }
+
+        // Run once when page first loads
+        initializeRatingSystem();
     </script>
 </x-app-layout>
