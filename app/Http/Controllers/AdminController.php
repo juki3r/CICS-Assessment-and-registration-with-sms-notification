@@ -625,7 +625,8 @@ class AdminController extends Controller
         $rank = $request->query('rank');     // if set, sort by total desc
         $print = $request->query('print');   // if set, print-friendly
 
-        $registrations = StudentRegistrations::query();
+        $registrations = StudentRegistrations::query()
+            ->where('sent', false);
         $registrations->whereYear('created_at', Carbon::now()->year);
 
         if ($course) {
@@ -707,6 +708,11 @@ class AdminController extends Controller
                     'course'       => $student->course,
                 ]
             );
+
+            // Find registration by phone number and update "sent" field
+            StudentRegistrations::where('contact_details', $phone)->update([
+                'sent' => true,
+            ]);
 
             $results[] = [
                 'student' => $name,

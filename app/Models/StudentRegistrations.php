@@ -23,6 +23,7 @@ class StudentRegistrations extends Model
         'total',
         'remarks',
         'actual_result',
+        'sent'
     ];
 
     // Hook into saving event

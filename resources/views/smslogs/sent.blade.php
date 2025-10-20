@@ -88,7 +88,10 @@
                     </div>
 
                     <div class="text-end mt-3">
-                        <button type="submit" class="btn btn-primary" id="sendBtn">Send Selected</button>
+                        <button type="submit" class="btn btn-primary" id="sendBtn">
+                            <span id="btnText">Send Selected</span>
+                            <span id="btnSpinner" class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true" style="display: none;"></span>
+                        </button>
                     </div>
                 </form>
 
@@ -101,6 +104,29 @@
         document.getElementById('selectAll').addEventListener('change', function() {
             const checked = this.checked;
             document.querySelectorAll('.select-item').forEach(cb => cb.checked = checked);
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('sendSmsForm');
+            const sendBtn = document.getElementById('sendBtn');
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+
+            // On submit → show spinner
+            form.addEventListener('submit', function () {
+                sendBtn.disabled = true;
+                btnSpinner.style.display = 'inline-block';
+                btnText.textContent = 'Sending...';
+            });
+
+            // On load → check if session message exists, reset spinner/button
+            const message = document.getElementById('statusMessage');
+            if (message) {
+                // Re-enable button and reset to default text
+                sendBtn.disabled = false;
+                btnSpinner.style.display = 'none';
+                btnText.textContent = 'Send Selected';
+            }
         });
     </script>
 </x-app-layout>
