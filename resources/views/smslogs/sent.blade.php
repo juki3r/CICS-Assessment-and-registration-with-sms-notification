@@ -47,6 +47,7 @@
                                     <th>#</th>
                                     <th>Name of student</th>
                                     <th>Mobile No.</th>
+                                    <th>Total Average</th>
                                     <th>
                                         <input type="checkbox" id="selectAll">
                                          <label for="">Select all</label>
@@ -60,6 +61,7 @@
                                         <td class="text-capitalize">{{ $reg->fullname }}</td>
                                         <td style="display: none">{{ $reg->course }}</td>
                                         <td>{{ $reg->contact_details }}</td>
+                                        <td>{{ $reg->total }}</td>
                                         <td>
                                             <input type="checkbox" name="selected[]" value="{{ $reg->id }}" class="select-item">
                                            
