@@ -63,7 +63,7 @@
                     data: { search: search },
                     success: function(data){
                         $('#studentsTable').html(data);
-                        initializeRatingSystem(); // ✅ add this
+                        initializeRatingSystem(); //
                     }
                 });
             });
