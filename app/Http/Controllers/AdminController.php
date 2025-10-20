@@ -438,7 +438,8 @@ class AdminController extends Controller
     // Skill test
     public function skilltest(Request $request)
     {
-        $query = StudentRegistrations::query();
+        $query = StudentRegistrations::query()
+            ->where('skilltest', null);
 
         // Filter for the current year
         $query->whereYear('created_at', Carbon::now()->year);
