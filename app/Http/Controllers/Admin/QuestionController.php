@@ -20,7 +20,19 @@ class QuestionController extends Controller
         $timerRecord = Timer::first();                 // fetch first row
         $timers = $timerRecord ? $timerRecord->timer / 60 : 60;
 
+        // 1️⃣ Try to get the first scoring record
         $scoring = ScoringPercentage::first();
+
+        // 2️⃣ If there is no record yet in the database
+        if (!$scoring) {
+            // 3️⃣ Create a default scoring record
+            $scoring = ScoringPercentage::create([
+                'interview' => 0.20,
+                'gwa' => 0.30,
+                'skilltest' => 25,
+                'exam' => 0.25,
+            ]);
+        }
 
         return view('admin.questions.index', compact('questions', 'notificationCount', 'timers', 'scoring'));
     }
