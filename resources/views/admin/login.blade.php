@@ -18,13 +18,13 @@
             {{ session('error') }}
         </div>
     @endif
-        <h3 class="fs-3 text-center mb-3">Admin Login</h3>
+        <h3 class="fs-3 text-center mb-3">Admin</h3>
     <form method="POST" action="{{ route('admin.login.proceed') }}">
         @csrf
 
         <!-- Email Address -->
         <div>
-            <x-input-label for="email" :value="__('Email')" />
+            <x-input-label for="email" :value="__('Username')" />
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>

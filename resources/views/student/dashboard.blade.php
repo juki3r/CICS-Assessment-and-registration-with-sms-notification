@@ -16,13 +16,13 @@
 <body style="display:flex; justify-content:center; height:100vh;width:100vw; flex-direction:column; align-items:center">
 
         <div>
-            <h1 class="fs-2 mb-5">Welcome, <strong class="text-capitalize">{{$name}}</strong></h1>
+            <h1 class="fs-2 mb-5">Welcome, <strong class="capitalize">{{$name}}</strong></h1>
             <h2 class="fs-4 mb-2 fw-bold">Exam Instructions:</h2>
             <p class="mb-3">Welcome to your exam. Please read the instructions below carefully before starting:</p>
             <ul>
                 <li>1. This exam contains multiple-choice questions.</li>
                 <li>2. Choose the best and correct answer.</li>
-                <li>3. The exam must be completed in one sitting—you cannot pause and resume later.</li>
+                <li>3. The exam must be completed in one sitting you cannot pause and resume later.</li>
                 <li>4. You will have [time limit] minutes to finish the exam.</li>
                 <li>5. Do not refresh the page to avoid technical disqualification.</li>
             </ul>

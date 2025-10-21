@@ -7,7 +7,7 @@
 
         <!-- Full name -->
         <div>
-            <h1 class="fs-3 text-center mb-3">Student Login</h1>
+            <h1 class="fs-3 text-center mb-3">Student</h1>
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input id="name" 
                           class="block mt-1 w-full form-control" 
