@@ -709,7 +709,7 @@ class AdminController extends Controller
             $course = $student->contact_details;
 
             $message = "Hi Good Day! Congratulations {$name}, you are qualified incoming
-                        First year student in {$student->course} A.Y 2025-2026. Dont reply because this is system generated";
+                        First year student in " . strtoupper($student->course) . " A.Y 2025-2026. Dont reply because this is system generated";
 
             $response = Http::withHeaders([
                 'X-API-KEY' => $apiKey,

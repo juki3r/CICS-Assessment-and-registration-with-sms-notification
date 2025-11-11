@@ -248,7 +248,7 @@
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td class="text-capitalize">{{ $reg->fullname }}</td>
-                                    <td>{{ $reg->course }}</td>
+                                    <td class="text-uppercase">{{ $reg->course }}</td>
                                    <td>
                                         {{ ($reg->exam_result && $reg->actual_result) 
                                             ? $reg->exam_result . '/' . (int) $reg->actual_result 
