@@ -24,12 +24,14 @@
     </head>
     <body class="font-sans text-gray-900 antialiased">
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
-                <a href="/">
+            <div >
+                
+                <a href="/" class="d-flex gap-4 justify-content-center">
                     <!-- <x-application-logo class="w-20 h-20 fill-current text-gray-500" /> -->
                     <img src="{{ asset('logo.png') }}" alt="Logo" style="width:150px">
-
+                    <img src="{{ asset('cics.png') }}" alt="Logo" style="width:150px">
                 </a>
+                <h1 class="fs-5 mt-3 fw-bold " style="font-family:mono space">CICS ASSESSMENT AND REGISTRATION WITH SMS NOTIFICATION</h1>
             </div>
 
             <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">

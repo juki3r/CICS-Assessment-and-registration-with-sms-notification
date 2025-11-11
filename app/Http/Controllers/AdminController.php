@@ -259,6 +259,18 @@ class AdminController extends Controller
 
         return view('admin.registrations', compact('registrations'));
     }
+ 
+
+    //Update or edit registration
+    public function update(Request $request, $id)
+    {
+        $update = StudentRegistrations::findOrFail($id);
+        $update->fullname = $request->fullname;
+        $update->save();
+
+        return back()->with('message', 'Student updated successfully');
+    }
+
 
 
 
@@ -291,6 +303,12 @@ class AdminController extends Controller
         StudentRegistrations::findOrFail($id)->delete();
         return back()->with('message', 'Student deleted successfully');
     }
+    //  public function edit_student($id)
+    // {
+    //     $student = StudentRegistrations::findOrFail($id);
+    //     echo $student;
+        
+    // }
 
     // Accounts
     public function admin_users(Request $request)

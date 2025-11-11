@@ -58,6 +58,8 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::get('/admin/registrations/search', [AdminController::class, 'admin_registrations'])->name('admin.registrations.search');
     Route::post('/admin/registrations/add', [AdminController::class, 'admin_registrations_add'])->name('add.registration');
     Route::get('/student/delete/{id}', [AdminController::class, 'delete_student'])->name('student.delete');
+    Route::get('/student/edit/{id}', [AdminController::class, 'edit_student'])->name('student.edit');
+    Route::put('/registration/update/{id}', [AdminController::class, 'update'])->name('registration.update');
 
 
 
