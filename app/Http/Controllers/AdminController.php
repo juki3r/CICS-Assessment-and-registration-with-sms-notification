@@ -708,7 +708,7 @@ class AdminController extends Controller
             $phone = $student->contact_details;
             $course = $student->course;
 
-            $message = "Congratulations {$name}, you are qualified incoming
+            $message = "{$name}, you are qualified incoming
                         First year student in " . strtoupper($student->course) . " A.Y 2025-2026. Dont reply because this is system generated";
 
             // $response = Http::withHeaders([
