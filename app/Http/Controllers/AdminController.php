@@ -259,7 +259,7 @@ class AdminController extends Controller
 
         return view('admin.registrations', compact('registrations'));
     }
- 
+
 
     //Update or edit registration
     public function update(Request $request, $id)
@@ -307,7 +307,7 @@ class AdminController extends Controller
     // {
     //     $student = StudentRegistrations::findOrFail($id);
     //     echo $student;
-        
+
     // }
 
     // Accounts
@@ -706,15 +706,23 @@ class AdminController extends Controller
         foreach ($registrations as $student) {
             $name  = $student->fullname;
             $phone = $student->contact_details;
-            $course = $student->contact_details;
+            $course = $student->course;
 
-            $message = "Hi Good Day! Congratulations {$name}, you are qualified incoming
+            $message = "Congratulations {$name}, you are qualified incoming
                         First year student in " . strtoupper($student->course) . " A.Y 2025-2026. Dont reply because this is system generated";
 
-            $response = Http::withHeaders([
+            // $response = Http::withHeaders([
+            //     'X-API-KEY' => $apiKey,
+            //     'Accept'    => 'application/json',
+            // ])->post('https://sms.pong-mta.tech/api/send-sms-api', [
+            //     'phone_number' => $phone,
+            //     'message'      => $message,
+            // ]);
+
+            $response = Http::withoutVerifying()->withHeaders([
                 'X-API-KEY' => $apiKey,
                 'Accept'    => 'application/json',
-            ])->post('https://sms.pong-mta.tech/api/send-sms-api', [
+            ])->post($endpoint, [
                 'phone_number' => $phone,
                 'message'      => $message,
             ]);
