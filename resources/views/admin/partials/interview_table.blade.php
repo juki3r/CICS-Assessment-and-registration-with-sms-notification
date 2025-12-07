@@ -18,7 +18,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="2" class="text-center">No Students found.</td>
+                    <td colspan="2" class="text-center">No Applicants found.</td>
                 </tr>
             @endforelse
         </tbody>
@@ -177,7 +177,7 @@
                                     class="text-center w-75" 
                                     value="{{ Auth::guard('admin')->check() ? Auth::guard('admin')->user()->fullname : (session('subadmin_name') ?? 'Guest') }}" 
                                      readonly style="border: none; border-bottom:1px solid grey">
-                                    <span class="mt-2"><strong>Interviewer</strong></span>
+                                    <span class="mt-2"><strong>Faculty</strong></span>
                                 </div>
                             </div>
                         </div>

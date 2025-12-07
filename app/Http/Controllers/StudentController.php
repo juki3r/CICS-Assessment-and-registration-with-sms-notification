@@ -7,41 +7,7 @@ use App\Models\StudentRegistrations;
 
 class StudentController extends Controller
 {
-    // LOGIN of Student
-    // public function login(Request $request)
-    // {
-    //     $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'course' => 'required|in:bsit,bscs,blis',
-    //     ]);
 
-    //     $student = StudentRegistrations::where('fullname', $request->name)->first();
-
-    //     if (!$student) {
-    //         return back()->withErrors([
-    //             'name' => 'Name not found in passed student records.',
-    //         ])->withInput();
-    //     }
-
-    //     // ✅ Check if exam_result is already set
-    //     if (!is_null($student->exam_result)) {
-    //         return redirect()->route('student.dashboard')
-    //             ->with('status', 'Error, ' . $student->fullname . ' (' . strtoupper($student->course) . ')!');
-    //     }
-
-    //     // Update student course
-    //     $student->course = $request->course;
-    //     $student->save();
-
-    //     // Store student in session
-    //     session([
-    //         'student_name'   => $student->fullname,
-    //         'student_course' => $student->course,
-    //     ]);
-
-    //     return redirect()->route('student.dashboard')
-    //         ->with('status', 'Welcome, ' . $student->fullname . ' (' . strtoupper($student->course) . ')!');
-    // }
 
     public function login(Request $request)
     {

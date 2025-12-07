@@ -6,14 +6,14 @@
     </x-slot>
 
     <div class="py-12 d-flex justify-content-center">
-        <div class="border rounded w-75 mt-5 p-3 shadow">
+        <div class="border rounded w-50 mt-5 p-3 shadow">
             <div class="responsive-table px-3">
                 <div class="text-end pb-3">
                     <!-- Button trigger modal -->
                     
                 </div>
 
-                <h3 class="fs-3">List of Student</h3>
+                <h3 class="fs-3">List of Applicants</h3>
                 
                 {{-- Error Messages --}}
                 @if ($errors->any())
@@ -36,7 +36,7 @@
                 @endif
 
                 <!-- Search Input -->
-                <div class="mb-3">
+                <div class="mb-3 w-50">
                     <input type="text" id="search" class="form-control" placeholder="Search Students...">
                 </div>
 

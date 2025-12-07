@@ -72,7 +72,8 @@
     
     <!-- Sticky Footer -->
     <footer class="text-center py-2">
-         &copy; NISU {{ date('Y') }}
+        &copy; NISU {{ date('Y') }} <br>
+        BSIT 4-B CICS ASSESSMENT AND REGISTRATION WITH SMS NOTIFICATION
     </footer>
 </body>
 </html>

@@ -1,21 +1,21 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight uppercase">
-            {{ __('Students Registration') }}
+            {{ __('Applicants Registration') }}
         </h2>
     </x-slot>
 
     <div class="py-12 d-flex justify-content-center">
-        <div class="border rounded w-75 mt-5 p-3 shadow">
+        <div class="border rounded w-50 mt-5 p-3 shadow">
             <div class="responsive-table px-3">
                 <div class="text-end pb-3">
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Add Student
+                        Add Applicant
                     </button>
                 </div>
 
-                <h3 class="fs-3">List of Student</h3>
+                <h3 class="fs-3">List of Applicants</h3>
                 
                 {{-- Error Messages --}}
                 @if ($errors->any())
@@ -38,7 +38,7 @@
                 @endif
 
                 <!-- Search Input -->
-                <div class="mb-3">
+                <div class="mb-3 w-50">
                     <input type="text" id="search" class="form-control" placeholder="Search Students...">
                 </div>
 

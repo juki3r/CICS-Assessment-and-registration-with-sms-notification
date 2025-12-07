@@ -33,6 +33,15 @@
                         color: white !important;
                     }
 
+                    .demo {
+                        position: fixed;
+                        bottom: 10%;
+                        left: 0;
+                        right: 0;
+                        text-align: center;
+                        font-size: 12px;
+                        padding: 8px;
+                    }
 
                     .footer {
                         position: fixed;
@@ -130,6 +139,29 @@
             </table>
         </div>
 
+        <div class="demo">
+            <h6 class="text-center mt-3 mb-5 underline-text">
+                @if($course == 'BSIT')
+                    JENNY ROSE V. WENCESLAO P.H.D
+                @elseif($course == 'BSCS')
+                    ARNOLD  B. BA&#209;ES P.H.D
+                @elseif($course == 'BLIS')
+                    DARYL L. SUPERIO P.H.D
+                @endif
+            </h6>
+            <!-- Chairperson label -->
+            <p class=" fw-bold " style="margin-top: -40px; font-size: 14px">
+                @if($course == 'BSIT')
+                    Chairperson, BS Information Technology
+                @elseif($course == 'BSCS')
+                    Chairperson, BS Computer Science
+                @elseif($course == 'BLIS')
+                   Chairperson, Bachelor of Library & Information Science
+                @endif
+            </p>
+        </div>
+
+
         <div class="footer  d-flex justify-content-between">
             <div class="d-flex flex-column text-start px-3">
                 <span>Tel. No.: 3970-314(1021)</span>
@@ -145,6 +177,13 @@
 
         <style>
             .page-break { page-break-after: always; }
+
+            .underline-text {
+                display: inline-block; /* makes border only as wide as text */
+                border-bottom: 2px solid #000; /* underline color & thickness */
+                padding-bottom: 4px; /* space between text and line */
+            }
+
         </style>
 
 
@@ -259,7 +298,20 @@
                                     <td>{{ $reg->interview_result ?? 'Pending' }}</td>
                                     <td>{{ $reg->skilltest ?? 'Pending' }}</td>
                                     <td>{{ $reg->total ?? 'Pending' }}</td>
-                                    <td>{{ $reg->remarks ?? 'Pending' }}</td>   
+                                    <td class="text-center">
+                                        <span class="
+                                            badge rounded-pill px-2 py-1 fs-6
+                                            @if($reg->remarks == 'Failed') bg-danger
+                                            @elseif($reg->remarks == 'Passed') bg-primary
+                                            @else bg-warning
+                                            @endif
+                                        ">
+                                            {{ $reg->remarks ?? 'Pending' }}
+                                        </span>
+                                    </td>
+
+
+
                                 </tr>
                             @empty
                                 <tr>

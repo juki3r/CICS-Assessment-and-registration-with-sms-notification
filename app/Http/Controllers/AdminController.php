@@ -79,39 +79,6 @@ class AdminController extends Controller
         return redirect()->route('admin.login')->with('error', 'Invalid credentials');
     }
 
-    // public function dashboard()
-    // {
-    //     if (Auth::guard('admin')->check() && Auth::guard('admin')->user()->role === 'admin') {
-    //         $notificationCount = AdminNotification::where('read', false)->count();
-    //         return view('admin.dashboard', compact('notificationCount'));
-    //     }
-
-    //     // if not admin, redirect somewhere else
-    //     return redirect()->route('admin.login')->with('error', 'Unauthorized access.');
-    // }
-
-
-    // public function dashboard()
-    // {
-    //     if (!Auth::guard('admin')->check() || Auth::guard('admin')->user()->role !== 'admin') {
-    //         return redirect()->route('admin.login')->with('error', 'Unauthorized access.');
-    //     }
-
-    //     // Count students by course and remarks
-    //     $courses = ['BSIT', 'BSCS', 'BLIS'];
-    //     $chartData = [];
-    //     $currentYear = Carbon::now()->year;
-
-    //     foreach ($courses as $course) {
-    //         $chartData[$course] = [
-    //             'passed' => StudentRegistrations::where('course', $course)->where('remarks', 'Passed')->count(),
-    //             'failed' => StudentRegistrations::where('course', $course)->where('remarks', 'Failed')->count(),
-    //             'pending' => StudentRegistrations::where('course', $course)->whereNull('remarks')->count(),
-    //         ];
-    //     }
-
-    //     return view('admin.dashboard', compact('chartData'));
-    // }
 
 
     public function dashboard()
@@ -336,6 +303,20 @@ class AdminController extends Controller
         return view('admin.users', compact('notificationCount', 'passed', 'failed', 'pending', 'subAdmins'));
     }
 
+    public function updateSubadmin(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $admin = SubAdmin::findOrFail($id);
+        $admin->name = $request->name;
+        $admin->save();
+
+        return back()->with('success', 'Sub Admin updated successfully!');
+    }
+
+
 
     public function search(Request $request)
     {
@@ -533,35 +514,6 @@ class AdminController extends Controller
     }
 
 
-    // public function reports(Request $request)
-    // {
-    //     $course = $request->query('course'); // BSIT, BSCS, BLIS
-    //     $status = $request->query('status'); // passed, failed
-    //     $rank = $request->query('rank'); // if set, sort by total desc
-
-    //     $registrations = StudentRegistrations::query();
-
-    //     if ($course) {
-    //         $registrations->where('course', $course);
-    //     }
-
-    //     if ($status) {
-    //         if ($status === 'passed') {
-    //             $registrations->where('remarks', 'Passed');
-    //         } elseif ($status === 'failed') {
-    //             $registrations->where('remarks', 'Failed');
-    //         }
-    //     }
-
-    //     if ($rank) {
-    //         $registrations->orderByDesc('total');
-    //     }
-
-    //     $registrations = $registrations->get();
-
-    //     return view('reports.index', compact('registrations', 'course', 'status', 'rank'));
-    // }
-
     public function reports(Request $request)
     {
         $course = $request->query('course'); // BSIT, BSCS, BLIS
@@ -620,18 +572,6 @@ class AdminController extends Controller
             $registrations->where('course', $course);
         }
 
-        // if ($status) {
-        //     if ($status === 'passed') {
-        //         $registrations->where('remarks', 'Passed');
-        //     } elseif ($status === 'failed') {
-        //         $registrations->where('remarks', 'Failed');
-        //     }
-        // }
-
-
-        // if ($print) {
-        //     $registrations->where('remarks', 'Passed')->orderBy('fullname', 'asc'); // alphabetical
-        // }
 
         $registrations = $registrations->get();
 

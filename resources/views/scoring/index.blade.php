@@ -77,21 +77,21 @@
     <form method="POST" action="{{ route('scoring.update') }}">
         @csrf
 
-        <label for="interview">Interview (e.g., 0.20)</label>
+        <label for="interview">Interview (20%)</label>
         <input type="number" step="0.01" name="interview" id="interview"
                value="{{ old('interview', $scoring->interview ?? 0) }}" required>
         @error('interview')
             <div class="error">{{ $message }}</div>
         @enderror
 
-        <label for="gwa">GWA (e.g., 0.30)</label>
+        <label for="gwa">GWA %</label>
         <input type="number" step="0.01" name="gwa" id="gwa"
                value="{{ old('gwa', $scoring->gwa ?? 0) }}" required>
         @error('gwa')
             <div class="error">{{ $message }}</div>
         @enderror
 
-        <label for="skilltest">Skill Test (e.g., 0.50)</label>
+        <label for="skilltest">Skill Test %</label>
         <input type="number" step="0.01" name="skilltest" id="skilltest"
                value="{{ old('skilltest', $scoring->skilltest ?? 0) }}" required>
         @error('skilltest')

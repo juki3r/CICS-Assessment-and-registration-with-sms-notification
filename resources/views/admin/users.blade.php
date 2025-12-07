@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-12 d-flex justify-content-center">
-        <div class="border rounded w-75 mt-5 p-3 shadow">
+        <div class="border rounded w-50 mt-5 p-3 shadow">
             <div class="responsive-table px-3">
                 <div class="text-end pb-3">
                     <!-- Button trigger modal -->
@@ -15,7 +15,7 @@
                     </button>
                 </div>
 
-                <h3 class="fs-3">List of Sub admins</h3>
+                <h3 class="fs-3">List of Faculty</h3>
                 
                 {{-- Error Messages --}}
                 @if ($errors->any())
@@ -39,7 +39,7 @@
 
                 <!-- Search Input -->
                 <div class="mb-3">
-                    <input type="text" id="search" class="form-control" placeholder="Search Sub Admins...">
+                    <input type="text" id="search" class="form-control w-50" placeholder="Search Sub Admins...">
                 </div>
 
                 <!-- Table Container (will be replaced by AJAX) -->
@@ -71,7 +71,45 @@
                             </form>
                     </div>
                 </div>
-            </div>              
+            </div>
+            
+            
+            <!-- EDIT MODAL -->
+            <div class="modal fade" id="editModal" tabindex="-1">
+            <div class="modal-dialog">
+                <form id="editForm" method="POST">
+                    @csrf
+
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Edit Sub Admin</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+
+                            <div class="mb-3">
+                                <label class="form-label">Name</label>
+                                <input type="text" id="editName" name="name" class="form-control" required>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                Update
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            </div>
+
+
+
         </div>
     </div>
 
@@ -104,5 +142,30 @@
                 });
             });
         });
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+    // When edit button clicked
+    document.querySelectorAll(".editBtn").forEach(btn => {
+        btn.addEventListener("click", function () {
+
+            let id = this.dataset.id;
+            let name = this.dataset.name;
+            let url = this.dataset.updateUrl;
+
+            // Set input value
+            document.getElementById("editName").value = name;
+
+            // Set form action URL
+            document.getElementById("editForm").action = url;
+
+            // Show modal
+            let modal = new bootstrap.Modal(document.getElementById("editModal"));
+            modal.show();
+        });
+    });
+
+});
     </script>
 </x-app-layout>

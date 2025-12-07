@@ -106,27 +106,58 @@
             document.querySelectorAll('.select-item').forEach(cb => cb.checked = checked);
         });
 
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     const form = document.getElementById('sendSmsForm');
+        //     const sendBtn = document.getElementById('sendBtn');
+        //     const btnText = document.getElementById('btnText');
+        //     const btnSpinner = document.getElementById('btnSpinner');
+
+        //     // On submit → show spinner
+        //     form.addEventListener('submit', function () {
+        //         sendBtn.disabled = true;
+        //         btnSpinner.style.display = 'inline-block';
+        //         btnText.textContent = 'Sending...';
+        //     });
+
+        //     // On load → check if session message exists, reset spinner/button
+        //     const message = document.getElementById('statusMessage');
+        //     if (message) {
+        //         // Re-enable button and reset to default text
+        //         sendBtn.disabled = false;
+        //         btnSpinner.style.display = 'none';
+        //         btnText.textContent = 'Send Selected';
+        //     }
+        // });
+
         document.addEventListener('DOMContentLoaded', function () {
-            const form = document.getElementById('sendSmsForm');
-            const sendBtn = document.getElementById('sendBtn');
-            const btnText = document.getElementById('btnText');
-            const btnSpinner = document.getElementById('btnSpinner');
 
-            // On submit → show spinner
-            form.addEventListener('submit', function () {
-                sendBtn.disabled = true;
-                btnSpinner.style.display = 'inline-block';
-                btnText.textContent = 'Sending...';
-            });
+        const form = document.getElementById('sendSmsForm');
+        const sendBtn = document.getElementById('sendBtn');
+        const btnText = document.getElementById('btnText');
+        const btnSpinner = document.getElementById('btnSpinner');
 
-            // On load → check if session message exists, reset spinner/button
-            const message = document.getElementById('statusMessage');
-            if (message) {
-                // Re-enable button and reset to default text
-                sendBtn.disabled = false;
-                btnSpinner.style.display = 'none';
-                btnText.textContent = 'Send Selected';
+        // Confirm before submit
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // stop form first
+
+            if (!confirm("Are you sure you want to send this message?")) {
+                return; // user pressed cancel
             }
+
+            // user confirmed → continue submit
+            sendBtn.disabled = true;
+            btnSpinner.style.display = 'inline-block';
+            btnText.textContent = 'Sending...';
+
+            form.submit(); // manually submit
         });
+
+        // Select All function
+        document.getElementById('selectAll').addEventListener('change', function() {
+            const checked = this.checked;
+            document.querySelectorAll('.select-item').forEach(cb => cb.checked = checked);
+        });
+
+    });
     </script>
 </x-app-layout>

@@ -266,14 +266,14 @@
                                     </div>
                                 @endif
 
-                                <form method="POST" action="{{ route('scoring.update') }}">
+                                <form method="POST" action="{{ route('scoring.update') }}" id="scoringForm">
                                     @csrf
 
                                     <div class="row g-3">
                                         <!-- Interview -->
                                         <div class="col-md-6">
                                             <label for="interview" class="form-label fw-semibold">
-                                                Interview <span class="text-muted">(e.g., 20)</span>
+                                                Interview <span class="text-muted">%</span>
                                             </label>
                                             <input type="number" step="0.1" name="interview" id="interview"
                                                 value="{{ old('interview', $scoring->interview *100 ?? 0) }}"
@@ -286,7 +286,7 @@
                                         <!-- GWA -->
                                         <div class="col-md-6">
                                             <label for="gwa" class="form-label fw-semibold">
-                                                GWA <span class="text-muted">(e.g., 30)</span>
+                                                GWA <span class="text-muted">%</span>
                                             </label>
                                             <input type="number" step="0.1" name="gwa" id="gwa"
                                                 value="{{ old('gwa', $scoring->gwa*100 ?? 0) }}"
@@ -299,7 +299,7 @@
                                         <!-- Skill Test -->
                                         <div class="col-md-6">
                                             <label for="skilltest" class="form-label fw-semibold">
-                                                Skill Test <span class="text-muted">(e.g., 25)</span>
+                                                Skill Test <span class="text-muted">%</span>
                                             </label>
                                             <input type="number" step="0.1" name="skilltest" id="skilltest"
                                                 value="{{ old('skilltest', (int)$scoring->skilltest ?? 0) }}"
@@ -312,7 +312,7 @@
                                         <!-- Exam -->
                                         <div class="col-md-6">
                                             <label for="exam" class="form-label fw-semibold">
-                                                Exam <span class="text-muted">(e.g., 25)</span>
+                                                Exam <span class="text-muted">%</span>
                                             </label>
                                             <input type="number" step="0.1" name="exam" id="exam"
                                                 value="{{ old('exam', $scoring->exam*100 ?? 0) }}"
@@ -341,4 +341,30 @@
             </div> <!-- /p-6 -->
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const form = document.getElementById('scoringForm');
+
+            form.addEventListener('submit', function(e) {
+                // get values
+                const interview = parseFloat(document.getElementById('interview').value) || 0;
+                const gwa = parseFloat(document.getElementById('gwa').value) || 0;
+                const skilltest = parseFloat(document.getElementById('skilltest').value) || 0;
+                const exam = parseFloat(document.getElementById('exam').value) || 0;
+
+                // calculate total
+                const total = interview + gwa + skilltest + exam;
+
+                // check if total equals 100
+                if (total.toFixed(1) != 100) {
+                    e.preventDefault(); // prevent form submission
+                    alert('Scoring must total 100%! Current total: ' + total.toFixed(1));
+                }
+            });
+
+        });
+        </script>
+
 </x-app-layout>

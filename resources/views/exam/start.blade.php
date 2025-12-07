@@ -15,6 +15,7 @@
             margin: 0;
             overflow: hidden; /* 🚫 Prevent scrolling */
             background-color: #f8f9fa;
+            font-size: 24px;
         }
 
         .exam-header {
@@ -35,7 +36,7 @@
             display: flex;
             justify-content: center;  
             flex-direction: column;
-            align-items: center;      
+            align-items: left;      
             height: 80vh; /* Viewport minus header+footer */
             margin-top: 70px; /* push below header */
             text-align: center;
@@ -69,7 +70,7 @@
 
     <!-- Header -->
     <div class="exam-header">
-        <h2 class="m-0 fw-bold">EXAM , {{$fullname}}</h2>
+        <h2 class="m-0 fw-bold text-uppercase">EXAM , {{$fullname}}</h2>
         <span id="timer" class="text-danger fw-bold fs-4"></span>
     </div>
 
@@ -79,7 +80,7 @@
             @csrf
             @foreach ($questions as $index => $question)
                 <div class="question-container text-center  px-5 py-2 " id="question-{{ $index }}" style="{{ $index === 0 ? '' : 'display:none;' }}">
-                    <p class="fs-4 fw-semibold">Question {{ $index + 1 }}</p>
+                    <p class="fs-4 fw-semibold">Question {{ $index + 1 }} / {{ count($questions) }}</p>
                     <p class="fs-5 mt-3">{{ $question->question }}</p>
 
                     <!-- Display image if available -->
@@ -90,7 +91,7 @@
                     @endif
 
                     <!-- Options -->
-                    <div class="mt-4 text-start d-inline-block">
+                    <div class="mt-4 text-start">
                         <label class="mb-2 d-block">
                             <input type="radio" name="questions[{{ $question->id }}]" value="a" required> 
                              {{ $question->option_a }}

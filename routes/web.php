@@ -46,6 +46,9 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::post('/admin/users', [AdminController::class, 'admin_users_add'])->name('add.admin.user');
     Route::get('/subadmin/delete/{id}', [AdminController::class, 'delete'])->name('subadmin.delete');
     Route::get('/admin/users/search', [AdminController::class, 'search'])->name('admin.users.search');
+    Route::post('/subadmin/update/{id}', [AdminController::class, 'updateSubadmin'])->name('subadmin.update');
+
+
 
     // ------------------------------------------------------------------------------------------------
 
